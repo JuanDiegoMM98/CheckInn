@@ -46,12 +46,12 @@ public class PrecargaDatos {
                 UsuarioModel u1 = new UsuarioModel(
                         "12345678A", "Juan", "Pérez", "Gómez", "juan@mail.com",
                         "pass1234", "1111222233334444", "Calle Falsa 123", LocalDate.of(1980, 5, 20),
-                        "600123456", UsuarioModel.Genero.MASCULINO, new ArrayList<AlojamientoModel>(), new ArrayList<ReservaModel>());
+                        "600123456", UsuarioModel.Genero.MASCULINO, new ArrayList<>(), new ArrayList<>());
 
                 UsuarioModel u2 = new UsuarioModel(
                         "12345678B", "Laura", "Martínez", "Ruiz", "laura@mail.com",
                         "pass1234", "4444333322221111", "Avenida Siempre Viva 742", LocalDate.of(1990, 8, 15),
-                        "699987654", UsuarioModel.Genero.FEMENINO, new ArrayList<AlojamientoModel>(), new ArrayList<ReservaModel>());
+                        "699987654", UsuarioModel.Genero.FEMENINO, new ArrayList<>(), new ArrayList<>());
                 u2.setRol(UsuarioModel.Rol.PRO);
 
                 usuarioRepository.save(u1);
