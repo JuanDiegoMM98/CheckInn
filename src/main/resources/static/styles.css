@@ -1,0 +1,140 @@
+html, body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body, main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+nav ul li {
+  margin: 0 15px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #555;
+  font-weight: bold;
+}
+
+nav ul li a.active {
+  color: orange;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 20px;
+}
+
+.user {
+  text-align: right;
+}
+
+main {
+  flex: 1;
+  padding: 40px;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+}
+
+h2 {
+  color: orange;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+form label {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 45%;
+  min-width: 250px;
+}
+
+form input, form textarea, form select {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form textarea {
+  resize: vertical;
+}
+
+.form-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+button.cancelar {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+button.guardar, button.enviar {
+  background-color: orange;
+  color: white;
+}
+
+button.borrar {
+  background-color: red;
+  color: white;
+}
