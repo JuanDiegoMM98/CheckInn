@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alta de Estancia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <img src="logo.png" alt="Logo" class="logo">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Mis reservas</a></li>
+        <li><a class="active" href="#">Mis estancias</a></li>
+        <li><a href="#">Área personal</a></li>
+      </ul>
+      <div class="user">
+        <span>Adam</span>
+        <span class="role">Admi</span>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <h2>Alta de estancia</h2>
+    <form class="form-estancia">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" value="Villa Chirinos">
+
+        <label>Precio por noche</label>
+        <input type="text" value="35,00 €">
+
+        <label>Capacidad</label>
+        <div class="capacidad">
+          <button type="button">-</button>
+          <span>5</span>
+          <button type="button">+</button>
+        </div>
+
+        <label>Provincia</label>
+        <select>
+          <option value="">Provincia</option>
+        </select>
+
+        <label><input type="checkbox"> Bloquear</label>
+
+        <label>Desde</label>
+        <input type="date">
+        <label>Hasta</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Dirección</label>
+        <input type="text" value="Calle Apagón Red Eléctrica, 17">
+
+        <label>Descripción</label>
+        <textarea>Muy chula. Tenemos hasta agua caliente</textarea>
+
+        <label>Servicios</label>
+        <label><input type="checkbox"> WiFi</label>
+        <label><input type="checkbox"> Piscina</label>
+        <label><input type="checkbox"> Barbacoa</label>
+
+        <label>Imágenes</label>
+        <input type="file">
+      </div>
+      <div class="form-buttons">
+        <button type="button" class="cancelar">Cancelar</button>
+        <button type="submit" class="guardar">Guardar</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

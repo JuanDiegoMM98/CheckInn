@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cancelación Reserva</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <img src="logo.png" alt="Logo" class="logo">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a class="active" href="#">Mis reservas</a></li>
+        <li><a href="#">Mis estancias</a></li>
+        <li><a href="#">Área personal</a></li>
+      </ul>
+      <div class="user">
+        <span>Adam</span>
+        <span class="role">Admi</span>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <h2>Solicitud de cancelación</h2>
+    <form class="form-cancelacion">
+      <label>Nombre</label>
+      <input type="text" value="Juan Diego">
+
+      <label>DNI</label>
+      <input type="text" value="49174432-H">
+
+      <label>Teléfono</label>
+      <input type="text" value="684335599">
+
+      <label>Cuantía</label>
+      <input type="text" value="135,00 €">
+
+      <label>Entrada</label>
+      <input type="date" value="2025-05-16">
+
+      <label>Salida</label>
+      <input type="date" value="2025-05-18">
+
+      <label>Motivo de la solicitud</label>
+      <textarea>Agustín nos ha puesto un examen y no nos podremos ir de vacaciones ese finde</textarea>
+
+      <div class="form-buttons">
+        <button type="button" class="cancelar">Cancelar</button>
+        <button type="submit" class="enviar">Enviar</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
