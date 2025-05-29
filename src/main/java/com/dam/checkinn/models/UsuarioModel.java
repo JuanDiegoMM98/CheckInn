@@ -1,8 +1,10 @@
 package com.dam.checkinn.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,7 +31,7 @@ public class UsuarioModel {
 
     public UsuarioModel(String dni, String nombre, String apellido1, String apellido2, String correo, String contraseña,
                         String tarjetaBancaria, String direccion, LocalDate fechaNacimiento, String telefono,
-                        Genero genero, List<AlojamientoModel> alojamientos, List<ReservaModel> reservas) {
+                        Genero genero) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -42,8 +44,8 @@ public class UsuarioModel {
         this.rol = Rol.CLIENTE;
         this.telefono = telefono;
         this.genero = genero;
-        this.alojamientos = alojamientos;
-        this.reservas = reservas;
+        this.alojamientos = new ArrayList<>();
+        this.reservas = new ArrayList<>();
     }
 
     /* ATRIBUTOS ******************************************************************************************************/
@@ -63,7 +65,7 @@ public class UsuarioModel {
     @Column(nullable = false, length = 50)
     private String correo;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false)
     private String contraseña;
 
     @Column(nullable = false, length = 16)
@@ -89,10 +91,12 @@ public class UsuarioModel {
     /* RELACIONES *****************************************************************************************************/
 
     @OneToMany(mappedBy = "usuarioAlojamiento", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "usuario-alojamientos")
     private
     List<AlojamientoModel> alojamientos;
 
     @OneToMany(mappedBy = "usuarioReserva", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "usuario-reservas")
     private
     List<ReservaModel> reservas;
 
