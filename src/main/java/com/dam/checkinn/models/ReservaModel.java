@@ -1,11 +1,14 @@
 package com.dam.checkinn.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name="reservas")
+@Table(name = "reservas")
 public class ReservaModel {
 
     /* CONSTRUCTOR ****************************************************************************************************/
@@ -45,10 +48,12 @@ public class ReservaModel {
     /* RELACIONES *****************************************************************************************************/
 
     @ManyToOne
+    @JsonBackReference(value = "usuario-reservas")
     private
     UsuarioModel usuarioReserva;
 
     @ManyToOne
+    @JsonBackReference(value = "reserva-alojamiento")
     private
     AlojamientoModel alojamiento;
 

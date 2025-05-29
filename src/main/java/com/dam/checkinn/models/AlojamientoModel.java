@@ -1,5 +1,8 @@
 package com.dam.checkinn.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -77,9 +80,11 @@ public class AlojamientoModel {
 
     /* RELACIONES *****************************************************************************************************/
     @ManyToOne
+    @JsonBackReference(value="usuario-alojamientos")
     private UsuarioModel usuarioAlojamiento;
 
-    @OneToMany(mappedBy = "alojamiento")
+    @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "reserva-alojamiento")
     private List<ReservaModel> reservas;
 
     /* GETTER Y SETTER ************************************************************************************************/
