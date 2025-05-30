@@ -26,16 +26,24 @@ import java.util.List;
 @Configuration
 public class PrecargaDatos {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    /* DEPENDENCIAS ***************************************************************************************************/
 
-    @Autowired
-    private AlojamientoRepository alojamientoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ReservaRepository reservaRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final AlojamientoRepository alojamientoRepository;
+
+    private final ReservaRepository reservaRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public PrecargaDatos(UsuarioRepository usuarioRepository, AlojamientoRepository alojamientoRepository,
+                         ReservaRepository reservaRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.alojamientoRepository = alojamientoRepository;
+        this.reservaRepository = reservaRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    /* BEAN ***********************************************************************************************************/
 
     @Bean
     @Order(1)
@@ -74,8 +82,7 @@ public class PrecargaDatos {
                         servicios,
                         LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
                         LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
-                        u2,
-                        new ArrayList<>() // reservas vacías al inicio
+                        u2
                 );
 
                 alojamientoRepository.save(alojamiento);

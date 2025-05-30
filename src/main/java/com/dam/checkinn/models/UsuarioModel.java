@@ -62,7 +62,7 @@ public class UsuarioModel {
     @Column(nullable = false, length = 20)
     private String apellido2;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String correo;
 
     @Column(nullable = false)
@@ -86,7 +86,7 @@ public class UsuarioModel {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Genero genero; //nullable
+    private Genero genero;
 
     /* RELACIONES *****************************************************************************************************/
 

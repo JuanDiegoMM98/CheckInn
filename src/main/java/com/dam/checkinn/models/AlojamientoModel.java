@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,8 +25,8 @@ public class AlojamientoModel {
 
     public AlojamientoModel(String nombre, String descripcion, String provincia,
                             double precioNoche, int capacidad, byte[] imagen, List<Servicio> servicios,
-                            LocalDate inicioBloqueo, LocalDate finBloqueo, UsuarioModel usuarioAlojamiento,
-                            List<ReservaModel> reservas) {
+                            LocalDate inicioBloqueo, LocalDate finBloqueo, UsuarioModel usuarioAlojamiento
+                            ) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.provincia = provincia;
@@ -37,7 +38,7 @@ public class AlojamientoModel {
         this.inicioBloqueo = inicioBloqueo;
         this.finBloqueo = finBloqueo;
         this.usuarioAlojamiento = usuarioAlojamiento;
-        this.reservas = reservas;
+        this.reservas = new ArrayList<>();
     }
 
     /* ATRIBUTOS ******************************************************************************************************/
@@ -46,7 +47,7 @@ public class AlojamientoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;     // PK
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String nombre;
 
     @Column(nullable = false)

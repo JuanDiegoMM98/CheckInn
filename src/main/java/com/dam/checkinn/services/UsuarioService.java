@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.sql.rowset.serial.SerialException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,13 +56,23 @@ public class UsuarioService {
     }
 
     public UsuarioModel createUser(UsuarioModel usuario) throws Exception {
+
         if (usuarioRepository.existsById(usuario.getDni())) {
             throw new AltaUsuarioException();
         }
 
+        if (LocalDate.now().getYear() - usuario.getFechaNacimiento().getYear() < 18 ) {
+            throw new AltaUsuarioException();
+        }
+
+        //
+
+
         try {
             String contraseña = usuario.getContraseña();
             usuario.setContraseña(passwordEncoder.encode(contraseña));
+            usuario.setAlojamientos(new ArrayList<>());
+            usuario.setReservas(new ArrayList<>());
             return usuarioRepository.save(usuario);
         } catch (DataIntegrityViolationException e) {
             throw new AltaUsuarioException();
