@@ -76,8 +76,10 @@ public class PrecargaDatos {
                         "Casa Rural El Bosque",
                         "Una casa rural acogedora en plena naturaleza.",
                         "Asturias",
+                        "Calle Falsa 123",
                         120.0,
                         5,
+                        0,
                         Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
                         servicios,
                         LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo

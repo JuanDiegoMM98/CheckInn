@@ -69,18 +69,38 @@ public class ReservaService {
     }
 
     public ReservaModel actualizarReserva(int id, CrearReservaDTO dto) throws Exception {
+        // Comprobar que existe reserva
         if (!reservaRepository.existsById(id)) {
             throw new ReservaNotFoundException();
         }
 
+        // Comprobar que existe alojamiento
+        if (!alojamientoRepository.existsById(dto.idAlojamiento())) {
+            throw new AlojamientoNotFoundException();
+        }
+
         ReservaModel reservaModel = reservaRepository.findById(id).get();
 
+        // Si tiene motivo de cancelacion, modificamos dicha reserva
         if (dto.motivoCancelacion() != null) {
             reservaModel.setMotivoCancelacion(dto.motivoCancelacion());
         }
 
+        // Si el dueño del alojamiento la cancela, modificamos el valor de "cancelada"
         if (dto.cancelada()) {
             reservaModel.setCancelada(dto.cancelada());
+        }
+
+        // Si tiene valoracion, modificamos las valoraciones del alojamiento
+        if (dto.valoracion() != -1) {
+            AlojamientoModel alojamiento = alojamientoRepository.findById(dto.idAlojamiento()).get();
+            int contadorValoraciones = alojamiento.getContadorValoraciones();
+            double valoracionMedia = alojamiento.getValoracionMedia();
+
+            double nuevaValoracionMedia = ((valoracionMedia * contadorValoraciones) + dto.valoracion()) / (contadorValoraciones + 1);
+            alojamiento.setValoracionMedia(nuevaValoracionMedia);
+            alojamiento.setContadorValoraciones(contadorValoraciones + 1);
+            alojamientoRepository.save(alojamiento);
         }
         return reservaRepository.save(reservaModel);
     }

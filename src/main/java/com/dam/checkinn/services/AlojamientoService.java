@@ -85,6 +85,7 @@ public class AlojamientoService {
         alojamiento.setNombre(dto.nombre());
         alojamiento.setDescripcion(dto.descripcion());
         alojamiento.setProvincia(dto.provincia());
+        alojamiento.setDireccion(dto.direccion());
         alojamiento.setPrecioNoche(dto.precioNoche());
         alojamiento.setCapacidad(dto.capacidad());
         alojamiento.setImagen(dto.imagen());

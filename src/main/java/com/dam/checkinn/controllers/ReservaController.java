@@ -48,7 +48,7 @@ public class ReservaController {
         try {
             ReservaModel reservaActualizada = reservaService.actualizarReserva(id, dto);
             return ResponseEntity.ok(reservaActualizada);
-        } catch (ReservaNotFoundException e) {
+        } catch (ReservaNotFoundException | AlojamientoNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();

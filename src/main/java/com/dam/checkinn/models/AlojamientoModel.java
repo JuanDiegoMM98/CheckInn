@@ -47,16 +47,18 @@ public class AlojamientoModel {
     }
 
     // Para precarga
-    public AlojamientoModel(String nombre, String descripcion, String provincia,
-                            double precioNoche, int capacidad, byte[] imagen, List<Servicio> servicios,
+    public AlojamientoModel(String nombre, String descripcion, String provincia, String direccion,
+                            double precioNoche, int capacidad, double valoracion, byte[] imagen, List<Servicio> servicios,
                             LocalDate inicioBloqueo, LocalDate finBloqueo, UsuarioModel usuarioAlojamiento
                             ) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.provincia = provincia;
+        this.direccion = direccion;
         this.disponible = true;
         this.precioNoche = precioNoche;
         this.capacidad = capacidad;
+        this.valoracionMedia = valoracion;
         this.imagen = imagen;
         this.servicios = servicios;
         this.inicioBloqueo = inicioBloqueo;
@@ -80,6 +82,9 @@ public class AlojamientoModel {
     @Column(nullable = false, length = 20)
     private String provincia;
 
+    @Column(nullable = false, length = 100)
+    private String direccion;
+
     @Column(nullable = false)
     private boolean disponible;
 
@@ -88,6 +93,12 @@ public class AlojamientoModel {
 
     @Column(nullable = false)
     private int capacidad;
+
+    @Column
+    private double valoracionMedia;
+
+    @Column
+    private int contadorValoraciones;
 
     @Lob
     @Column(nullable = false, columnDefinition = "MEDIUMBLOB") //16 MB
@@ -215,5 +226,29 @@ public class AlojamientoModel {
 
     public void setReservas(List<ReservaModel> reservas) {
         this.reservas = reservas;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public double getValoracionMedia() {
+        return valoracionMedia;
+    }
+
+    public void setValoracionMedia(double valoracionMedia) {
+        this.valoracionMedia = valoracionMedia;
+    }
+
+    public int getContadorValoraciones() {
+        return contadorValoraciones;
+    }
+
+    public void setContadorValoraciones(int contadorValoraciones) {
+        this.contadorValoraciones = contadorValoraciones;
     }
 }
