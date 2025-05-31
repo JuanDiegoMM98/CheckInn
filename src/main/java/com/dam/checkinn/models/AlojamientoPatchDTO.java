@@ -7,6 +7,7 @@ public record AlojamientoPatchDTO(
         String nombre,
         String descripcion,
         String provincia,
+        String direccion,
         double precioNoche,
         int capacidad,
         byte[] imagen,
