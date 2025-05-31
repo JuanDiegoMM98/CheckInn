@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Info Apartamento</title>
+  <link href="styles.css" rel="stylesheet"> 
+  <style>
+
+    .info-apartamento h2 {
+      color: #f90;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .info-contenido {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .info-imagen {
+      width: 300px;
+      height: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .info-imagen img {
+      width: 300px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      background-color: #eee;
+    }
+    .estrellas {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      color: orange;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .valoracion {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .info-detalles {
+      flex: 2;
+      min-width: 300px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .checkbox-row {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-row label {
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .boton-reserva {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .btn-guardar {
+      background-color: #ffa500;
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-guardar:hover {
+      background-color: #e69500;
+    }
+  </style>
+</head>
+<body>
+
+    <header class="navbar">
+    <div class="navbar-left">
+      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
+      <nav>
+        <a href="Home.html">Home</a>
+        <a href="ListadoReservas.html">Mis reservas</a>
+        <a href="ListadoApartamentos.html">Mis Apartamentos</a>
+        <a href="AreaPersonal.html">Área personal</a>
+      </nav>
+    </div>
+    <div class="navbar-right">
+      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
+      <span>Adam<br><small>Admi</small></span>
+    </div>
+  </header>
+
+  <div class="form-container">
+    <h2>Villa Chirinos</h2>
+
+    <div class="info-contenido">
+      <!-- Imagen y estrellas -->
+      <div class="info-imagen">
+        <img src="placeholder.jpg" alt="Imagen del apartamento" />
+        <div class="estrellas">
+          <span class="estrella">&#9733;</span>
+          <span class="estrella">&#9733;</span>
+          <span class="estrella">&#9733;</span>
+          <span class="estrella">&#9734;</span>
+          <span class="estrella">&#9734;</span>
+          <span class="valoracion">(3,7)</span>
+        </div>
+      </div>
+
+      <!-- Detalles -->
+      <div class="info-detalles">
+        <div class="input-row">
+          <div class="form-group">
+            <label>Provincia</label>
+            <input type="text" value="" readonly />
+          </div>
+          <div class="form-group">
+            <label>Dirección</label>
+            <input type="text" value="" readonly />
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="form-group">
+            <label>Capacidad</label>
+            <input type="text" value="" readonly />
+          </div>
+          <div class="form-group">
+            <label>Precio por noche</label>
+            <input type="text" value="" readonly />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea rows="3" readonly></textarea>
+        </div>
+
+        <div class="checkbox-row">
+          <label class="readonly-checkbox"><input type="checkbox" name="wifi"/> WiFi</label>
+          <label class="readonly-checkbox"><input type="checkbox" name="piscina" /> Piscina</label>
+          <label class="readonly-checkbox"><input type="checkbox" name="barbacoa" /> Barbacoa</label>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="boton-reserva">
+      <button class="btn-guardar">Reservar</button>
+    </div>
+  </div>
+</body>
+</html>
