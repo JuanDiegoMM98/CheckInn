@@ -3,17 +3,15 @@ package com.dam.checkinn.services;
 import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AltaUsuarioException;
 import com.dam.checkinn.exceptions.BorradoUsuarioException;
-import com.dam.checkinn.exceptions.ServerException;
-import com.dam.checkinn.models.Credenciales;
+import com.dam.checkinn.models.CredencialesDTO;
+import com.dam.checkinn.models.ReservaModel;
+import com.dam.checkinn.models.UsuarioDTO;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.repositories.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.sql.rowset.serial.SerialException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +34,9 @@ public class UsuarioService {
 
     /* MÉTODOS ********************************************************************************************************/
 
-    public UsuarioModel login(Credenciales credenciales) throws Exception {
-        String dni = credenciales.dni();
-        String contraseña = credenciales.contraseña();
+    public UsuarioModel login(CredencialesDTO credencialesDTO) throws Exception {
+        String dni = credencialesDTO.dni();
+        String contraseña = credencialesDTO.contraseña();
 
         Optional<UsuarioModel> usuarioConsultado = usuarioRepository.findByDniIgnoreCase(dni);
 
@@ -61,7 +59,7 @@ public class UsuarioService {
             throw new AltaUsuarioException();
         }
 
-        if (LocalDate.now().getYear() - usuario.getFechaNacimiento().getYear() < 18 ) {
+        if (LocalDate.now().getYear() - usuario.getFechaNacimiento().getYear() < 18) {
             throw new AltaUsuarioException();
         }
 
@@ -97,11 +95,34 @@ public class UsuarioService {
         usuarioRepository.deleteById(dni);
     }
 
-    public UsuarioModel updateUser(String dni, UsuarioModel usuario) throws Exception {
-        if (!usuarioRepository.existsById(dni) || !dni.equals(usuario.getDni())) {
+    public UsuarioModel updateUser(String dni, UsuarioDTO dto) throws Exception {
+        if (!usuarioRepository.existsById(dni)) {
             throw new AccesoDenegadoException();
         }
 
-        return usuarioRepository.save(usuario);
+        UsuarioModel usuarioModel = usuarioRepository.findByDniIgnoreCase(dni).get();
+
+        usuarioModel.setNombre(dto.nombre());
+        usuarioModel.setApellido1(dto.apellido1());
+        usuarioModel.setApellido2(dto.apellido2());
+        usuarioModel.setCorreo(dto.correo());
+        usuarioModel.setContraseña(passwordEncoder.encode(dto.contraseña()));
+        usuarioModel.setTarjetaBancaria(dto.tarjetaBancaria());
+        usuarioModel.setDireccion(dto.direccion());
+        usuarioModel.setFechaNacimiento(dto.fechaNacimiento());
+        usuarioModel.setRol(UsuarioModel.Rol.valueOf(dto.rol()));
+        usuarioModel.setTelefono(dto.telefono());
+        usuarioModel.setGenero(UsuarioModel.Genero.valueOf(dto.genero()));
+
+        return usuarioRepository.save(usuarioModel);
+    }
+
+    public List<ReservaModel> getAllReservasByDniUsuario(String dni) throws Exception {
+
+        Optional<UsuarioModel> usuarioOptional = usuarioRepository.findByDniIgnoreCase(dni);
+        if (usuarioOptional.isEmpty()) {
+            throw new AccesoDenegadoException();
+        }
+        return usuarioOptional.get().getReservas();
     }
 }

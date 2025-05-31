@@ -23,6 +23,30 @@ public class AlojamientoModel {
         this.disponible = true;
     }
 
+    // Para patch
+    public AlojamientoModel(
+            String nombre,
+            String descripcion,
+            String provincia,
+            double precioNoche,
+            int capacidad,
+            byte[] imagen,
+            List<Servicio> servicios,
+            LocalDate inicioBloqueo,
+            LocalDate finBloqueo
+    ) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.provincia = provincia;
+        this.precioNoche = precioNoche;
+        this.capacidad = capacidad;
+        this.imagen = imagen;
+        this.servicios = servicios;
+        this.inicioBloqueo = inicioBloqueo;
+        this.finBloqueo = finBloqueo;
+    }
+
+    // Para precarga
     public AlojamientoModel(String nombre, String descripcion, String provincia,
                             double precioNoche, int capacidad, byte[] imagen, List<Servicio> servicios,
                             LocalDate inicioBloqueo, LocalDate finBloqueo, UsuarioModel usuarioAlojamiento

@@ -18,13 +18,14 @@ public class ReservaModel {
     }
 
     public ReservaModel(double precio, LocalDate fechaInicio, LocalDate fechaFin,
-                        UsuarioModel usuarioReserva, AlojamientoModel alojamiento) {
+                        UsuarioModel usuarioReserva, AlojamientoModel alojamiento, String motivoCancelacion) {
         this.precio = precio;
         this.cancelada = false;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.usuarioReserva = usuarioReserva;
         this.alojamiento = alojamiento;
+        this.motivoCancelacion = motivoCancelacion;
     }
 
     /* ATRIBUTOS ******************************************************************************************************/
@@ -44,6 +45,9 @@ public class ReservaModel {
 
     @Column(nullable = false)
     private LocalDate fechaFin;
+
+    @Column
+    private String motivoCancelacion;
 
     /* RELACIONES *****************************************************************************************************/
 
@@ -114,5 +118,13 @@ public class ReservaModel {
 
     public void setAlojamiento(AlojamientoModel alojamiento) {
         this.alojamiento = alojamiento;
+    }
+
+    public String getMotivoCancelacion() {
+        return motivoCancelacion;
+    }
+
+    public void setMotivoCancelacion(String motivoCancelacion) {
+        this.motivoCancelacion = motivoCancelacion;
     }
 }

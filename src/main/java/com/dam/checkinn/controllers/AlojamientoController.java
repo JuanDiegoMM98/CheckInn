@@ -5,6 +5,8 @@ import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.AltaAlojamientoException;
 import com.dam.checkinn.exceptions.BorradoUsuarioException;
 import com.dam.checkinn.models.AlojamientoModel;
+import com.dam.checkinn.models.AlojamientoPatchDTO;
+import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.services.AlojamientoService;
 import com.dam.checkinn.services.UsuarioService;
@@ -21,11 +23,9 @@ public class AlojamientoController {
     /* DEPENDENCIAS ***************************************************************************************************/
 
     private final AlojamientoService alojamientoService;
-    private final UsuarioService usuarioService;
 
-    public AlojamientoController(AlojamientoService alojamientoService, UsuarioService usuarioService) {
+    public AlojamientoController(AlojamientoService alojamientoService) {
         this.alojamientoService = alojamientoService;
-        this.usuarioService = usuarioService;
     }
 
     /* MÉTODOS ********************************************************************************************************/
@@ -82,16 +82,30 @@ public class AlojamientoController {
         }
     }
 
-    @PatchMapping()
+    @PatchMapping
     public ResponseEntity<AlojamientoModel> updateAlojamiento(
             @RequestParam int id,
-            @RequestBody AlojamientoModel alojamiento) {
+            @RequestBody AlojamientoPatchDTO alojamiento) {
 
         try {
             AlojamientoModel alojamientoActualizado = alojamientoService.updateAlojamiento(id, alojamiento);
             return ResponseEntity.ok(alojamientoActualizado);
         } catch (AlojamientoNotFoundException e) {
             return ResponseEntity.status(404).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/{id}/reservas")
+    public ResponseEntity<List<ReservaModel>> getReservasByIdAlojamiento(
+            @PathVariable int id
+    ) {
+        try {
+            List<ReservaModel> allReservasByIdAlojamiento = alojamientoService.getAllReservasByIdAlojamiento(id);
+            return ResponseEntity.ok(allReservasByIdAlojamiento);
+        } catch (AlojamientoNotFoundException e) {
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
