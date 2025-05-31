@@ -109,6 +109,13 @@ public class UsuarioService {
         usuarioModel.setContraseña(passwordEncoder.encode(dto.contraseña()));
         usuarioModel.setTarjetaBancaria(dto.tarjetaBancaria());
         usuarioModel.setDireccion(dto.direccion());
+        if (dto.fechaNacimiento() != null) {
+            if (LocalDate.now().getYear() - dto.fechaNacimiento().getYear() >= 18) {
+                usuarioModel.setFechaNacimiento(dto.fechaNacimiento());
+            } else {
+                throw new AltaUsuarioException();
+            }
+        }
         usuarioModel.setFechaNacimiento(dto.fechaNacimiento());
         usuarioModel.setRol(UsuarioModel.Rol.valueOf(dto.rol()));
         usuarioModel.setTelefono(dto.telefono());

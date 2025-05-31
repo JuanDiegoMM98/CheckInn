@@ -32,7 +32,7 @@ public class AlojamientoService {
 
     /* MÉTODOS ********************************************************************************************************/
 
-    public AlojamientoModel createAlojamiento(String dni, AlojamientoModel alojamientoModel) throws Exception{
+    public AlojamientoModel createAlojamiento(String dni, AlojamientoModel alojamientoModel) throws Exception {
         if (alojamientoRepository.existsByNombre(alojamientoModel.getNombre())) {
             throw new AltaAlojamientoException();
         }
@@ -54,7 +54,6 @@ public class AlojamientoService {
     }
 
 
-
     public List<AlojamientoModel> getAllAlojamientos() {
         return alojamientoRepository.findAll();
     }
@@ -68,7 +67,7 @@ public class AlojamientoService {
         return optionalAlojamiento.get();
     }
 
-    public void deleteAlojamiento(int id) throws Exception{
+    public void deleteAlojamiento(int id) throws Exception {
         if (!alojamientoRepository.existsById(id)) {
             throw new AlojamientoNotFoundException();
         }
@@ -89,9 +88,15 @@ public class AlojamientoService {
         alojamiento.setPrecioNoche(dto.precioNoche());
         alojamiento.setCapacidad(dto.capacidad());
         alojamiento.setImagen(dto.imagen());
-        alojamiento.setServicios(dto.servicios());
-        alojamiento.setInicioBloqueo(dto.inicioBloqueo());
-        alojamiento.setFinBloqueo(dto.finBloqueo());
+        if (dto.servicios() != null) {
+            alojamiento.setServicios(dto.servicios());
+        }
+        if (dto.inicioBloqueo() != null) {
+            alojamiento.setInicioBloqueo(dto.inicioBloqueo());
+        }
+        if (dto.finBloqueo() != null) {
+            alojamiento.setFinBloqueo(dto.finBloqueo());
+        }
 
         return alojamientoRepository.save(alojamiento);
     }

@@ -74,7 +74,7 @@ public class UsuarioController {
             usuarioService.deleteUser(dni);
             return ResponseEntity.ok().build();
         } catch (BorradoUsuarioException e) {
-            return ResponseEntity.status(409).build();
+            return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -90,6 +90,8 @@ public class UsuarioController {
             return ResponseEntity.ok(usuarioActualizado);
         } catch (AccesoDenegadoException e) {
             return ResponseEntity.status(404).build();
+        } catch (AltaUsuarioException e) {
+            return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
