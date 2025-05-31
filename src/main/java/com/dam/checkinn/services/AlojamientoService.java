@@ -4,9 +4,12 @@ import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.AltaAlojamientoException;
 import com.dam.checkinn.exceptions.ServerException;
 import com.dam.checkinn.models.AlojamientoModel;
+import com.dam.checkinn.models.AlojamientoPatchDTO;
+import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -72,10 +75,32 @@ public class AlojamientoService {
         alojamientoRepository.deleteById(id);
     }
 
-    public AlojamientoModel updateAlojamiento(int id, AlojamientoModel alojamiento) throws AlojamientoNotFoundException {
+    public AlojamientoModel updateAlojamiento(int id, AlojamientoPatchDTO dto) throws Exception {
         if (!alojamientoRepository.existsById(id)) {
             throw new AlojamientoNotFoundException();
         }
+
+        AlojamientoModel alojamiento = alojamientoRepository.findById(id).get();
+
+        alojamiento.setNombre(dto.nombre());
+        alojamiento.setDescripcion(dto.descripcion());
+        alojamiento.setProvincia(dto.provincia());
+        alojamiento.setPrecioNoche(dto.precioNoche());
+        alojamiento.setCapacidad(dto.capacidad());
+        alojamiento.setImagen(dto.imagen());
+        alojamiento.setServicios(dto.servicios());
+        alojamiento.setInicioBloqueo(dto.inicioBloqueo());
+        alojamiento.setFinBloqueo(dto.finBloqueo());
+
         return alojamientoRepository.save(alojamiento);
+    }
+
+    public List<ReservaModel> getAllReservasByIdAlojamiento(int id) throws Exception {
+        Optional<AlojamientoModel> alojamientoOptional = alojamientoRepository.findById(id);
+        if (alojamientoOptional.isEmpty()) {
+            throw new AlojamientoNotFoundException();
+        }
+        AlojamientoModel alojamientoModel = alojamientoOptional.get();
+        return alojamientoModel.getReservas();
     }
 }

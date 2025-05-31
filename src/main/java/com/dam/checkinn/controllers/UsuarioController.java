@@ -1,20 +1,16 @@
 package com.dam.checkinn.controllers;
 
-import com.dam.checkinn.exceptions.AccesoDenegadoException;
-import com.dam.checkinn.exceptions.AltaUsuarioException;
-import com.dam.checkinn.exceptions.BorradoUsuarioException;
-import com.dam.checkinn.exceptions.ServerException;
-import com.dam.checkinn.models.Credenciales;
+import com.dam.checkinn.exceptions.*;
+import com.dam.checkinn.models.CredencialesDTO;
+import com.dam.checkinn.models.ReservaModel;
+import com.dam.checkinn.models.UsuarioDTO;
 import com.dam.checkinn.models.UsuarioModel;
-import com.dam.checkinn.repositories.UsuarioRepository;
 import com.dam.checkinn.services.UsuarioService;
-import org.apache.catalina.connector.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("${api.basepath}")
@@ -32,9 +28,9 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<UsuarioModel> login(
-            @RequestBody Credenciales credenciales) {
+            @RequestBody CredencialesDTO credencialesDTO) {
         try {
-            return ResponseEntity.ok(usuarioService.login(credenciales));
+            return ResponseEntity.ok(usuarioService.login(credencialesDTO));
         } catch (AccesoDenegadoException e) {
             return ResponseEntity.status(401).build();
         } catch (Exception a) {
@@ -84,14 +80,28 @@ public class UsuarioController {
         }
     }
 
-    @PatchMapping("/usuarios")
+    @PatchMapping("/usuarios/{dni}")
     public ResponseEntity<UsuarioModel> updateUser(
-            @RequestParam String dni,
-            @RequestBody UsuarioModel usuario) {
+            @PathVariable String dni,
+            @RequestBody UsuarioDTO dto) {
 
         try {
-            UsuarioModel usuarioActualizado = usuarioService.updateUser(dni, usuario);
+            UsuarioModel usuarioActualizado = usuarioService.updateUser(dni, dto);
             return ResponseEntity.ok(usuarioActualizado);
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(404).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/usuarios/{dni}/reservas")
+    public ResponseEntity<List<ReservaModel>> getReservasByDniUsuario(
+            @PathVariable String dni
+    ) {
+        try {
+            List<ReservaModel> allReservasByDniUsuario = usuarioService.getAllReservasByDniUsuario(dni);
+            return ResponseEntity.ok(allReservasByDniUsuario);
         } catch (AccesoDenegadoException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {

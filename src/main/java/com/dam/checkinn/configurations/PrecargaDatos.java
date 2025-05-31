@@ -93,7 +93,8 @@ public class PrecargaDatos {
                         LocalDate.of(2025, 7, 10),            // fechaInicio
                         LocalDate.of(2025, 7, 12),            // fechaFin
                         u1,                                                          // usuario que reserva
-                        alojamiento                           // alojamiento reservado
+                        alojamiento,     // alojamiento reservado
+                        null
                 );
 
                 reservaRepository.save(reserva);
