@@ -82,9 +82,9 @@ public class AlojamientoController {
         }
     }
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     public ResponseEntity<AlojamientoModel> updateAlojamiento(
-            @RequestParam int id,
+            @PathVariable int id,
             @RequestBody AlojamientoPatchDTO alojamiento) {
 
         try {
