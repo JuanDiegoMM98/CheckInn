@@ -156,28 +156,28 @@
         <div class="input-row">
           <div class="form-group">
             <label>Provincia</label>
-            <input type="text" value="" readonly />
+            <input type="text" name="provincia" value="" readonly />
           </div>
           <div class="form-group">
             <label>Dirección</label>
-            <input type="text" value="" readonly />
+            <input type="text" name="direccion" value="" readonly />
           </div>
         </div>
 
         <div class="input-row">
           <div class="form-group">
             <label>Capacidad</label>
-            <input type="text" value="" readonly />
+            <input type="text" name="capacidad" value="" readonly />
           </div>
           <div class="form-group">
             <label>Precio por noche</label>
-            <input type="text" value="" readonly />
+            <input type="text" name="precio" value="" readonly />
           </div>
         </div>
 
         <div class="form-group">
           <label>Descripción</label>
-          <textarea rows="3" readonly></textarea>
+          <textarea rows="4" name="descripcion" readonly></textarea>
         </div>
 
         <div class="checkbox-row">
@@ -193,5 +193,32 @@
       <button class="btn-guardar">Reservar</button>
     </div>
   </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+
+        // Obtener todos los parámetros de la URL
+        const params = new URLSearchParams(window.location.search);
+
+        // Extraer el valor de 'idApartamento'
+        const idApartamento = params.get("idApartamento");
+
+        try {
+          const response = await axios.get(`${uri}/apartamentos/${idApartamento}`, datos);
+
+          if (response.status === 200) {
+
+          } else if (response.status === 404) {
+            alert("No se ha encontrado el apartamento indicado");
+          } else {
+            alert("Ha habido un error durante la búsqueda del apartamento!");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Error al conectar con el servidor.");
+        }
+      });
+    </script>
 </body>
 </html>
