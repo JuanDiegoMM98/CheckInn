@@ -3,10 +3,9 @@ package com.dam.checkinn.services;
 import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AltaUsuarioException;
 import com.dam.checkinn.exceptions.BorradoUsuarioException;
-import com.dam.checkinn.models.CredencialesDTO;
-import com.dam.checkinn.models.ReservaModel;
-import com.dam.checkinn.models.UsuarioDTO;
-import com.dam.checkinn.models.UsuarioModel;
+import com.dam.checkinn.models.*;
+import com.dam.checkinn.repositories.AlojamientoRepository;
+import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +26,7 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, ReservaRepository reservaRepository, AlojamientoRepository alojamientoRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -124,12 +123,19 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioModel);
     }
 
-    public List<ReservaModel> getAllReservasByDniUsuario(String dni) throws Exception {
+    public List<MisReservasDTO> getAllReservasByDniUsuario(String dni) throws Exception {
 
         Optional<UsuarioModel> usuarioOptional = usuarioRepository.findByDniIgnoreCase(dni);
         if (usuarioOptional.isEmpty()) {
             throw new AccesoDenegadoException();
         }
-        return usuarioOptional.get().getReservas();
+
+        List<ReservaModel> reservas = usuarioOptional.get().getReservas();
+        List<MisReservasDTO> misReservasDTO = new ArrayList<>();
+        reservas.forEach( r -> {
+            MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), r.getFechaInicio(), r.getFechaFin(), r.getAlojamiento());
+            misReservasDTO.add(reservaDTO);
+        });
+        return misReservasDTO;
     }
 }
