@@ -63,14 +63,14 @@ public class UsuarioService {
             throw new AltaUsuarioException();
         }
 
-        //
-
-
         try {
             String contraseña = usuario.getContraseña();
             usuario.setContraseña(passwordEncoder.encode(contraseña));
             usuario.setAlojamientos(new ArrayList<>());
             usuario.setReservas(new ArrayList<>());
+            if (usuario.getTelefono().equals("")) {
+                usuario.setTelefono(null);
+            }
             return usuarioRepository.save(usuario);
         } catch (DataIntegrityViolationException e) {
             throw new AltaUsuarioException();

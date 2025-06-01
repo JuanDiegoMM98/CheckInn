@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="usuarios")
+@Table(name = "usuarios")
 public class UsuarioModel {
 
     /* DEFINICIÓN DE ENUMERADOS ***************************************************************************************/
@@ -84,7 +84,7 @@ public class UsuarioModel {
     @Column(length = 9)
     private String telefono;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Genero genero;
 
