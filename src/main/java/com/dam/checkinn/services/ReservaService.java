@@ -92,7 +92,7 @@ public class ReservaService {
         }
 
         // Si tiene valoracion, modificamos las valoraciones del alojamiento
-        if (dto.valoracion() != -1) {
+        if (dto.valoracion() != 0) {
             AlojamientoModel alojamiento = alojamientoRepository.findById(dto.idAlojamiento()).get();
             int contadorValoraciones = alojamiento.getContadorValoraciones();
             double valoracionMedia = alojamiento.getValoracionMedia();

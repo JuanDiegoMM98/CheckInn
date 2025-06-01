@@ -1,19 +1,18 @@
 package com.dam.checkinn.controllers;
 
-import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.AltaAlojamientoException;
-import com.dam.checkinn.exceptions.BorradoUsuarioException;
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.AlojamientoPatchDTO;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.services.AlojamientoService;
-import com.dam.checkinn.services.UsuarioService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -30,9 +29,9 @@ public class AlojamientoController {
 
     /* MÉTODOS ********************************************************************************************************/
 
-    @PostMapping
+    @PostMapping("/{dni}")
     public ResponseEntity<AlojamientoModel> createAlojamiento(
-            @RequestParam String dni,
+            @PathVariable String dni,
             @RequestBody AlojamientoModel alojamiento) {
         try {
             System.out.println("entra en metodo");
@@ -61,9 +60,23 @@ public class AlojamientoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AlojamientoModel>> getAllAlojamientos() {
+    public ResponseEntity<List<AlojamientoModel>> getAlojamientosByFiltro(
+            @RequestParam(required = false) String provincia,
+            @RequestParam(required = false) Double valoracionMin,
+            @RequestParam(required = false) Double precioMin,
+            @RequestParam(required = false) List<String> servicios,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaEntrada,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaSalida,
+            @RequestParam(required = false) Integer personas
+    ) {
         try {
-            List<AlojamientoModel> allAlojamientos = alojamientoService.getAllAlojamientos();
+            List<AlojamientoModel> allAlojamientos = alojamientoService.getAlojamientosByFiltro(provincia,
+                    valoracionMin,
+                    precioMin,
+                    servicios,
+                    fechaEntrada,
+                    fechaSalida,
+                    personas);
             return ResponseEntity.ok(allAlojamientos);
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
