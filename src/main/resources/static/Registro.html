@@ -262,7 +262,7 @@
       const response = await axios.post(`${uri}/usuarios`, datos);
 
       if (response.status === 201) {
-        guardar_storage(response.data);
+        guardar_session(response.data);
         window.location.href = "Home.html";
       } else if (response.status === 404) {
         alert("Registro fallido");
