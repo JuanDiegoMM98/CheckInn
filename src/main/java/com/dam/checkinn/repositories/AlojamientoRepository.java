@@ -17,8 +17,7 @@ public interface AlojamientoRepository extends JpaRepository<AlojamientoModel, I
             "(:provincia IS NULL OR a.provincia = :provincia) AND " +
             "(:valoracionMinima IS NULL OR a.valoracionMedia >= :valoracionMinima) AND " +
             "(:precioMaximo IS NULL OR a.precioNoche <= :precioMaximo) AND " +
-            "(:personasMaximas IS NULL OR a.capacidad >= :personasMaximas) AND " +
-            "a.disponible = true")
+            "(:personasMaximas IS NULL OR a.capacidad >= :personasMaximas)")
     List<AlojamientoModel> findByFiltrosBasicos(
             @Param("provincia") String provincia,
             @Param("valoracionMinima") Double valoracionMinima,

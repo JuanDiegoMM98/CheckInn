@@ -34,11 +34,10 @@ public class AlojamientoController {
             @PathVariable String dni,
             @RequestBody AlojamientoModel alojamiento) {
         try {
-            System.out.println("entra en metodo");
             AlojamientoModel nuevoAlojamiento = alojamientoService.createAlojamiento(dni, alojamiento);
             URI location = URI.create("/alojamientos/" + nuevoAlojamiento.getId());
             return ResponseEntity
-                    .created(location) // Esto automáticamente pone el código 201 Created y la cabecera Location
+                    .created(location)
                     .body(nuevoAlojamiento);
         } catch (AltaAlojamientoException e) {
             return ResponseEntity.status(409).build();
