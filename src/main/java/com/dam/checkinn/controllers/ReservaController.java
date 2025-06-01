@@ -2,6 +2,7 @@ package com.dam.checkinn.controllers;
 
 import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
+import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
 import com.dam.checkinn.models.CrearReservaDTO;
 import com.dam.checkinn.models.ReservaModel;
@@ -34,7 +35,7 @@ public class ReservaController {
             return ResponseEntity
                     .created(location) // Esto automáticamente pone el código 201 Created y la cabecera Location
                     .body(nuevaReserva);
-        } catch (AlojamientoNotFoundException |AccesoDenegadoException e) {
+        } catch (AlojamientoNotFoundException | AccesoDenegadoException | ReservaNoValidaException e ) {
             return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();

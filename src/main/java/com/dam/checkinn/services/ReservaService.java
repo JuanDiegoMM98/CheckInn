@@ -2,6 +2,7 @@ package com.dam.checkinn.services;
 
 import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
+import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.CrearReservaDTO;
@@ -13,6 +14,7 @@ import com.dam.checkinn.repositories.UsuarioRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -51,6 +53,24 @@ public class ReservaService {
         // Obtenemos alojamiento y usuario
         AlojamientoModel alojamientoModel = alojamientoRepository.findById(dto.idAlojamiento()).get();
         UsuarioModel usuarioModel = usuarioRepository.findByDniIgnoreCase(dto.dni()).get();
+
+        // Validación de solapamiento con fechas de bloqueo
+        LocalDate inicioBloqueo = alojamientoModel.getInicioBloqueo();
+        LocalDate finBloqueo = alojamientoModel.getFinBloqueo();
+
+        if (inicioBloqueo != null && finBloqueo != null &&
+                !dto.fechaFin().isBefore(inicioBloqueo) &&
+                !dto.fechaInicio().isAfter(finBloqueo)) {
+            throw new ReservaNoValidaException();
+        }
+
+        // Validacion de solapamiento con otras reservas
+        List<ReservaModel> reservasSolapadas = reservaRepository.findReservasSolapadas(
+                dto.idAlojamiento(), dto.fechaInicio(), dto.fechaFin());
+
+        if (!reservasSolapadas.isEmpty()) {
+            throw new ReservaNoValidaException();
+        }
 
         // Calculamos precio
         double precioNoche = alojamientoModel.getPrecioNoche();
