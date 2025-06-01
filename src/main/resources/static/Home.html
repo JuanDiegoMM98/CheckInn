@@ -222,7 +222,7 @@
     </div>
   </header>
 
-  <h1>Bienvenido a CheckInn, Adam!</h1>
+  <h1>Bienvenido a CheckInn!</h1>
 
   <div class="carousel-container">
     <button class="nav-arrow nav-left" onclick="scrollCards(-1)">❮</button>
@@ -319,104 +319,105 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="app.js"></script>
-<script>
-  const cardsWrapper = document.getElementById("cardsWrapper");
+  <script src="app.js"></script>
+  <script>
+    const cardsWrapper = document.getElementById("cardsWrapper");
 
-  // Mostrar nombre y rol del usuario guardado en sessionStorage
-  document.addEventListener("DOMContentLoaded", function () {
-    const usuarioGuardado = sessionStorage.getItem("nombre");
+    // Mostrar nombre y rol del usuario guardado en sessionStorage
+    document.addEventListener("DOMContentLoaded", function () {
+      const usuarioGuardado = sessionStorage.getItem("nombre");
 
-    if (usuarioGuardado) {
-      const usuario = JSON.parse(usuarioGuardado);
+      if (usuarioGuardado) {
+        const usuario = JSON.parse(usuarioGuardado);
 
-      const nombreElement = document.querySelector('span[name="nombre"]');
-      const rolElement = document.querySelector('small[name="rol"]');
+        const nombreElement = document.querySelector('span[name="nombre"]');
+        const rolElement = document.querySelector('small[name="rol"]');
+        const nombreBienvenida = document.querySelector('[name="nombre"]');
 
-      if (nombreElement && rolElement) {
-        nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
-      }
-    }
-
-    // Cargar alojamientos al inicio
-    cargarAlojamientos();
-  });
-
-  // Función para renderizar tarjetas de alojamientos
-  function renderizarAlojamientos(lista) {
-    cardsWrapper.innerHTML = ""; // Limpiar contenido anterior
-
-    lista.forEach(apto => {
-      const card = document.createElement("a");
-      card.className = "card-link";
-      card.href = `InfoApartamento.html?idApartamento=${apto.idApartamento}`;
-
-      card.innerHTML = `
-        <div class="card">
-          <img src="${apto.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-          <div class="title">${apto.nombre}</div>
-          <div class="description">${apto.descripcion || 'Sin descripción.'}</div>
-          <span class="reservar">Reservar</span>
-        </div>
-      `;
-
-      cardsWrapper.appendChild(card);
-    });
-  }
-
-  // Función para cargar todos los alojamientos
-  async function cargarAlojamientos() {
-    try {
-      const response = await axios.get(`${uri}/alojamientos`);
-      if (response.status === 200) {
-        renderizarAlojamientos(response.data);
-      } else {
-        alert("Error al cargar los apartamentos.");
-      }
-    } catch (error) {
-      console.error("Error al cargar alojamientos:", error);
-      cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos.</p>";
-    }
-  }
-
-  // Filtro del formulario
-  document.getElementById("filtroForm").addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-    const params = new URLSearchParams();
-
-    for (const [key, value] of formData.entries()) {
-      if (value) {
-        if (key === "servicios") {
-          params.append("servicios", value);
-        } else {
-          params.set(key, value);
+        if (nombreElement && rolElement) {
+          nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
         }
       }
-    }
 
-    try {
-      const response = await axios.get(`${uri}/alojamientos?${params.toString()}`);
-      if (response.status === 200) {
-        renderizarAlojamientos(response.data);
-      } else {
-        alert("Error al cargar los apartamentos filtrados.");
-      }
-    } catch (error) {
-      console.error("Error al filtrar alojamientos:", error);
-      cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos filtrados.</p>";
-    }
-  });
-
-  // Carrusel horizontal con flechas
-  function scrollCards(direction) {
-    const scrollAmount = 320;
-    cardsWrapper.scrollBy({
-      left: direction * scrollAmount,
-      behavior: "smooth"
+      // Cargar alojamientos al inicio
+      cargarAlojamientos();
     });
-  }
-</script>
+
+    // Función para renderizar tarjetas de alojamientos
+    function renderizarAlojamientos(lista) {
+      cardsWrapper.innerHTML = ""; // Limpiar contenido anterior
+
+      lista.forEach(apto => {
+        const card = document.createElement("a");
+        card.className = "card-link";
+        card.href = `InfoApartamento.html?idApartamento=${apto.idApartamento}`;
+
+        card.innerHTML = `
+          <div class="card">
+            <img src="${apto.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+            <div class="title">${apto.nombre}</div>
+            <div class="description">${apto.descripcion || 'Sin descripción.'}</div>
+            <span class="reservar">Reservar</span>
+          </div>
+        `;
+
+        cardsWrapper.appendChild(card);
+      });
+    }
+
+    // Función para cargar todos los alojamientos
+    async function cargarAlojamientos() {
+      try {
+        const response = await axios.get(`${uri}/alojamientos`);
+        if (response.status === 200) {
+          renderizarAlojamientos(response.data);
+        } else {
+          alert("Error al cargar los apartamentos.");
+        }
+      } catch (error) {
+        console.error("Error al cargar alojamientos:", error);
+        cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos.</p>";
+      }
+    }
+
+    // Filtro del formulario
+    document.getElementById("filtroForm").addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const params = new URLSearchParams();
+
+      for (const [key, value] of formData.entries()) {
+        if (value) {
+          if (key === "servicios") {
+            params.append("servicios", value);
+          } else {
+            params.set(key, value);
+          }
+        }
+      }
+
+      try {
+        const response = await axios.get(`${uri}/alojamientos?${params.toString()}`);
+        if (response.status === 200) {
+          renderizarAlojamientos(response.data);
+        } else {
+          alert("Error al cargar los apartamentos filtrados.");
+        }
+      } catch (error) {
+        console.error("Error al filtrar alojamientos:", error);
+        cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos filtrados.</p>";
+      }
+    });
+
+    // Carrusel horizontal con flechas
+    function scrollCards(direction) {
+      const scrollAmount = 320;
+      cardsWrapper.scrollBy({
+        left: direction * scrollAmount,
+        behavior: "smooth"
+      });
+    }
+  </script>
 </body>
 </html>

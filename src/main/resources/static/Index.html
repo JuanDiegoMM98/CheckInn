@@ -202,7 +202,7 @@
       const response = await axios.post(`${uri}/login`, datos);
 
       if (response.status === 200) {
-        guardar_storage(response.data);
+        guardar_session(response.data);
         window.location.href = "Home.html";
       } else if (response.status === 401) {
         alert("Los datos introducidos no son correctos");
