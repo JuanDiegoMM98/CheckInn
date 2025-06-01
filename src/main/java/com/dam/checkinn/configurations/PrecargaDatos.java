@@ -1,4 +1,4 @@
-package com.dam.checkinn;
+package com.dam.checkinn.configurations;
 
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
@@ -13,6 +13,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,14 +26,24 @@ import java.util.List;
 @Configuration
 public class PrecargaDatos {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    /* DEPENDENCIAS ***************************************************************************************************/
 
-    @Autowired
-    private AlojamientoRepository alojamientoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ReservaRepository reservaRepository;
+    private final AlojamientoRepository alojamientoRepository;
+
+    private final ReservaRepository reservaRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public PrecargaDatos(UsuarioRepository usuarioRepository, AlojamientoRepository alojamientoRepository,
+                         ReservaRepository reservaRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.alojamientoRepository = alojamientoRepository;
+        this.reservaRepository = reservaRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    /* BEAN ***********************************************************************************************************/
 
     @Bean
     @Order(1)
@@ -45,13 +56,13 @@ public class PrecargaDatos {
                 // USUARIOS
                 UsuarioModel u1 = new UsuarioModel(
                         "12345678A", "Juan", "Pérez", "Gómez", "juan@mail.com",
-                        "pass1234", "1111222233334444", "Calle Falsa 123", LocalDate.of(1980, 5, 20),
-                        "600123456", UsuarioModel.Genero.MASCULINO, new ArrayList<>(), new ArrayList<>());
+                        passwordEncoder.encode("pass1234"), "1111222233334444", "Calle Falsa 123", LocalDate.of(1980, 5, 20),
+                        "600123456", UsuarioModel.Genero.MASCULINO);
 
                 UsuarioModel u2 = new UsuarioModel(
                         "12345678B", "Laura", "Martínez", "Ruiz", "laura@mail.com",
-                        "pass1234", "4444333322221111", "Avenida Siempre Viva 742", LocalDate.of(1990, 8, 15),
-                        "699987654", UsuarioModel.Genero.FEMENINO, new ArrayList<>(), new ArrayList<>());
+                        passwordEncoder.encode("pass1234"), "4444333322221111", "Avenida Siempre Viva 742", LocalDate.of(1990, 8, 15),
+                        "699987654", UsuarioModel.Genero.FEMENINO);
                 u2.setRol(UsuarioModel.Rol.PRO);
 
                 usuarioRepository.save(u1);
@@ -65,14 +76,15 @@ public class PrecargaDatos {
                         "Casa Rural El Bosque",
                         "Una casa rural acogedora en plena naturaleza.",
                         "Asturias",
+                        "Calle Falsa 123",
                         120.0,
                         5,
+                        0,
                         Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
                         servicios,
                         LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
                         LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
-                        u2,
-                        new ArrayList<>() // reservas vacías al inicio
+                        u2
                 );
 
                 alojamientoRepository.save(alojamiento);
@@ -83,7 +95,8 @@ public class PrecargaDatos {
                         LocalDate.of(2025, 7, 10),            // fechaInicio
                         LocalDate.of(2025, 7, 12),            // fechaFin
                         u1,                                                          // usuario que reserva
-                        alojamiento                           // alojamiento reservado
+                        alojamiento,     // alojamiento reservado
+                        null
                 );
 
                 reservaRepository.save(reserva);
