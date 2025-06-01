@@ -199,10 +199,10 @@
     const datos = Object.fromEntries(formData.entries());
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/login", datos);
+      const response = await axios.post(`${uri}/login`, datos);
 
       if (response.status === 200) {
-        guardar_localstorage(response.data);
+        guardar_storage(response.data);
         window.location.href = "Home.html";
       } else if (response.status === 401) {
         alert("Los datos introducidos no son correctos");
