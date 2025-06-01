@@ -55,19 +55,10 @@ public class AlojamientoService {
     }
 
 
-    public List<AlojamientoModel> buscarDisponiblesConFiltro(
-            String provincia,
-            Double valoracionMinima,
-            Double precioMaximo,
-            List<AlojamientoModel.Servicio> servicios,
-            LocalDate fechaInicio,
-            LocalDate fechaFin,
-            Integer personasMaximas
+    public List<AlojamientoModel> buscarDisponiblesConFiltro(String provincia, Double valoracionMinima, Double precioMaximo,
+                                                             List<AlojamientoModel.Servicio> servicios, LocalDate fechaInicio, LocalDate fechaFin, Integer personasMaximas
     ) {
-        List<AlojamientoModel> candidatos = alojamientoRepository.findByFiltrosBasicos(
-                provincia,
-                valoracionMinima,
-                precioMaximo,
+        List<AlojamientoModel> candidatos = alojamientoRepository.findByFiltrosBasicos(provincia, valoracionMinima, precioMaximo,
                 personasMaximas
         );
 
@@ -129,6 +120,8 @@ public class AlojamientoService {
         AlojamientoModel alojamientoModel = alojamientoOptional.get();
         return alojamientoModel.getReservas();
     }
+
+    /* AUXILIARES *****************************************************************************************************/
 
     private boolean tieneServicios(AlojamientoModel alojamiento, List<AlojamientoModel.Servicio> serviciosRequeridos) {
         if (serviciosRequeridos == null || serviciosRequeridos.isEmpty()) return true;

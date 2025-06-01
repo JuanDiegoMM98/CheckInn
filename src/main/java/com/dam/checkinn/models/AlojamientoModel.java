@@ -20,7 +20,6 @@ public class AlojamientoModel {
     /* CONSTRUCTOR ****************************************************************************************************/
 
     public AlojamientoModel() {
-        this.disponible = true;
     }
 
     // Para patch
@@ -55,7 +54,6 @@ public class AlojamientoModel {
         this.descripcion = descripcion;
         this.provincia = provincia;
         this.direccion = direccion;
-        this.disponible = true;
         this.precioNoche = precioNoche;
         this.capacidad = capacidad;
         this.valoracionMedia = valoracion;
@@ -84,9 +82,6 @@ public class AlojamientoModel {
 
     @Column(nullable = false, length = 100)
     private String direccion;
-
-    @Column(nullable = false)
-    private boolean disponible;
 
     @Column(nullable = false)
     private double precioNoche;
@@ -154,14 +149,6 @@ public class AlojamientoModel {
 
     public void setProvincia(String provincia) {
         this.provincia = provincia;
-    }
-
-    public boolean isDisponible() {
-        return disponible;
-    }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
     }
 
     public double getPrecioNoche() {
