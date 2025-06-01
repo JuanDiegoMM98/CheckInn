@@ -9,9 +9,9 @@ import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +54,11 @@ public class AlojamientoService {
     }
 
 
-    public List<AlojamientoModel> getAllAlojamientos() {
-        return alojamientoRepository.findAll();
+    public List<AlojamientoModel> getAlojamientosByFiltro(String provincia, Double valoracionMin, Double precioMin,
+                                                          List<String> servicios, LocalDate fechaEntrada,
+                                                          LocalDate fechaSalida, Integer personas) {
+        return alojamientoRepository.findAllByFiltro(provincia, valoracionMin, precioMin, servicios, fechaEntrada, fechaSalida,
+                personas);
     }
 
     public AlojamientoModel getAlojamientoById(int id) throws Exception {
