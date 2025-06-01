@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("${api.basepath}/reservas")
@@ -55,5 +54,8 @@ public class ReservaController {
             return ResponseEntity.status(500).build();
         }
     }
+
+    
+
 
 }

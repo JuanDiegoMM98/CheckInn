@@ -1,10 +1,7 @@
 package com.dam.checkinn.controllers;
 
 import com.dam.checkinn.exceptions.*;
-import com.dam.checkinn.models.CredencialesDTO;
-import com.dam.checkinn.models.ReservaModel;
-import com.dam.checkinn.models.UsuarioDTO;
-import com.dam.checkinn.models.UsuarioModel;
+import com.dam.checkinn.models.*;
 import com.dam.checkinn.services.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -98,11 +95,11 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarios/{dni}/reservas")
-    public ResponseEntity<List<ReservaModel>> getReservasByDniUsuario(
+    public ResponseEntity<List<MisReservasDTO>> getReservasByDniUsuario(
             @PathVariable String dni
     ) {
         try {
-            List<ReservaModel> allReservasByDniUsuario = usuarioService.getAllReservasByDniUsuario(dni);
+            List<MisReservasDTO> allReservasByDniUsuario = usuarioService.getAllReservasByDniUsuario(dni);
             return ResponseEntity.ok(allReservasByDniUsuario);
         } catch (AccesoDenegadoException e) {
             return ResponseEntity.status(404).build();

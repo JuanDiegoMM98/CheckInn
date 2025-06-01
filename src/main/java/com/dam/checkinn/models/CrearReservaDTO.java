@@ -9,7 +9,8 @@ public record CrearReservaDTO(
         LocalDate fechaFin, // Necesario para crear
         boolean cancelada, // Necesario para actualizaciones
         double valoracion, // Necesario para actualizaciones
-        String motivoCancelacion // Necesario para actualizaciones
+        String motivoCancelacion,// Necesario para actualizaciones
+        AlojamientoModel alojamiento
 ) {
 }
 
