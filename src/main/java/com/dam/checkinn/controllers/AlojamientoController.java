@@ -60,27 +60,26 @@ public class AlojamientoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AlojamientoModel>> getAlojamientosByFiltro(
+    public ResponseEntity<List<AlojamientoModel>> filtrarAlojamientos(
             @RequestParam(required = false) String provincia,
-            @RequestParam(required = false) Double valoracionMin,
-            @RequestParam(required = false) Double precioMin,
-            @RequestParam(required = false) List<String> servicios,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaEntrada,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaSalida,
-            @RequestParam(required = false) Integer personas
+            @RequestParam(required = false) Double valoracionMinima,
+            @RequestParam(required = false) Double precioMaximo,
+            @RequestParam(required = false) List<AlojamientoModel.Servicio> servicios,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+            @RequestParam(required = false) Integer personasMaximas
     ) {
-        try {
-            List<AlojamientoModel> allAlojamientos = alojamientoService.getAlojamientosByFiltro(provincia,
-                    valoracionMin,
-                    precioMin,
-                    servicios,
-                    fechaEntrada,
-                    fechaSalida,
-                    personas);
-            return ResponseEntity.ok(allAlojamientos);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
+        List<AlojamientoModel> alojamientos = alojamientoService.buscarDisponiblesConFiltro(
+                provincia,
+                valoracionMinima,
+                precioMaximo,
+                servicios,
+                fechaInicio,
+                fechaFin,
+                personasMaximas
+        );
+
+        return ResponseEntity.ok(alojamientos);
     }
 
     @GetMapping("/{id}")

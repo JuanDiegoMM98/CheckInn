@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AlojamientoService {
@@ -54,12 +55,28 @@ public class AlojamientoService {
     }
 
 
-    public List<AlojamientoModel> getAlojamientosByFiltro(String provincia, Double valoracionMin, Double precioMin,
-                                                          List<String> servicios, LocalDate fechaEntrada,
-                                                          LocalDate fechaSalida, Integer personas) {
-        return alojamientoRepository.findAllByFiltro(provincia, valoracionMin, precioMin, servicios, fechaEntrada, fechaSalida,
-                personas);
+    public List<AlojamientoModel> buscarDisponiblesConFiltro(
+            String provincia,
+            Double valoracionMinima,
+            Double precioMaximo,
+            List<AlojamientoModel.Servicio> servicios,
+            LocalDate fechaInicio,
+            LocalDate fechaFin,
+            Integer personasMaximas
+    ) {
+        List<AlojamientoModel> candidatos = alojamientoRepository.findByFiltrosBasicos(
+                provincia,
+                valoracionMinima,
+                precioMaximo,
+                personasMaximas
+        );
+
+        return candidatos.stream()
+                .filter(a -> tieneServicios(a, servicios))
+                .filter(a -> estaDisponiblePorFechas(a, fechaInicio, fechaFin))
+                .collect(Collectors.toList());
     }
+
 
     public AlojamientoModel getAlojamientoById(int id) throws Exception {
         Optional<AlojamientoModel> optionalAlojamiento = alojamientoRepository.findById(id);
@@ -111,5 +128,30 @@ public class AlojamientoService {
         }
         AlojamientoModel alojamientoModel = alojamientoOptional.get();
         return alojamientoModel.getReservas();
+    }
+
+    private boolean tieneServicios(AlojamientoModel alojamiento, List<AlojamientoModel.Servicio> serviciosRequeridos) {
+        if (serviciosRequeridos == null || serviciosRequeridos.isEmpty()) return true;
+        return alojamiento.getServicios() != null && alojamiento.getServicios().containsAll(serviciosRequeridos);
+    }
+
+    private boolean estaDisponiblePorFechas(AlojamientoModel alojamiento, LocalDate inicio, LocalDate fin) {
+        if (inicio == null || fin == null) return true;
+
+        // Verifica si está bloqueado
+        if (alojamiento.getInicioBloqueo() != null && alojamiento.getFinBloqueo() != null) {
+            if (!(fin.isBefore(alojamiento.getInicioBloqueo()) || inicio.isAfter(alojamiento.getFinBloqueo()))) {
+                return false;
+            }
+        }
+
+        // Verifica colisiones con reservas existentes
+        for (ReservaModel reserva : alojamiento.getReservas()) {
+            if (!(fin.isBefore(reserva.getFechaInicio()) || inicio.isAfter(reserva.getFechaFin()))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
