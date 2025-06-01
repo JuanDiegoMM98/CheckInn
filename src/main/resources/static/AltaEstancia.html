@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alta de estancia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Contenedor principal */
+    .form-container {
+      max-width: 1200px;
+      margin: 40px auto 60px auto;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 40px;
+      border-radius: 10px;
+    }
+
+    .form-container h2 {
+      text-align: center;
+      color: orange;
+      margin-bottom: 40px;
+      font-size: 28px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px 40px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: none;
+      height: 60px;
+    }
+
+    .capacity-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 6px 10px;
+    }
+
+    .capacity-input button {
+      border: none;
+      background-color: #eee;
+      padding: 4px 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .services {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .block-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .dates {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .dates input {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Menú superior -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
+      <nav>
+        <a href="Home.html">Home</a>
+        <a href="ListadoReservas.html">Mis reservas</a>
+        <a href="ListadoApartamentos.html">Mis Apartamentos</a>
+        <a href="AreaPersonal.html">Área personal</a>
+      </nav>
+    </div>
+    <div class="navbar-right">
+      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
+      <span>Adam<br><small>Admi</small></span>
+    </div>
+  </header>
+
+  <!-- FORM -->
+  <div class="form-container">
+    <h2>Alta de estancia</h2>
+    <form>
+      <div class="main-form">
+        <!-- Columna izquierda -->
+        <div class="form-column">
+          <div>
+            <label>Nombre</label>
+            <input type="text" value="" />
+          </div>
+
+          <div>
+            <label>Precio por noche</label>
+            <input type="text" value="" />
+          </div>
+
+          <div>
+            <label>Capacidad</label>
+            <div class="capacity-input">
+              <button type="button">−</button>
+              <strong>5</strong>
+              <button type="button">+</button>
+            </div>
+          </div>
+
+          <div>
+            <label>Provincia</label>
+            <select>
+              <option>Provincia</option>
+            </select>
+          </div>
+
+          <div>
+            <div class="block-section">
+              <input type="checkbox" id="bloquear" />
+              <label for="bloquear">Bloquear</label>
+            </div>
+          </div>
+
+          <div>
+            <div class="dates">
+              <div>
+                <label>Desde</label>
+                <input type="date" />
+              </div>
+              <div>
+                <label>Hasta</label>
+                <input type="date" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="form-column">
+          <div>
+            <label>Dirección</label>
+            <input type="text" value="" />
+          </div>
+
+          <div>
+            <label>Descripción</label>
+            <textarea></textarea>
+          </div>
+
+          <div>
+            <label>Servicios</label>
+            <div class="services">
+              <div class="checkbox-group">
+                <input type="checkbox" id="wifi" />
+                <label for="wifi">WiFi</label>
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="piscina" />
+                <label for="piscina">Piscina</label>
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="barbacoa" />
+                <label for="barbacoa">Barbacoa</label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label>Imágenes</label>
+            <input type="file" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-guardar">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

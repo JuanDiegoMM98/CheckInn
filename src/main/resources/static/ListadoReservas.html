@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis reservas</title>
+  <link href="styles.css" rel="stylesheet"> 
+  <style>
+
+    .container {
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      color: orange;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .reservas {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 400px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      text-align: center;
+      padding: 15px;
+      background-color: #f9f9f9;
+      box-sizing: border-box;
+    }
+
+    .card img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 5px;
+      background-color: #e0e0e0;
+    }
+
+    .card h4 {
+      margin: 10px 0 5px;
+    }
+
+    .card p {
+      margin: 5px 0 10px;
+      color: #666;
+    }
+
+    .cancelar-link {
+      font-size: 0.85rem;
+      color: orange;
+      text-decoration: none;
+    }
+
+    .rating {
+      color: orange;
+      font-size: 1.2rem;
+      margin-top: 5px;
+    }
+
+    .boton-buscar {
+      display: block;
+      margin: 30px auto 0;
+      background-color: orange;
+      color: white;
+      padding: 10px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .boton-buscar:hover {
+      background-color: darkorange;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .navbar nav a {
+        display: block;
+        margin: 5px 0;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      .boton-buscar {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+      }
+
+      .navbar-right {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .navbar-right span {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar nav a {
+        font-size: 0.95rem;
+      }
+
+      h2 {
+        font-size: 1.4rem;
+      }
+
+      .card h4 {
+        font-size: 1.1rem;
+      }
+
+      .card p,
+      .cancelar-link {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+    <header class="navbar">
+    <div class="navbar-left">
+      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
+      <nav>
+        <a href="Home.html">Home</a>
+        <a href="ListadoReservas.html" class="active">Mis reservas</a>
+        <a href="ListadoApartamentos.html">Mis Apartamentos</a>
+        <a href="AreaPersonal.html">Área personal</a>
+      </nav>
+    </div>
+    <div class="navbar-right">
+      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
+      <span>Adam<br><small>Admi</small></span>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Mis reservas</h2>
+
+    <div class="reservas">
+      <div class="card">
+        <img src="descarga.jfif" alt="Reserva 1">
+        <h4>Reserva 1</h4>
+        <p>Descripción</p>
+        <a href="#" class="cancelar-link">Solicitar cancelación</a>
+      </div>
+
+      <div class="card">
+        <img src="descarga.jfif" alt="Reserva 2">
+        <h4>Reserva 2</h4>
+        <p>Descripción</p>
+        <a href="#" class="cancelar-link">Solicitar cancelación</a>
+      </div>
+
+      <div class="card">
+        <img src="descarga.jfif" alt="Reserva 3">
+        <h4>Reserva 3</h4>
+        <p>Descripción</p>
+        <div class="rating">★ ★ ★ ☆ ☆</div>
+      </div>
+    </div>
+
+    <button class="boton-buscar">Buscar alojamiento</button>
+  </div>
+</body>
+</html>
