@@ -57,6 +57,7 @@
       font-size: 0.9rem;
     }
 
+    input[type="password"],
     input[type="text"],
     input[type="email"],
     input[type="date"],
@@ -173,14 +174,20 @@
   </div>
 
   <form action="Index.html" method="get">
-    <div>
-      <label for="nombre">Nombre (*)</label>
-      <input type="text" id="nombre" required />
-    </div>
 
     <div>
       <label for="email">Correo electrónico (*)</label>
       <input type="email" id="email" name="correo" required />
+    </div>
+
+    <div>
+      <label for="contraseña">Contraseña (*)</label>
+      <input type="password" id="contraseña" name="contraseña" required />
+    </div>
+
+    <div>
+      <label for="nombre">Nombre (*)</label>
+      <input type="text" id="nombre" name="nombre" required />
     </div>
 
     <div>
@@ -220,11 +227,9 @@
 
     <div>
       <label for="genero">Género</label>
-      <select id="genero">
-        <option selected disabled>Clic para seleccionar</option>
-        <option value="masculino">Masculino</option>
-        <option value="femenino">Femenino</option>
-        <option></option>
+      <select id="genero" name="genero" required>
+        <option selected value="MASCULINO">Masculino</option>
+        <option value="FEMENINO">Femenino</option>
       </select>
     </div>
 
@@ -256,17 +261,19 @@
     try {
       const response = await axios.post(`${uri}/usuarios`, datos);
 
-      if (response === 201) {
-        guardar_localstorage(response.data);
+      if (response.status === 201) {
+        guardar_storage(response.data);
         window.location.href = "Home.html";
-      } else if (response === 404) {
+      } else if (response.status === 404) {
         alert("Registro fallido");
       } else {
         alert("Ha habido un error durante el registro");
       }
     } catch (error) {
+    /*
       console.error("Error:", error);
       alert("Error al conectar con el servidor.");
+      */
     }
   });
 </script>

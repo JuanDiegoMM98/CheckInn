@@ -1,17 +1,12 @@
-
 const uri = "http://localhost:5000/api/v1";
 
-function obtener_localstorage(){
-
-    let nombre = localStorage.getItem("nombre");
-
+function obtener_session() {
+    let nombre = sessionStorage.getItem("nombre");
     console.log(nombre);
-
 }
 
-function guardar_localstorage(dataArray){
-
-    let usuario = dataArray
+function guardar_session(dataArray) {
+    let usuario = dataArray;
 
     /*
     Formato de dataArray:
@@ -26,11 +21,10 @@ function guardar_localstorage(dataArray){
         "tarjetaBancaria": "String",
         "direccion": "String",
         "fechaNacimiento": "String",
-        "telefono": "String",                                        // OPCIONAL
-        "genero": "String"                                       // OPCIONAL
+        "telefono": "String",       // OPCIONAL
+        "genero": "String"          // OPCIONAL
     }
+    */
 
-     */
-
-    localStorage.setItem("nombre", JSON.stringify(usuario));
-};
+    sessionStorage.setItem("nombre", JSON.stringify(usuario));
+}
