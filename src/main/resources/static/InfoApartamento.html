@@ -130,7 +130,7 @@
     </div>
     <div class="navbar-right">
       <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span>Adam<br><small>Admi</small></span>
+      <span name="nombre"><br><small name="rol"></small></span>
     </div>
   </header>
 
@@ -197,22 +197,57 @@
     <script src="app.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", async function () {
+        // Mostrar nombre y rol del usuario guardado en sessionStorage
+        const usuarioGuardado = sessionStorage.getItem("nombre");
+
+        if (usuarioGuardado) {
+          const usuario = JSON.parse(usuarioGuardado);
+
+          const nombreElement = document.querySelector('span[name="nombre"]');
+          const rolElement = document.querySelector('small[name="rol"]');
+
+          if (nombreElement) {
+            nombreElement.textContent = usuario.nombre;
+          }
+          if (rolElement) {
+            rolElement.textContent = usuario.rol;
+          }
+        }
 
         // Obtener todos los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
-
-        // Extraer el valor de 'idApartamento'
         const idApartamento = params.get("idApartamento");
 
+        if (!idApartamento) {
+          alert("No se proporcionó el ID del apartamento en la URL.");
+          return;
+        }
+
         try {
-          const response = await axios.get(`${uri}/apartamentos/${idApartamento}`, datos);
+          const response = await axios.get(`${uri}/alojamientos/${idApartamento}`);
 
-          if (response.status === 200) {
+          if (response.status === 200 && response.data) {
+            const apto = response.data;
 
+            document.querySelector('[name="provincia"]').value = apto.provincia || '';
+            document.querySelector('[name="direccion"]').value = apto.direccion || '';
+            document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
+            document.querySelector('[name="precio"]').value = apto.precioNoche || '';
+            document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+
+            // Marcar checkboxes de servicios
+            if (Array.isArray(apto.servicios)) {
+              apto.servicios.forEach(servicio => {
+                const checkbox = document.querySelector(`input[type="checkbox"][name="${servicio.toLowerCase()}"]`);
+                if (checkbox) {
+                  checkbox.checked = true;
+                }
+              });
+            }
           } else if (response.status === 404) {
-            alert("No se ha encontrado el apartamento indicado");
+            alert("No se ha encontrado el apartamento indicado.");
           } else {
-            alert("Ha habido un error durante la búsqueda del apartamento!");
+            alert("Ha habido un error durante la búsqueda del apartamento.");
           }
         } catch (error) {
           console.error("Error:", error);
