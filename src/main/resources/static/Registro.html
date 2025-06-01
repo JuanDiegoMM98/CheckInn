@@ -241,6 +241,12 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="app.js"></script>
 <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector(".cancelar").addEventListener("click", function () {
+      window.location.href = "Index.html";
+    });
+  });
+
   document.querySelector("form").addEventListener("submit", async function(event) {
     event.preventDefault();
 
