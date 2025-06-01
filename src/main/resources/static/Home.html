@@ -15,19 +15,24 @@
 
     /* Carrusel con flechas */
     .carousel-container {
+      display: flex;
+      justify-content: center;
       position: relative;
       margin: 20px auto 40px;
-      max-width: 100%;
-      overflow: hidden;
       padding: 0 40px;
+      overflow: hidden;
     }
 
     .cards-wrapper {
       display: flex;
-      overflow-x: auto;
-      scroll-behavior: smooth;
+      justify-content: start;
       gap: 20px;
       padding: 10px 0;
+      scroll-behavior: smooth;
+      overflow-x: auto;
+      width: fit-content;
+      min-width: 100%;
+      margin: 0 auto;
     }
     .cards-wrapper::-webkit-scrollbar {
       display: none;
@@ -232,94 +237,97 @@
     <button class="nav-arrow nav-right" onclick="scrollCards(1)">❯</button>
   </div>
 
-  <div class="filters">
-    <select name="provincia">
-      <option></option>
-      <option>Älava</option>
-      <option>Albacete</option>
-      <option>Alicante</option>
-      <option>Almeria</option>
-      <option>Asturias</option>
-      <option>Ávila</option>
-      <option>Badajoz</option>
-      <option>Barcelona</option>
-      <option>Burgos</option>
-      <option>Cáceres</option>
-      <option>Cádiz</option>
-      <option>Cantabria</option>
-      <option>Castellón</option>
-      <option>Ciudad Real</option>
-      <option>Córdoba</option>
-      <option>La Coruña</option>
-      <option>Cuenca</option>
-      <option>Gerona</option>
-      <option>Granada</option>
-      <option>Guadalajara</option>
-      <option>Guipúzcoa</option>
-      <option>Huelva</option>
-      <option>Huesca</option>
-      <option>Baleares</option>
-      <option>Jaén</option>
-      <option>León</option>
-      <option>Lérida</option>
-      <option>Lugo</option>
-      <option>Madrid</option>
-      <option>Málaga</option>
-      <option>Murcia</option>
-      <option>Navarra</option>
-      <option>Orense</option>
-      <option>Palencia</option>
-      <option>Las Palmas</option>
-      <option>Pontevedra</option>
-      <option>La Rioja</option>
-      <option>Salamanca</option>
-      <option>Segovia</option>
-      <option>Sevilla</option>
-      <option>Soria</option>
-      <option>Tarragona</option>
-      <option>Santa Cruz de Tenerife</option>
-      <option>Teruel</option>
-      <option>Toledo</option>
-      <option>Valencia</option>
-      <option>Valladolid</option>
-      <option>Vizcaya</option>
-      <option>Zamora</option>
-      <option>Zaragoza</option>
-    </select>
+  <form id="filtroForm" class="filters">
 
-    <select name="valoracion">
-      <option>0 Estrellas</option>
-      <option>1 Estrella</option>
-      <option>2 Estrellas</option>
-      <option>3 Estrellas</option>
-      <option>4 Estrellas</option>
-      <option>5 Estrellas</option>
-    </select>
+    <div class="filters">
+      <select name="provincia">
+        <option>Älava</option>
+        <option>Albacete</option>
+        <option>Alicante</option>
+        <option>Almeria</option>
+        <option>Asturias</option>
+        <option>Ávila</option>
+        <option>Badajoz</option>
+        <option>Barcelona</option>
+        <option>Burgos</option>
+        <option>Cáceres</option>
+        <option>Cádiz</option>
+        <option>Cantabria</option>
+        <option>Castellón</option>
+        <option>Ciudad Real</option>
+        <option>Córdoba</option>
+        <option>La Coruña</option>
+        <option>Cuenca</option>
+        <option>Gerona</option>
+        <option>Granada</option>
+        <option>Guadalajara</option>
+        <option>Guipúzcoa</option>
+        <option>Huelva</option>
+        <option>Huesca</option>
+        <option>Baleares</option>
+        <option>Jaén</option>
+        <option>León</option>
+        <option>Lérida</option>
+        <option>Lugo</option>
+        <option>Madrid</option>
+        <option>Málaga</option>
+        <option>Murcia</option>
+        <option>Navarra</option>
+        <option>Orense</option>
+        <option>Palencia</option>
+        <option>Las Palmas</option>
+        <option>Pontevedra</option>
+        <option>La Rioja</option>
+        <option>Salamanca</option>
+        <option>Segovia</option>
+        <option>Sevilla</option>
+        <option>Soria</option>
+        <option>Tarragona</option>
+        <option>Santa Cruz de Tenerife</option>
+        <option>Teruel</option>
+        <option>Toledo</option>
+        <option>Valencia</option>
+        <option>Valladolid</option>
+        <option>Vizcaya</option>
+        <option>Zamora</option>
+        <option>Zaragoza</option>
+      </select>
 
-    <div class="checkbox-group">
-      <input type="number" class="precio-maximo" placeholder="Precio máximo" name="precioMaximo"/>
+      <select name="valoracionMinima">
+        <option selected></option>
+        <option value=0>0 Estrellas</option>
+        <option value=1>1 Estrella</option>
+        <option value=2>2 Estrellas</option>
+        <option value=3>3 Estrellas</option>
+        <option value=4>4 Estrellas</option>
+        <option value=5>5 Estrellas</option>
+      </select>
 
-      <div class="row">
-        <label><input type="checkbox" name="wifi"/> WiFi</label>
-        <label><input type="checkbox" name="piscina"/> Piscina</label>
-        <label><input type="checkbox" name="barbacoa"/> Barbacoa</label>
+      <div class="checkbox-group">
+        <input type="number" class="precio-maximo" placeholder="Precio máximo" name="precioMaximo"/>
+
+        <div class="row">
+          <input type="checkbox" name="servicios" value="WIFI" />
+          <input type="checkbox" name="servicios" value="PISCINA" />
+          <input type="checkbox" name="servicios" value="BARBACOA" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <input type="date" placeholder="Entrada" name="fechaInicio"/>
+        <input type="date" placeholder="Salida" name="fechaFin"/>
+        <input type="number" placeholder="Personas" name="personasMaximas"/>
+      </div>
+
+      <div class="buttons">
+        <button class="btn-buscar">Buscar</button>
+        <button class="btn-reserva">Reserva rápida</button>
       </div>
     </div>
+  </form>
 
-    <div class="form-row">
-      <input type="date" placeholder="Entrada" name="fechaInicio"/>
-      <input type="date" placeholder="Salida" name="fechaFin"/>
-      <input type="number" placeholder="Personas" name="personasMaximas"/>
-    </div>
-
-    <div class="buttons">
-      <button class="btn-buscar">Buscar</button>
-      <button class="btn-reserva">Reserva rápida</button>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const cardsWrapper = document.getElementById("cardsWrapper");
 
@@ -332,7 +340,6 @@
 
         const nombreElement = document.querySelector('span[name="nombre"]');
         const rolElement = document.querySelector('small[name="rol"]');
-        const nombreBienvenida = document.querySelector('[name="nombre"]');
 
         if (nombreElement && rolElement) {
           nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
@@ -341,6 +348,12 @@
 
       // Cargar alojamientos al inicio
       cargarAlojamientos();
+
+      // Asignar el evento al botón "Buscar"
+      const botonBuscar = document.querySelector(".btn-buscar");
+      if (botonBuscar) {
+        botonBuscar.addEventListener("click", aplicarFiltro);
+      }
     });
 
     // Función para renderizar tarjetas de alojamientos
@@ -350,19 +363,22 @@
       lista.forEach(apto => {
         const card = document.createElement("a");
         card.className = "card-link";
-        card.href = `InfoApartamento.html?idApartamento=${apto.idApartamento}`;
+        card.href = `InfoApartamento.html?idApartamento=${apto.id}`;
 
         card.innerHTML = `
-          <div class="card">
-            <img src="${apto.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-            <div class="title">${apto.nombre}</div>
-            <div class="description">${apto.descripcion || 'Sin descripción.'}</div>
-            <span class="reservar">Reservar</span>
-          </div>
-        `;
+        <div class="card">
+          <img src="${apto.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+          <div class="title">${apto.nombre}</div>
+          <div class="description">${apto.descripcion || 'Sin descripción.'}</div>
+          <span class="reservar">Reservar</span>
+        </div>
+      `;
 
         cardsWrapper.appendChild(card);
       });
+
+      // Centramos las tarjetas luego de renderizarlas
+      centrarCards();
     }
 
     // Función para cargar todos los alojamientos
@@ -380,11 +396,14 @@
       }
     }
 
-    // Filtro del formulario
-    document.getElementById("filtroForm").addEventListener("submit", async function (event) {
+    // Función que aplica el filtro con el botón "Buscar"
+    async function aplicarFiltro(event) {
       event.preventDefault();
 
-      const formData = new FormData(event.target);
+      const filtroForm = document.getElementById("filtroForm");
+      if (!filtroForm) return;
+
+      const formData = new FormData(filtroForm);
       const params = new URLSearchParams();
 
       for (const [key, value] of formData.entries()) {
@@ -408,7 +427,21 @@
         console.error("Error al filtrar alojamientos:", error);
         cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos filtrados.</p>";
       }
-    });
+    }
+
+    // Función para centrar las tarjetas
+    function centrarCards() {
+      if (!cardsWrapper) return;
+
+      const totalWidth = cardsWrapper.scrollWidth;
+      const visibleWidth = cardsWrapper.clientWidth;
+      const scrollAmount = (totalWidth - visibleWidth) / 2;
+
+      cardsWrapper.scrollTo({
+        left: scrollAmount,
+        behavior: "smooth"
+      });
+    }
 
     // Carrusel horizontal con flechas
     function scrollCards(direction) {
@@ -417,6 +450,8 @@
         left: direction * scrollAmount,
         behavior: "smooth"
       });
+
+      setTimeout(centrarCards, 500);
     }
   </script>
 </body>
