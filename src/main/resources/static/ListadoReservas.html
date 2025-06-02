@@ -271,7 +271,9 @@
       <button class="nav-arrow nav-right" onclick="scrollCards(1)">❯</button>
     </div>
 
-    <button class="boton-buscar">Buscar alojamiento</button>
+    <form>
+      <button type="button" class="boton-buscar">Buscar alojamiento</button>
+    </form>
   </div>
     <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -295,6 +297,10 @@
 
           // Cargar alojamientos al inicio
           cargarReservas();
+          document.querySelector("form").addEventListener("click", async function(event) {
+            event.preventDefault();
+            window.location.href = "Home.html";
+          });
         });
 
         // Función para renderizar tarjetas de reservas
@@ -302,7 +308,6 @@
           cardsWrapper.innerHTML = ""; // Limpiar contenido anterior
 
           lista.forEach(reserva => {
-            alert("imagen: " +reserva.alojamiento.imagen + " precio: " + reserva.precio);
             const card = document.createElement("a");
             card.className = "card-link";
             // card.href = `InfoApartamento.html?idReserva=${reserva.id}`;
@@ -311,7 +316,7 @@
           <div class="card">
             <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
             <div class="title">${reserva.alojamiento.nombre}</div>
-            <div class="description">${reserva.precio || 'Sin descripción.'}</div>
+            <div class="description">${reserva.precio + "€" || ''}</div>
             <a href="#" class="cancelar-link">Solicitar cancelación</a>
           </div>
         `;
@@ -364,6 +369,7 @@
           setTimeout(centrarCards, 500);
         }
       }
+
     </script>
 </body>
 </html>
