@@ -5,6 +5,8 @@ import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
 import com.dam.checkinn.models.CrearReservaDTO;
+import com.dam.checkinn.models.FiltroDTO;
+import com.dam.checkinn.models.MisReservasDTO;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.services.ReservaService;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +57,19 @@ public class ReservaController {
         }
     }
 
-    
-
+    @PostMapping("/reservaRapida")
+    public ResponseEntity<MisReservasDTO> reservaRapida(
+            @RequestBody FiltroDTO dto) {
+        try {
+            MisReservasDTO reservaRapida = reservaService.reservaRapida(dto);
+            return ResponseEntity.ok(reservaRapida);
+        } catch (AlojamientoNotFoundException e) {
+            return ResponseEntity.status(404).build();
+        } catch (ReservaNoValidaException e) {
+             return ResponseEntity.status(409).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
 
 }
