@@ -7,6 +7,34 @@
   <link href="styles.css" rel="stylesheet"> 
   <style>
 
+    .filters input[type="number"],
+    .filters input[type="text"],
+    .filters input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .label-fechas {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .subtitle{
+      margin-top: 80px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
     .info-apartamento h2 {
       color: #f90;
       text-align: center;
@@ -99,15 +127,10 @@
     .boton-reserva {
       text-align: center;
       margin-top: 2rem;
-    }
-
-    .btn-guardar {
-      background-color: #ffa500;
-      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
       border: none;
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
-      border-radius: 4px;
+      font-size: 14px;
       cursor: pointer;
     }
 
@@ -167,31 +190,42 @@
         <div class="input-row">
           <div class="form-group">
             <label>Capacidad</label>
-            <input type="text" name="capacidad" value="" readonly />
+            <input type="number" name="capacidad" value="" readonly />
           </div>
           <div class="form-group">
             <label>Precio por noche</label>
-            <input type="text" name="precio" value="" readonly />
+            <input type="number" name="precio" value="" readonly />
           </div>
         </div>
 
         <div class="form-group">
           <label>Descripción</label>
-          <textarea rows="4" name="descripcion" readonly></textarea>
+          <textarea rows="8" name="descripcion" readonly></textarea>
         </div>
 
         <div class="checkbox-row">
           <label class="readonly-checkbox"><input type="checkbox" name="wifi"/> WiFi</label>
           <label class="readonly-checkbox"><input type="checkbox" name="piscina" /> Piscina</label>
           <label class="readonly-checkbox"><input type="checkbox" name="barbacoa" /> Barbacoa</label>
-
         </div>
+
+        <label class="subtitle">Fechas de reserva</label>
+        <form>
+          <div class="form-row" name="fechasReserva">
+            <label class="label-fechas">Entrada</label>
+            <input type="date" name="fechaInicio" placeholder="Entrada" required ="fechaInicio"/>
+            <label class="label-fechas">Salida</label>
+            <input type="date" name="fechaFin" placeholder="Salida" required ="fechaFin"/>
+          </div>
+          <br>
+          <div class="boton-reserva">
+            <button type="submit" class="btn-guardar">Reservar</button>
+          </div>
+        </form>
       </div>
     </div>
 
-    <div class="boton-reserva">
-      <button class="btn-guardar">Reservar</button>
-    </div>
+
   </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
@@ -216,15 +250,15 @@
 
         // Obtener todos los parámetros de la URL
         const params = new URLSearchParams(window.location.search);
-        const idApartamento = params.get("idApartamento");
+        const idAlojamiento = params.get("idAlojamiento");
 
-        if (!idApartamento) {
+        if (!idAlojamiento) {
           alert("No se proporcionó el ID del apartamento en la URL.");
           return;
         }
 
         try {
-          const response = await axios.get(`${uri}/alojamientos/${idApartamento}`);
+          const response = await axios.get(`${uri}/alojamientos/${idAlojamiento}`);
 
           if (response.status === 200 && response.data) {
             const apto = response.data;
@@ -252,6 +286,49 @@
         } catch (error) {
           console.error("Error:", error);
           alert("Error al conectar con el servidor.");
+        }
+      });
+
+      // Realizar la reserva
+      document.querySelector("form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const datos = Object.fromEntries(formData.entries());
+
+        // Obtener el idAlojamiento desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const idAlojamiento = urlParams.get("idAlojamiento");
+
+        // Obtener el dni desde sessionStorage
+        let dni;
+        const usuarioGuardado = sessionStorage.getItem("nombre");
+        if (usuarioGuardado) {
+          const usuario = JSON.parse(usuarioGuardado);
+          dni = `${usuario.dni}`
+        }
+
+        const nombreElement = document.querySelector('span[name="nombre"]');
+
+        // Añadir estos datos al objeto que se enviará
+        datos.idAlojamiento = idAlojamiento;
+        datos.dni = dni;
+
+        try {
+          const response = await axios.post(`${uri}/reservas`, datos);
+
+          if (response.status === 201) {
+            window.location.href = "ListadoReservas.html";
+          } else if (response.status === 404) {
+            alert("Reserva fallida");
+          } else {
+            alert("Ha habido un error durante la reserva");
+          }
+        } catch (error) {
+          /*
+            console.error("Error:", error);
+            alert("Error al conectar con el servidor.");
+            */
         }
       });
     </script>

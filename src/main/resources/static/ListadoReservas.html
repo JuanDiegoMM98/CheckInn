@@ -84,6 +84,99 @@
       background-color: darkorange;
     }
 
+    /* Carrusel con flechas */
+    .carousel-container {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin: 20px auto 40px;
+      padding: 0 40px;
+      overflow: hidden;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      justify-content: start;
+      gap: 20px;
+      padding: 10px 0;
+      scroll-behavior: smooth;
+      overflow-x: auto;
+      width: fit-content;
+      min-width: 100%;
+      margin: 0 auto;
+    }
+    .cards-wrapper::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      flex: 0 0 auto;
+    }
+
+    .card {
+      background-color: #f5f7fb;
+      border-radius: 12px;
+      padding: 20px;
+      width: 300px;
+      height: 400px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
+      width: 100%;
+      height: 100px;
+      background-color: #dcdcdc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+    .card .title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .card .description {
+      font-size: 0.9rem;
+      color: #555;
+      flex-grow: 1;
+    }
+    .card .reservar {
+      margin-top: 10px;
+      color: orange;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1;
+      padding: 8px;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .nav-left {
+      left: 10px;
+    }
+    .nav-right {
+      right: 10px;
+    }
+
     /* RESPONSIVE DESIGN */
     @media (max-width: 768px) {
       .navbar {
@@ -166,37 +259,111 @@
     </div>
     <div class="navbar-right">
       <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span>Adam<br><small>Admi</small></span>
+      <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
     </div>
   </header>
 
-  <div class="container">
-    <h2>Mis reservas</h2>
-
-    <div class="reservas">
-      <div class="card">
-        <img src="descarga.jfif" alt="Reserva 1">
-        <h4>Reserva 1</h4>
-        <p>Descripción</p>
-        <a href="#" class="cancelar-link">Solicitar cancelación</a>
+    <div class="carousel-container">
+      <button class="nav-arrow nav-left" onclick="scrollCards(-1)">❮</button>
+      <div class="cards-wrapper" id="cardsWrapper">
+        <!-- Aquí se generarán dinámicamente las cards -->
       </div>
-
-      <div class="card">
-        <img src="descarga.jfif" alt="Reserva 2">
-        <h4>Reserva 2</h4>
-        <p>Descripción</p>
-        <a href="#" class="cancelar-link">Solicitar cancelación</a>
-      </div>
-
-      <div class="card">
-        <img src="descarga.jfif" alt="Reserva 3">
-        <h4>Reserva 3</h4>
-        <p>Descripción</p>
-        <div class="rating">★ ★ ★ ☆ ☆</div>
-      </div>
+      <button class="nav-arrow nav-right" onclick="scrollCards(1)">❯</button>
     </div>
 
     <button class="boton-buscar">Buscar alojamiento</button>
   </div>
+    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const cardsWrapper = document.getElementById("cardsWrapper");
+      const usuarioGuardado = sessionStorage.getItem("nombre");
+      if (usuarioGuardado) {
+        const usuario = JSON.parse(usuarioGuardado);
+
+        // Mostrar nombre y rol del usuario guardado en sessionStorage
+        document.addEventListener("DOMContentLoaded", function () {
+          const usuarioGuardado = sessionStorage.getItem("nombre");
+
+          const nombreElement = document.querySelector('span[name="nombreUsuario"]');
+          const rolElement = document.querySelector('small[name="rolUsuario"]');
+
+          if (nombreElement && rolElement) {
+            nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
+          }
+
+
+          // Cargar alojamientos al inicio
+          cargarReservas();
+        });
+
+        // Función para renderizar tarjetas de reservas
+        function renderizarReservas(lista) {
+          cardsWrapper.innerHTML = ""; // Limpiar contenido anterior
+
+          lista.forEach(reserva => {
+            alert("imagen: " +reserva.alojamiento.imagen + " precio: " + reserva.precio);
+            const card = document.createElement("a");
+            card.className = "card-link";
+            // card.href = `InfoApartamento.html?idReserva=${reserva.id}`;
+
+            card.innerHTML = `
+          <div class="card">
+            <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+            <div class="title">${reserva.alojamiento.nombre}</div>
+            <div class="description">${reserva.precio || 'Sin descripción.'}</div>
+            <a href="#" class="cancelar-link">Solicitar cancelación</a>
+          </div>
+        `;
+
+            cardsWrapper.appendChild(card);
+          });
+
+          // Centramos las tarjetas luego de renderizarlas
+          centrarCards();
+        }
+
+        // Función para cargar todas las reservas
+        async function cargarReservas() {
+          try {
+            const response = await axios.get(`${uri}/usuarios/${usuario.dni}/reservas`);
+            if (response.status === 200) {
+              renderizarReservas(response.data);
+            } else if (response.status === 404) {
+              alert("No se ha encontrado información del usuario");
+            } else {
+              alert("Error al cargar las reservas.");
+            }
+          } catch (error) {
+            console.error("Error al cargar reservas:", error);
+            cardsWrapper.innerHTML = "<p>No se pudieron cargar las reservas.</p>";
+          }
+        }
+
+        // Función para centrar las tarjetas
+        function centrarCards() {
+          if (!cardsWrapper) return;
+
+          const totalWidth = cardsWrapper.scrollWidth;
+          const visibleWidth = cardsWrapper.clientWidth;
+          const scrollAmount = (totalWidth - visibleWidth) / 2;
+
+          cardsWrapper.scrollTo({
+            left: scrollAmount,
+            behavior: "smooth"
+          });
+        }
+
+        // Carrusel horizontal con flechas
+        function scrollCards(direction) {
+          const scrollAmount = 320;
+          cardsWrapper.scrollBy({
+            left: direction * scrollAmount,
+            behavior: "smooth"
+          });
+          setTimeout(centrarCards, 500);
+        }
+      }
+    </script>
 </body>
 </html>

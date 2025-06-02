@@ -62,6 +62,7 @@
     input[type="email"],
     input[type="date"],
     input[type="number"],
+    input[type="tel"],
     select {
       width: 100%;
       padding: 10px;
@@ -186,6 +187,11 @@
     </div>
 
     <div>
+      <label for="dni">DNI (*)</label>
+      <input type="text" id="dni" name="dni" required />
+    </div>
+
+    <div>
       <label for="nombre">Nombre (*)</label>
       <input type="text" id="nombre" name="nombre" required />
     </div>
@@ -193,11 +199,6 @@
     <div>
       <label for="apellido1">Apellido 1 (*)</label>
       <input type="text" id="apellido1" name="apellido1" required />
-    </div>
-
-    <div>
-      <label for="tarjeta">Tarjeta bancaria (*)</label>
-      <input type="text" id="tarjeta" name="tarjetaBancaria" required />
     </div>
 
     <div>
@@ -211,23 +212,23 @@
     </div>
 
     <div>
-      <label for="dni">DNI (*)</label>
-      <input type="text" id="dni" name="dni" required />
-    </div>
-
-    <div>
       <label for="direccion">Dirección (*)</label>
       <input type="text" id="direccion" name="direccion" required />
     </div>
 
     <div>
+      <label for="tarjeta">Tarjeta bancaria (*)</label>
+      <input type="text" id="tarjeta" name="tarjetaBancaria" required />
+    </div>
+
+    <div>
       <label for="telefono">Teléfono de contacto</label>
-      <input type="text" id="telefono" name="telefono" />
+      <input type="tel" id="telefono" name="telefono" />
     </div>
 
     <div>
       <label for="genero">Género</label>
-      <select id="genero" name="genero" required>
+      <select id="genero" name="genero">
         <option selected value="MASCULINO">Masculino</option>
         <option value="FEMENINO">Femenino</option>
       </select>
