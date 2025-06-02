@@ -272,7 +272,7 @@
     </div>
 
     <form>
-      <button type="button" class="boton-buscar">Buscar alojamiento</button>
+      <button id="btn-cancelar" type="button" class="boton-buscar">Buscar alojamiento</button>
     </form>
   </div>
     <script src="app.js"></script>
@@ -297,7 +297,7 @@
 
           // Cargar alojamientos al inicio
           cargarReservas();
-          document.querySelector("form").addEventListener("click", async function(event) {
+          document.getElementById("btn-cancelar").addEventListener("click", function(event) {
             event.preventDefault();
             window.location.href = "Home.html";
           });
@@ -312,20 +312,29 @@
             card.className = "card-link";
             // card.href = `InfoApartamento.html?idReserva=${reserva.id}`;
 
-            card.innerHTML = `
-          <div class="card">
-            <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-            <div class="title">${reserva.alojamiento.nombre}</div>
-            <div class="description">${reserva.precio + "€" || ''}</div>
-            <a href="CancelacionReserva.html?idReserva=${reserva.id}&fechaInicio=${reserva.fechaInicio}&fechaFin=${reserva.fechaFin}&precio=${reserva.precio}"
-             target="_blank"
-             class="cancelar-link">
-             Solicitar cancelación
-            </a>
-
-
-          </div>
-        `;
+            // Checkeo de si la reserva esta cancelada o no y se modifica el mensaje que se muestra
+            if (!reserva.cancelada) {
+              card.innerHTML = `
+                <div class="card">
+                  <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+                  <div class="title">${reserva.alojamiento.nombre}</div>
+                  <div class="description">${reserva.precio + "€" || ''}</div>
+                  <a href="CancelacionReserva.html?idReserva=${reserva.id}&fechaInicio=${reserva.fechaInicio}&fechaFin=${reserva.fechaFin}&precio=${reserva.precio}&idApartamento=${reserva.alojamiento.id}"
+                   class="cancelar-link">
+                   Solicitar cancelación
+                  </a>
+                </div>
+              `;
+            } else {
+              card.innerHTML = `
+                <div class="card">
+                  <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+                  <div class="title">${reserva.alojamiento.nombre}</div>
+                  <div class="description">${reserva.precio + "€" || ''}</div>
+                  <div class="title">Esta reserva esta cancelada</div>
+                </div>
+              `;
+            }
 
             cardsWrapper.appendChild(card);
           });

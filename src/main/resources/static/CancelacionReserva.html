@@ -116,14 +116,14 @@
       <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
       <nav>
         <a href="Home.html">Home</a>
-        <a href="ListadoReservas.html">Mis reservas</a>
+        <a href="ListadoReservas.html" class="active">Mis reservas</a>
         <a href="ListadoApartamentos.html">Mis Apartamentos</a>
         <a href="AreaPersonal.html">Área personal</a>
       </nav>
     </div>
     <div class="navbar-right">
       <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span>Adam<br><small>Admi</small></span>
+      <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
     </div>
   </header>
 
@@ -134,43 +134,107 @@
         <div class="form-column">
           <div>
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" value="">
+            <input type="text" id="nombre" name="nombre" value="" readonly>
           </div>
           <div>
             <label for="dni">DNI</label>
-            <input type="text" id="dni" value="">
+            <input type="text" id="dni" name="dni" value="" readonly>
           </div>
           <div>
             <label for="telefono">Teléfono</label>
-            <input type="text" id="telefono" value="">
+            <input type="text" id="telefono" name="telefono" value="" readonly>
           </div>
           <div>
-            <label for="cuantia">Cuantía</label>
-            <input type="text" id="cuantia" value="">
+            <label for="precio">Cuantía</label>
+            <input type="text" id="precio" name="precio" value="" readonly>
           </div>
         </div>
 
         <div class="form-column">
           <div>
-            <label for="entrada">Entrada</label>
-            <input type="date" id="entrada" value="">
+            <label for="fechaInicio">Entrada</label>
+            <input type="date" id="fechaInicio" name="fechaInicio" value="" readonly>
           </div>
           <div>
-            <label for="salida">Salida</label>
-            <input type="date" id="salida" value="">
+            <label for="fechaFin">Salida</label>
+            <input type="date" id="fechaFin" name="fechaFin" value="" readonly>
           </div>
           <div>
-            <label for="motivo">Motivo de la solicitud</label>
-            <textarea id="motivo" rows="4"></textarea>
+            <label for="motivoCancelacion">Motivo de la solicitud</label>
+            <textarea id="motivoCancelacion" name="motivoCancelacion" rows="4"></textarea>
           </div>
         </div>
       </div>
 
       <div class="form-buttons">
-        <button type="button" class="btn-cancelar">Cancelar</button>
+        <button type="button" id="btn-cancelar" class="btn-cancelar">Cancelar</button>
         <button type="submit" class="btn-guardar">Guardar</button>
       </div>
     </form>
   </div>
 </body>
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const cardsWrapper = document.getElementById("cardsWrapper");
+  const usuarioGuardado = sessionStorage.getItem("nombre");
+  if (usuarioGuardado) {
+    const usuario = JSON.parse(usuarioGuardado);
+
+    
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // Mostrar nombre y rol del usuario guardado en sessionStorage
+      const nombreElement = document.querySelector('span[name="nombreUsuario"]');
+      const rolElement = document.querySelector('small[name="rolUsuario"]');
+
+      if (nombreElement && rolElement) {
+        nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
+      }
+
+      
+      // Cargar datos de la url:
+      const urlParams = new URLSearchParams(window.location.search);
+      const idReserva = urlParams.get("idReserva");
+      const fechaInicio = urlParams.get("fechaInicio");
+      const fechaFin = urlParams.get("fechaFin");
+      const precio = urlParams.get("precio");
+
+      // Insertar datos en campos correspondientes
+      document.getElementById("nombre").value = usuario.nombre;
+      document.getElementById("dni").value = usuario.dni;
+      document.getElementById("telefono").value = usuario.telefono;
+      document.getElementById("precio").value = precio;
+      document.getElementById("fechaInicio").value = fechaInicio;
+      document.getElementById("fechaFin").value = fechaFin;
+
+
+      // Botón de cancelar
+      document.getElementById("btn-cancelar").addEventListener("click", function(event) {
+        event.preventDefault();
+        window.location.href = "ListadoReservas.html";
+      });
+
+
+      // Petición de Update a reserva cambiar estado a cancelación
+      document.querySelector("form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const datos = { motivoCancelacion: formData.get("motivoCancelacion") };
+        datos.idReserva = idReserva;
+        datos.idAlojamiento = urlParams.get("idApartamento");
+
+        const response = await axios.patch(`${uri}/reservas/${idReserva}`, datos);
+        if (response.status === 200) {
+          window.location.href = "ListadoReservas.html";
+        } else if (response.status === 404) {
+          alert(`No se ha encontrado el id de la reserva: ${idReserva}`);
+        } else {
+          alert(`Error al intentar solicitar la cancelación de la reserva: ${idReserva}`);
+        }
+      });
+    });
+  }
+</script>
 </html>

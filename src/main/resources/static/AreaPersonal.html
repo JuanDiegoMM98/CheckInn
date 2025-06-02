@@ -151,7 +151,7 @@
 
     <div class="botones">
       <button class="borrar" type="reset">Borrar datos</button>
-      <button class="cancelar" type="button">Cancelar</button>
+      <button id="btn-cancelar" class="cancelar" type="button">Cancelar</button>
       <button class="guardar" type="submit">Guardar</button>
     </div>
   </form>
@@ -252,9 +252,10 @@
             }
           });
 
-          document.querySelector("form").addEventListener("click", async function(event) {
+          // Botón de cancelar
+          document.getElementById("btn-cancelar").addEventListener("click", function(event) {
             event.preventDefault();
-            window.location.href = "Home.html";
+            window.location.href = "ListadoReservas.html";
           });
         }
 

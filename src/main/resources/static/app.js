@@ -23,6 +23,7 @@ function guardar_session(dataArray) {
         "fechaNacimiento": "String",
         "telefono": "String",       // OPCIONAL
         "genero": "String"          // OPCIONAL
+        "rol": "String"
     }
     */
 
