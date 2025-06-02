@@ -313,7 +313,7 @@
             // card.href = `InfoApartamento.html?idReserva=${reserva.id}`;
 
             // Checkeo de si la reserva esta cancelada o no y se modifica el mensaje que se muestra
-            if (!reserva.cancelada) {
+            if (!reserva.cancelada && reserva.motivoCancelacion == null) {
               card.innerHTML = `
                 <div class="card">
                   <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
@@ -323,6 +323,15 @@
                    class="cancelar-link">
                    Solicitar cancelación
                   </a>
+                </div>
+              `;
+            } else if (reserva.motivoCancelacion != null && reserva.cancelada === false) {
+              card.innerHTML = `
+                <div class="card">
+                  <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+                  <div class="title">${reserva.alojamiento.nombre}</div>
+                  <div class="description">${reserva.precio + "€" || ''}</div>
+                  <div class="title">Cancelación solicitada</div>
                 </div>
               `;
             } else {
