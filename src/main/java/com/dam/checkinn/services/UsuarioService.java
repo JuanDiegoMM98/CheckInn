@@ -133,7 +133,7 @@ public class UsuarioService {
         List<ReservaModel> reservas = usuarioOptional.get().getReservas();
         List<MisReservasDTO> misReservasDTO = new ArrayList<>();
         reservas.forEach( r -> {
-            MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), r.getFechaInicio(), r.getFechaFin(), r.getAlojamiento());
+            MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), r.getFechaInicio(), r.getFechaFin(),r.getMotivoCancelacion(), r.getAlojamiento());
             misReservasDTO.add(reservaDTO);
         });
         return misReservasDTO;

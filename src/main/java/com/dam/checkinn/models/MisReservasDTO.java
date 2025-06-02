@@ -8,6 +8,7 @@ public record MisReservasDTO(
         boolean cancelada,
         LocalDate fechaInicio,
         LocalDate fechaFin,
+        String motivoCancelacion,
         AlojamientoModel alojamiento
 ) {
 }
