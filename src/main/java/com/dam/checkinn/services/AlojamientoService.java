@@ -140,6 +140,7 @@ public class AlojamientoService {
 
         // Verifica colisiones con reservas existentes
         for (ReservaModel reserva : alojamiento.getReservas()) {
+            if (reserva.isCancelada()) continue;
             if (!(fin.isBefore(reserva.getFechaInicio()) || inicio.isAfter(reserva.getFechaFin()))) {
                 return false;
             }

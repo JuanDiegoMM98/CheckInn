@@ -175,7 +175,7 @@ public class ReservaService {
                         null
                 );
                 ReservaModel reservaCreada = reservaRepository.save(reserva);
-                return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(), reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(), alojamientoAleatorio);
+                return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(), reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(),reservaCreada.getMotivoCancelacion(), alojamientoAleatorio);
             } else {
                 throw new AlojamientoNotFoundException();
             }
@@ -192,6 +192,7 @@ public class ReservaService {
     }
 
     private boolean estaDisponiblePorFechas(AlojamientoModel alojamiento, LocalDate inicio, LocalDate fin) {
+
         if (inicio == null || fin == null) return true;
 
         // Verifica si está bloqueado
@@ -203,6 +204,7 @@ public class ReservaService {
 
         // Verifica colisiones con reservas existentes
         for (ReservaModel reserva : alojamiento.getReservas()) {
+            if (reserva.isCancelada()) continue;
             if (!(fin.isBefore(reserva.getFechaInicio()) || inicio.isAfter(reserva.getFechaFin()))) {
                 return false;
             }
