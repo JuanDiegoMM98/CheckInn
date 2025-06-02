@@ -91,7 +91,7 @@
   </div>
   <div class="navbar-right">
     <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-    <span>Adam<br><small>Admi</small></span>
+    <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
   </div>
 </header>
 
@@ -100,47 +100,51 @@
   <form>
     <div class="campo">
       <label>Nombre (*)</label>
-      <input type="text" value="Adam" />
+      <input type="text" name="nombre" value="" />
     </div>
+
     <div class="campo">
       <label>Correo electrónico (*)</label>
-      <input type="email" value="adamblazcort@gmail.com" />
+      <input type="email" name="correo" value="" />
     </div>
+
     <div class="campo">
       <label>Apellido 1 (*)</label>
-      <input type="text" value="Blázquez" />
+      <input type="text" name="apellido1" value="" />
     </div>
-    <div class="campo">
-      <label>Fecha de nacimiento (*)</label>
-      <input type="date" value="2016-05-12" />
-    </div>
+
     <div class="campo">
       <label>Apellido 2 (*)</label>
-      <input type="text" value="Cortés" />
+      <input type="text" name="apellido2" value="" />
     </div>
+
+    <div class="campo">
+      <label>Fecha de nacimiento (*)</label>
+      <input type="date" name="fechaNacimiento" value="" />
+    </div>
+
     <div class="campo">
       <label>Dirección (*)</label>
-      <input type="text" value="Avenida Ginés Pérez Chirinos, 44" />
+      <input type="text" name="direccion" value="" />
     </div>
-    <div class="campo">
-      <label>DNI (*)</label>
-      <input type="text" value="18552368-H" />
-    </div>
+
     <div class="campo">
       <label>Género</label>
-      <select>
-        <option>Hombre</option>
-        <option>Mujer</option>
-        <option>Otro</option>
+      <select name="genero">
+        <option value="MASCULINO">Masculino</option>
+        <option value="FEMENINO">Femenino</option>
+        <option></option>
       </select>
     </div>
+
     <div class="campo">
       <label>Teléfono de contacto</label>
-      <input type="tel" value="666585232" />
+      <input type="tel" name="telefono" value="666585232" />
     </div>
+
     <div class="campo">
       <label>Tarjeta de crédito</label>
-      <input type="text" value="1585325899462" />
+      <input type="text" name="tarjetaBancaria" value="1585325899462" />
     </div>
 
     <div class="obligatorio">Los campos marcados con (*) son obligatorios</div>
@@ -152,5 +156,127 @@
     </div>
   </form>
 </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+
+    // Formatear género
+    /* En desuso (No hace falta, usarlo hacía que no se reconociera los géneros)
+    function formatearGenero(texto) {
+      if (!texto || typeof texto !== 'string') return ''; // Maneja null, undefined o vacío
+      texto = texto.trim().toLowerCase(); // Elimina espacios y pone todo en minúscula
+      return texto.charAt(0).toUpperCase() + texto.slice(1);
+    }
+    */
+
+    // Cargar datos usuario
+
+    const usuarioGuardado = sessionStorage.getItem("nombre");
+
+    document.addEventListener("DOMContentLoaded", async function() {
+
+      // Mostrar nombre y rol del usuario guardado en sessionStorage
+
+        if (usuarioGuardado) {
+          const usuario = JSON.parse(usuarioGuardado);
+
+          const nombreElement = document.querySelector('span[name="nombreUsuario"]');
+          const rolElement = document.querySelector('small[name="rolUsuario"]');
+
+          document.querySelector('[name="nombre"]').value = usuario.nombre
+          document.querySelector('[name="correo"]').value = usuario.correo
+          document.querySelector('[name="apellido1"]').value = usuario.apellido1
+          document.querySelector('[name="apellido2"]').value = usuario.apellido2
+          document.querySelector('[name="fechaNacimiento"]').value = usuario.fechaNacimiento
+          document.querySelector('[name="direccion"]').value = usuario.direccion
+          document.querySelector('[name="genero"]').value = usuario.genero
+          document.querySelector('[name="telefono"]').value = usuario.telefono
+          document.querySelector('[name="tarjetaBancaria"]').value = usuario.tarjetaBancaria
+
+          if (nombreElement && rolElement) {
+            nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
+          }
+
+          //Petición actualizar usuario
+          document.querySelector("form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const datos = Object.fromEntries(formData.entries());
+
+            if (usuarioGuardado) {
+              const usuario = JSON.parse(usuarioGuardado);
+              datos.rol = usuario.rol;
+              datos.contraseña = usuario.contraseña;
+            }
+
+            try {
+              const response = await axios.patch(`${uri}/usuarios/${usuario.dni}`, datos);
+
+              if (response.status === 200) {
+                guardar_session(response.data);
+                window.location.href = "Home.html";
+              } else if (response.status === 404) {
+                alert("Modificación de datos fallida");
+              } else {
+                alert("Ha habido un error al actualizar los datos");
+              }
+            } catch (error) {
+              /*
+                console.error("Error:", error);
+                alert("Error al conectar con el servidor.");
+                */
+            }
+          });
+
+          // Eliminar usuario
+          document.querySelector("form").addEventListener("reset", async function(event) {
+            event.preventDefault();
+
+            const confirmacion = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
+
+            if (!confirmacion) return; // El usuario canceló
+
+            if (usuarioGuardado) {
+              const usuario = JSON.parse(usuarioGuardado);
+              const response = await axios.delete(`${uri}/usuarios/${usuario.dni}`)
+
+              if (response.status === 200) {
+                window.location.href = "Index.html";
+              } else if (response.status === 404) {
+                alert("No se ha encontrado el usuario en la base de datos");
+              } else {
+                alert("Error al intentar eliminar el usuario");
+              }
+            }
+          });
+
+          document.querySelector("form").addEventListener("click", async function(event) {
+            window.location.href = "Home.html";
+          });
+        }
+
+
+
+          /*
+          const response = axios.get(`${uri}/usuarios/${usuario.dni}`);
+          if (response.status === 200) {
+
+            const datosUsuario = response.data;
+
+           */
+
+
+/*
+          } else {
+            alert("Error al obtener los datos de usuario");
+          }
+      } else {
+        alert("Error al acceder a los datos de inicio de sesión");
+      }
+      */
+    });
+  </script>
 </body>
 </html>

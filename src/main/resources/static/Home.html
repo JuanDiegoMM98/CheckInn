@@ -13,6 +13,79 @@
       color: orange;
     }
 
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .label-servicios {
+      display: block;
+      margin-top: 5px;
+      margin-right: -18px;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    /* Filtros */
+    .filters {
+      max-width: 800px;
+      margin: 0 auto 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .filters select,
+    .filters input[type="number"],
+    .filters input[type="text"],
+    .filters input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .inputNumeros {
+      max-width: 200px;
+      width: 100%;
+    }
+    .filters .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .filters .checkbox-group .row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .filters .form-row {
+      display: flex;
+      gap: 10px;
+    }
+    .filters .form-row > * {
+      flex: 1;
+    }
+    .filters .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .filters button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .btn-buscar {
+      background-color: #ccc;
+      color: #000;
+    }
+    .btn-reserva {
+      background-color: orange;
+      color: white;
+    }
+
     /* Carrusel con flechas */
     .carousel-container {
       display: flex;
@@ -106,66 +179,6 @@
       right: 10px;
     }
 
-    /* Filtros */
-    .filters {
-      max-width: 800px;
-      margin: 0 auto 60px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .filters select,
-    .filters input[type="number"],
-    .filters input[type="text"],
-    .filters input[type="date"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-    .precio-maximo {
-      max-width: 200px;
-      width: 100%;
-    }
-    .filters .checkbox-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .filters .checkbox-group .row {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .filters .form-row {
-      display: flex;
-      gap: 10px;
-    }
-    .filters .form-row > * {
-      flex: 1;
-    }
-    .filters .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .filters button {
-      padding: 12px 24px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .btn-buscar {
-      background-color: #ccc;
-      color: #000;
-    }
-    .btn-reserva {
-      background-color: orange;
-      color: white;
-    }
-
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .navbar {
@@ -241,7 +254,7 @@
 
     <div class="filters">
       <select name="provincia">
-        <option>Älava</option>
+        <option>Alava</option>
         <option>Albacete</option>
         <option>Alicante</option>
         <option>Almeria</option>
@@ -304,19 +317,27 @@
       </select>
 
       <div class="checkbox-group">
-        <input type="number" class="precio-maximo" placeholder="Precio máximo" name="precioMaximo"/>
+        <input type="number" class="inputNumeros" placeholder="Precio máximo" name="precioMaximo"/>
 
         <div class="row">
+          <label class="label-servicios">Wifi</label>
           <input type="checkbox" name="servicios" value="WIFI" />
+          <label class="label-servicios">Piscina</label>
           <input type="checkbox" name="servicios" value="PISCINA" />
+          <label class="label-servicios">Barbacoa</label>
           <input type="checkbox" name="servicios" value="BARBACOA" />
         </div>
       </div>
 
       <div class="form-row">
+        <label>Entrada</label>
         <input type="date" placeholder="Entrada" name="fechaInicio"/>
+        <label>Salida</label>
         <input type="date" placeholder="Salida" name="fechaFin"/>
-        <input type="number" placeholder="Personas" name="personasMaximas"/>
+      </div>
+
+      <div class="row">
+        <input type="number" class="inputNumeros" placeholder="Personas" name="personasMaximas"/>
       </div>
 
       <div class="buttons">
@@ -363,7 +384,7 @@
       lista.forEach(apto => {
         const card = document.createElement("a");
         card.className = "card-link";
-        card.href = `InfoApartamento.html?idApartamento=${apto.id}`;
+        card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
 
         card.innerHTML = `
         <div class="card">
