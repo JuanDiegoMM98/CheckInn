@@ -7,11 +7,17 @@
   <link href="styles.css" rel="stylesheet"> 
   <style>
 
-    .container {
-      width: 100%;
-      padding: 20px;
+    input[type="number"]{
+      width: 50%;
+      padding: 10px;
+      text-align: center;
+      border-radius: 20px;
+      border: 1px solid #444;
       box-sizing: border-box;
-      background-color: #fff;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: orange;
+      padding-left: 25px;
     }
 
     h2 {
@@ -19,13 +25,6 @@
       color: orange;
       margin-bottom: 30px;
       font-size: 2rem;
-    }
-
-    .reservas {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
     }
 
     .card {
@@ -278,15 +277,15 @@
     <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+      const hoy = new Date();
+      const fechaHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
       const cardsWrapper = document.getElementById("cardsWrapper");
       const usuarioGuardado = sessionStorage.getItem("nombre");
+
       if (usuarioGuardado) {
         const usuario = JSON.parse(usuarioGuardado);
 
-        // Mostrar nombre y rol del usuario guardado en sessionStorage
         document.addEventListener("DOMContentLoaded", function () {
-          const usuarioGuardado = sessionStorage.getItem("nombre");
-
           const nombreElement = document.querySelector('span[name="nombreUsuario"]');
           const rolElement = document.querySelector('small[name="rolUsuario"]');
 
@@ -294,65 +293,110 @@
             nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
           }
 
-
-          // Cargar alojamientos al inicio
           cargarReservas();
+
           document.getElementById("btn-cancelar").addEventListener("click", function(event) {
             event.preventDefault();
             window.location.href = "Home.html";
           });
         });
 
-        // Función para renderizar tarjetas de reservas
         function renderizarReservas(lista) {
-          cardsWrapper.innerHTML = ""; // Limpiar contenido anterior
+          cardsWrapper.innerHTML = "";
 
           lista.forEach(reserva => {
             const card = document.createElement("a");
             card.className = "card-link";
-            // card.href = `InfoApartamento.html?idReserva=${reserva.id}`;
 
-            // Checkeo de si la reserva esta cancelada o no y se modifica el mensaje que se muestra
-            if (!reserva.cancelada && reserva.motivoCancelacion == null) {
+            if (new Date(reserva.fechaFin) <= fechaHoy) {
               card.innerHTML = `
-                <div class="card">
-                  <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-                  <div class="title">${reserva.alojamiento.nombre}</div>
-                  <div class="description">${reserva.precio + "€" || ''}</div>
-                  <a href="CancelacionReserva.html?idReserva=${reserva.id}&fechaInicio=${reserva.fechaInicio}&fechaFin=${reserva.fechaFin}&precio=${reserva.precio}&idApartamento=${reserva.alojamiento.id}"
-                   class="cancelar-link">
-                   Solicitar cancelación
-                  </a>
-                </div>
-              `;
+            <div class="card">
+              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+              <div class="title">${reserva.alojamiento.nombre}</div>
+              <div class="description">${reserva.precio + "€" || ''}</div>
+              <form class="form-valorar" data-id="${reserva.id}" data-id-alojamiento="${reserva.alojamiento.id}">
+                <input class="valoracion" type="number" min="1" max="5" maxlength="1" minlength="1" value="5">
+                <button type="submit" class="boton-buscar">Valorar reserva</button>
+              </form>
+            </div>
+          `;
+            } else if (!reserva.cancelada && reserva.motivoCancelacion == null) {
+              card.innerHTML = `
+            <div class="card">
+              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+              <div class="title">${reserva.alojamiento.nombre}</div>
+              <div class="description">${reserva.precio + "€" || ''}</div>
+              <a href="CancelacionReserva.html?idReserva=${reserva.id}&fechaInicio=${reserva.fechaInicio}&fechaFin=${reserva.fechaFin}&precio=${reserva.precio}&idApartamento=${reserva.alojamiento.id}"
+               class="cancelar-link">
+               Solicitar cancelación
+              </a>
+            </div>
+          `;
             } else if (reserva.motivoCancelacion != null && reserva.cancelada === false) {
               card.innerHTML = `
-                <div class="card">
-                  <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-                  <div class="title">${reserva.alojamiento.nombre}</div>
-                  <div class="description">${reserva.precio + "€" || ''}</div>
-                  <div class="title">Cancelación solicitada</div>
-                </div>
-              `;
+            <div class="card">
+              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+              <div class="title">${reserva.alojamiento.nombre}</div>
+              <div class="description">${reserva.precio + "€" || ''}</div>
+              <div class="title">Cancelación solicitada</div>
+            </div>
+          `;
             } else {
               card.innerHTML = `
-                <div class="card">
-                  <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-                  <div class="title">${reserva.alojamiento.nombre}</div>
-                  <div class="description">${reserva.precio + "€" || ''}</div>
-                  <div class="title">Esta reserva esta cancelada</div>
-                </div>
-              `;
+            <div class="card">
+              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
+              <div class="title">${reserva.alojamiento.nombre}</div>
+              <div class="description">${reserva.precio + "€" || ''}</div>
+              <div class="title">Esta reserva está cancelada</div>
+            </div>
+          `;
             }
 
             cardsWrapper.appendChild(card);
           });
 
-          // Centramos las tarjetas luego de renderizarlas
+          // Evento para valorar reservas
+          cardsWrapper.addEventListener("submit", async function (e) {
+            if (e.target.matches(".form-valorar")) {
+              e.preventDefault();
+              const form = e.target;
+              const valoracion = form.querySelector(".valoracion").value;
+              const idReserva = form.dataset.id;
+              const idAlojamiento = form.dataset.idAlojamiento;
+
+              try {
+                const response = await axios.patch(`${uri}/reservas/${idReserva}`, {
+                  valoracion: valoracion,
+                  idAlojamiento: idAlojamiento,
+                  idReserva: idReserva,
+                });
+                if (response.status === 200){
+                  alert("Reserva valorada correctamente");
+                } else if (response.status === 404) {
+                  alert("No se ha encontrado la reserva");
+                } else {
+                  alert("Ha habido un error al intentar hacer la valoración");
+                }
+              } catch (error) {
+                console.error(error);
+                alert("Hubo un error al valorar");
+              }
+            }
+          });
+
+          // Validación para inputs de valoración
+          document.querySelectorAll(".valoracion").forEach(input => {
+            input.addEventListener("keydown", function(e) {
+              const allowedKeys = ["ArrowUp", "ArrowDown", "Tab"];
+              if (!allowedKeys.includes(e.key)) {
+                e.preventDefault();
+              }
+            });
+          });
+
           centrarCards();
         }
 
-        // Función para cargar todas las reservas
         async function cargarReservas() {
           try {
             const response = await axios.get(`${uri}/usuarios/${usuario.dni}/reservas`);
@@ -369,10 +413,8 @@
           }
         }
 
-        // Función para centrar las tarjetas
         function centrarCards() {
           if (!cardsWrapper) return;
-
           const totalWidth = cardsWrapper.scrollWidth;
           const visibleWidth = cardsWrapper.clientWidth;
           const scrollAmount = (totalWidth - visibleWidth) / 2;
@@ -383,7 +425,6 @@
           });
         }
 
-        // Carrusel horizontal con flechas
         function scrollCards(direction) {
           const scrollAmount = 320;
           cardsWrapper.scrollBy({
@@ -393,7 +434,6 @@
           setTimeout(centrarCards, 500);
         }
       }
-
     </script>
 </body>
 </html>

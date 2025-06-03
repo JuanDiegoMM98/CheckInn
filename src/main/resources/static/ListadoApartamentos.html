@@ -1,236 +1,259 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mis estancias</title>
-  <link href="styles.css" rel="stylesheet"> 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mis estancias</title>
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    .info-pro {
-      background: #f5faff;
-      border: 1px solid #cce5ff;
-      padding: 10px;
-      margin: 20px;
-      color: #007bff;
-      font-size: 0.9rem;
-    }
+        .info-pro {
+            background: #f5faff;
+            border: 1px solid #cce5ff;
+            padding: 10px;
+            margin: 20px;
+            color: #007bff;
+            font-size: 0.9rem;
+        }
 
-    .pro-message {
-      display: none;
-      color: #007bff;
-      margin: 20px 0;
-    }
+        .pro-message {
+            display: none;
+            color: #007bff;
+            margin: 20px 0;
+        }
 
-    .info-pro span {
-      color: red;
-      font-size: 0.8rem;
-      display: block;
-      margin-top: 5px;
-    }
+        .info-pro span {
+            color: red;
+            font-size: 0.8rem;
+            display: block;
+            margin-top: 5px;
+        }
 
-    .main-content {
-      padding: 20px;
-    }
+        .main-content {
+            padding: 20px;
+        }
 
-    .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 30px;
-    }
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
 
-    .card {
-      width: 100%;
-      max-width: 400px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      background-color: white;
-    }
+        .card {
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
 
-    .card img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      display: block;
-    }
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
 
-    .card-body {
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      text-align: center;
-    }
+        .card-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            text-align: center;
+        }
 
-    .mensaje-vacio {
-      display: none;
-      font-style: italic;
-      color: #999;
-      margin-top: 20px;
-      text-align: center;
-    }
+        .mensaje-vacio {
+            display: none;
+            font-style: italic;
+            color: #999;
+            margin-top: 20px;
+            text-align: center;
+        }
 
-    .card h4 {
-      margin: 10px 0 5px;
-    }
+        .card h4 {
+            margin: 10px 0 5px;
+        }
 
-    .card .trash {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      cursor: pointer;
-      color: #999;
-    }
+        .card .trash {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #999;
+        }
 
-    .card a {
-      display: block;
-      font-size: 0.9rem;
-      color: orange;
-      margin-top: 5px;
-      text-decoration: none;
-    }
+        .card a {
+            display: block;
+            font-size: 0.9rem;
+            color: orange;
+            margin-top: 5px;
+            text-decoration: none;
+        }
 
-    .facturacion-btn {
-      display: none;
-      margin: 30px auto;
-      background: orange;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 5px;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+        .facturacion-btn {
+            display: none;
+            margin: 30px auto;
+            background: orange;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
 
-    /* SOLO PARA RESPONSIVE */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+        /* SOLO PARA RESPONSIVE */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-      .navbar-left, .navbar-right {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-        width: 100%;
-      }
+            .navbar-left, .navbar-right {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                width: 100%;
+            }
 
-      .navbar nav {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
+            .navbar nav {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
 
-      .navbar nav a {
-        margin: 5px 0;
-        width: 100%;
-      }
+            .navbar nav a {
+                margin: 5px 0;
+                width: 100%;
+            }
 
-      .cards-container {
-        flex-direction: column;
-        align-items: center;
-      }
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
 
-      .card img {
-        height: 200px;
-      }
+            .card img {
+                height: 200px;
+            }
 
-      h2 {
-        font-size: 1.5rem;
-      }
+            h2 {
+                font-size: 1.5rem;
+            }
 
-      .facturacion-btn {
-        width: 90%;
-      }
-    }
-  </style>
+            .facturacion-btn {
+                width: 90%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="navbar">
+<header class="navbar">
     <div class="navbar-left">
-      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
-      <nav>
-        <a href="Home.html">Home</a>
-        <a href="ListadoReservas.html">Mis reservas</a>
-        <a href="ListadoApartamentos.html" class="active">Mis Apartamentos</a>
-        <a href="AreaPersonal.html">Área personal</a>
-      </nav>
+        <img class="logo" src="https://via.placeholder.com/40" alt="Logo"/>
+        <nav>
+            <a href="Home.html">Home</a>
+            <a href="ListadoReservas.html">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="active">Mis Apartamentos</a>
+            <a href="AreaPersonal.html">Área personal</a>
+        </nav>
     </div>
     <div class="navbar-right">
-      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span>Adam<br><small>Admi</small></span>
+        <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar"/>
+        <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
     </div>
-  </header>
+</header>
 
-  <div class="info-pro">
+<div class="info-pro">
     <p id="pro-message" class="pro-message">
-      Para añadir tus estancias necesitas hacerte PRO. <a href="#">Haz clic aquí</a>
+        Para añadir tus estancias necesitas hacerte PRO. <a href="#">Haz clic aquí</a>
     </p>
-  </div>
+</div>
 
-  <div class="main-content">
+<div class="main-content">
     <h2>Mis Apartamentos</h2>
     <div id="estancias-container" class="cards-container"></div>
 
     <p id="sin-estancias" class="mensaje-vacio">
-      No tienes ninguna estancia en alquiler todavía.
+        No tienes ninguna estancia en alquiler todavía.
     </p>
 
     <button id="facturacion-btn" class="facturacion-btn">Consultar facturación</button>
-  </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    axios.get('/api/usuario/estancias') // Cambia por tu endpoint real
-      .then(function(response) {
-        const { esPro, estancias } = response.data;
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        const usuarioGuardado = sessionStorage.getItem("nombre");
 
-        const proMessage = document.getElementById('pro-message');
-        const container = document.getElementById('estancias-container');
-        const mensajeVacio = document.getElementById('sin-estancias');
-        const facturacionBtn = document.getElementById('facturacion-btn');
-
-        if (!esPro) {
-          proMessage.style.display = 'block';
-        } else {
-          facturacionBtn.style.display = 'block';
+        if (!usuarioGuardado) {
+            return;
         }
 
-        if (estancias.length === 0) {
-          mensajeVacio.style.display = 'block';
-          return;
+        const usuario = JSON.parse(usuarioGuardado);
+
+        // Mostrar nombre y rol del usuario en el DOM
+        const nombreElement = document.querySelector('span[name="nombreUsuario"]');
+        const rolElement = document.querySelector('small[name="rolUsuario"]');
+
+        if (nombreElement && rolElement) {
+            nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
         }
 
-        estancias.forEach(estancia => {
-          const card = document.createElement('div');
-          card.className = 'card';
+        try {
+            // Obtener estancias del usuario
+            const response = await axios.get('/api/usuario/estancias');
 
-          card.innerHTML = `
-            <img src="${estancia.imagen}" alt="Estancia ${estancia.nombre}">
-            <div class="card-body">
-              <h3>${estancia.nombre}</h3>
-              <p>${estancia.ubicacion}</p>
-              <p><strong>${estancia.precio} €/noche</strong></p>
-            </div>
-          `;
+            if (response.status === 200) {
+                const estancias = response.data;
 
-          container.appendChild(card);
-        });
-      })
-      .catch(function(error) {
-        console.error('Error al obtener estancias:', error);
-      });
-  </script>
+                const proMessage = document.getElementById('pro-message');
+                const facturacionBtn = document.getElementById('facturacion-btn');
+                const container = document.getElementById('estancias-container');
+                const mensajeVacio = document.getElementById('sin-estancias');
+
+                // Mostrar mensaje PRO o botón de facturación
+                if (usuario.rol !== "PRO") {
+                    proMessage.style.display = 'block';
+                } else if (facturacionBtn) {
+                    facturacionBtn.style.display = 'block';
+                }
+
+                // Mostrar estancias
+                estancias.forEach(estancia => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+
+                    card.innerHTML = `
+                        <img src="${estancia.imagen || 'https://via.placeholder.com/300x200'}" alt="Estancia ${estancia.nombre}">
+                        <div class="card-body">
+                            <h3>${estancia.nombre}</h3>
+                            <p>${estancia.ubicacion}</p>
+                            <p><strong>${estancia.precio} €/noche</strong></p>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                });
+
+            } else if (response.status === 404) {
+                console.warn('No se encontraron estancias.');
+            }
+
+        } catch (error) {
+            console.error('Error al obtener estancias:', error);
+        }
+    });
+</script>
 </body>
 </html>
