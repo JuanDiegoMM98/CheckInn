@@ -210,47 +210,49 @@
             nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
         }
 
-        // Obtener estancias del usuario
-        const response = await axios.get('/api/usuario/estancias');
+        try {
+            // Obtener estancias del usuario
+            const response = await axios.get('/api/usuario/estancias');
 
-        if (response.status === 200) {
+            if (response.status === 200) {
+                const estancias = response.data;
 
-        } else if (response.status === 404)
+                const proMessage = document.getElementById('pro-message');
+                const facturacionBtn = document.getElementById('facturacion-btn');
+                const container = document.getElementById('estancias-container');
+                const mensajeVacio = document.getElementById('sin-estancias');
 
-        const proMessage = document.getElementById('pro-message');
-        const facturacionBtn = document.getElementById('facturacion-btn');
-        const container = document.getElementById('estancias-container');
-        const mensajeVacio = document.getElementById('sin-estancias');
+                // Mostrar mensaje PRO o botón de facturación
+                if (usuario.rol !== "PRO") {
+                    proMessage.style.display = 'block';
+                } else if (facturacionBtn) {
+                    facturacionBtn.style.display = 'block';
+                }
 
-        // Mostrar mensaje PRO o botón de facturación
-        alert(usuario.rol);
-        if (usuario.rol !== "PRO") {
-            proMessage.style.display = 'block';
-            alert("Ha entrado");
-        } else if (facturacionBtn) {
-            facturacionBtn.style.display = 'block';
+                // Mostrar estancias
+                estancias.forEach(estancia => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+
+                    card.innerHTML = `
+                        <img src="${estancia.imagen || 'https://via.placeholder.com/300x200'}" alt="Estancia ${estancia.nombre}">
+                        <div class="card-body">
+                            <h3>${estancia.nombre}</h3>
+                            <p>${estancia.ubicacion}</p>
+                            <p><strong>${estancia.precio} €/noche</strong></p>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                });
+
+            } else if (response.status === 404) {
+                console.warn('No se encontraron estancias.');
+            }
+
+        } catch (error) {
+            console.error('Error al obtener estancias:', error);
         }
-
-        // Mostrar estancias
-        estancias.forEach(estancia => {
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            card.innerHTML = `
-            <img src="${estancia.imagen || 'https://via.placeholder.com/300x200'}" alt="Estancia ${estancia.nombre}">
-            <div class="card-body">
-                <h3>${estancia.nombre}</h3>
-                <p>${estancia.ubicacion}</p>
-                <p><strong>${estancia.precio} €/noche</strong></p>
-            </div>
-        `;
-
-            container.appendChild(card);
-        });
-
-    .catch(function (error) {
-        console.error('Error al obtener estancias:', error);
-    });
     });
 </script>
 </body>
