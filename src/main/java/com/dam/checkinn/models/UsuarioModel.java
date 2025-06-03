@@ -51,6 +51,10 @@ public class UsuarioModel {
     /* ATRIBUTOS ******************************************************************************************************/
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false, unique = true)
     private String dni;     // PK
 
     @Column(nullable = false, length = 20)
@@ -102,6 +106,14 @@ public class UsuarioModel {
 
 
     /* GETTER Y SETTER ************************************************************************************************/
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDni() {
         return dni;

@@ -64,6 +64,26 @@ public class AlojamientoModel {
         this.usuarioAlojamiento = usuarioAlojamiento;
         this.reservas = new ArrayList<>();
     }
+    public AlojamientoModel(String nombre, String descripcion, String provincia, String direccion,
+                            double precioNoche, int capacidad, double valoracion, byte[] imagen, List<Servicio> servicios,
+                            LocalDate inicioBloqueo, LocalDate finBloqueo
+    ) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.provincia = provincia;
+        this.direccion = direccion;
+        this.precioNoche = precioNoche;
+        this.capacidad = capacidad;
+        this.valoracionMedia = valoracion;
+        this.imagen = imagen;
+        this.servicios = servicios;
+        this.inicioBloqueo = inicioBloqueo;
+        this.finBloqueo = finBloqueo;
+        this.reservas = new ArrayList<>();
+    }
+
+
+
 
     /* ATRIBUTOS ******************************************************************************************************/
 

@@ -1,22 +1,27 @@
 package com.dam.checkinn.services;
 
-import com.dam.checkinn.exceptions.AccesoDenegadoException;
-import com.dam.checkinn.exceptions.AltaUsuarioException;
-import com.dam.checkinn.exceptions.BorradoUsuarioException;
+import com.dam.checkinn.exceptions.*;
 import com.dam.checkinn.models.*;
+import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
+import com.dam.checkinn.models.dto.usuarios.CredencialesLoginDTO;
+import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
+import com.dam.checkinn.models.dto.usuarios.UsuarioDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "dni")
 @Service
 public class UsuarioService {
 
@@ -25,17 +30,20 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
     private final PasswordEncoder passwordEncoder;
+    private final AlojamientoRepository alojamientoRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, ReservaRepository reservaRepository, AlojamientoRepository alojamientoRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.alojamientoRepository = alojamientoRepository;
     }
 
     /* MÉTODOS ********************************************************************************************************/
 
-    public UsuarioModel login(CredencialesDTO credencialesDTO) throws Exception {
-        String dni = credencialesDTO.dni();
-        String contraseña = credencialesDTO.contraseña();
+    // LOGIN
+    public UsuarioModel login(CredencialesLoginDTO credencialesLoginDTO) throws Exception {
+        String dni = credencialesLoginDTO.dni();
+        String contraseña = credencialesLoginDTO.contraseña();
 
         Optional<UsuarioModel> usuarioConsultado = usuarioRepository.findByDniIgnoreCase(dni);
 
@@ -48,13 +56,13 @@ public class UsuarioService {
         if (!passwordEncoder.matches(contraseña, usuario.getContraseña())) {
             throw new AccesoDenegadoException();
         }
-
         return usuario;
     }
 
+    // CREAR
     public UsuarioModel createUser(UsuarioModel usuario) throws Exception {
 
-        if (usuarioRepository.existsById(usuario.getDni())) {
+        if (usuarioRepository.existsByDni(usuario.getDni()) || usuarioRepository.existsByCorreoLikeIgnoreCase(usuario.getCorreo())) {
             throw new AltaUsuarioException();
         }
 
@@ -77,29 +85,32 @@ public class UsuarioService {
     }
 
 
-    public UsuarioModel getUserById(String dni) throws Exception {
-        Optional<UsuarioModel> usuario = usuarioRepository.findByDniIgnoreCase(dni);
-
-        if (usuario.isEmpty()) {
+    // GET USUARIO INDIVIDUAL (AREA PERSONAL)
+    public UsuarioModel getUserById(int id) throws Exception {
+        if (!usuarioRepository.existsById(id)) {
             throw new AccesoDenegadoException();
         }
-        return usuario.get();
+
+        return usuarioRepository.findById(id).get();
     }
 
-    public void deleteUser(String dni) throws Exception {
-
-        if (!usuarioRepository.existsById(dni)) {
+    // BORRADO
+    @Transactional
+    public void deleteUser(int id) throws Exception {
+        if (!usuarioRepository.existsById(id)) {
             throw new BorradoUsuarioException();
         }
-        usuarioRepository.deleteById(dni);
+        usuarioRepository.deleteById(id);
     }
 
-    public UsuarioModel updateUser(String dni, UsuarioDTO dto) throws Exception {
-        if (!usuarioRepository.existsById(dni)) {
+    // ACTUALIZACION
+    @Transactional
+    public UsuarioModel updateUser(int id, UsuarioDTO dto) throws Exception {
+        if (!usuarioRepository.existsById(id)) {
             throw new AccesoDenegadoException();
         }
 
-        UsuarioModel usuarioModel = usuarioRepository.findByDniIgnoreCase(dni).get();
+        UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
 
         usuarioModel.setNombre(dto.nombre());
         usuarioModel.setApellido1(dto.apellido1());
@@ -123,19 +134,63 @@ public class UsuarioService {
         return usuarioRepository.save(usuarioModel);
     }
 
-    public List<MisReservasDTO> getAllReservasByDniUsuario(String dni) throws Exception {
-
-        Optional<UsuarioModel> usuarioOptional = usuarioRepository.findByDniIgnoreCase(dni);
-        if (usuarioOptional.isEmpty()) {
+    public List<MisReservasDTO> getAllReservasByIdUsuario(int id) throws Exception {
+        if (!usuarioRepository.existsById(id)) {
             throw new AccesoDenegadoException();
         }
 
-        List<ReservaModel> reservas = usuarioOptional.get().getReservas();
+        UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
+
+        List<ReservaModel> reservas = usuarioModel.getReservas();
+
         List<MisReservasDTO> misReservasDTO = new ArrayList<>();
         reservas.forEach( r -> {
             MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), r.getFechaInicio(), r.getFechaFin(),r.getMotivoCancelacion(), r.getAlojamiento());
             misReservasDTO.add(reservaDTO);
         });
         return misReservasDTO;
+    }
+
+    @Transactional
+    public AlojamientoModel guardarAlojamientoDeUsuario(int id, AlojamientoDTO alojamientoDTO) throws Exception {
+        if (!usuarioRepository.existsById(id)) {
+            throw new AccesoDenegadoException();
+        }
+
+        // Comprobamos que no exista alojamiento con el mismo nombre
+        if (alojamientoRepository.existsByNombre(alojamientoDTO.nombre())) {
+            throw new AltaAlojamientoException();
+        }
+        // Creamos alojamiento
+        AlojamientoModel alojamientoModel = new AlojamientoModel(
+                alojamientoDTO.nombre(),
+                alojamientoDTO.descripcion(),
+                alojamientoDTO.provincia(),
+                alojamientoDTO.direccion(),
+                alojamientoDTO.precioNoche(),
+                alojamientoDTO.capacidad(),
+                0.0,
+                alojamientoDTO.imagen(),
+                alojamientoDTO.servicios(),
+                alojamientoDTO.inicioBloqueo(),
+                alojamientoDTO.finBloqueo()
+        );
+
+        // Buscamos al usuario
+        UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
+
+        // Si no es pro, no le dejamos
+        if (usuarioModel.getRol() != UsuarioModel.Rol.PRO) {
+            throw new AltaAlojamientoException();
+        }
+
+        // Le añadimos su alojamiento
+        usuarioModel.getAlojamientos().add(alojamientoModel);
+
+        // Guardamos el usuario
+        usuarioRepository.save(usuarioModel);
+
+        // Devolvemos el alojamiento creado
+        return alojamientoModel;
     }
 }

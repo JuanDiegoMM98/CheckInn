@@ -5,19 +5,23 @@ import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
 import com.dam.checkinn.models.*;
+import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTO;
+import com.dam.checkinn.models.dto.alojamientos.FiltroDTO;
+import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
+import com.dam.checkinn.models.dto.reservas.QueryDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Service
 public class ReservaService {
 
@@ -37,7 +41,7 @@ public class ReservaService {
 
     /* MÉTODOS ********************************************************************************************************/
 
-    public ReservaModel crearReserva(CrearReservaDTO dto) throws Exception {
+    public ReservaModel crearReserva(CrearActualizarReservaDTO dto) throws Exception {
 
         // Comprobamos que el alojamiento existe
         if (!alojamientoRepository.existsById(dto.idAlojamiento())) {
@@ -87,7 +91,7 @@ public class ReservaService {
         return reservaRepository.save(reservaModel);
     }
 
-    public ReservaModel actualizarReserva(int id, CrearReservaDTO dto) throws Exception {
+    public ReservaModel actualizarReserva(int id, CrearActualizarReservaDTO dto) throws Exception {
         // Comprobar que existe reserva
         if (!reservaRepository.existsById(id)) {
             throw new ReservaNotFoundException();

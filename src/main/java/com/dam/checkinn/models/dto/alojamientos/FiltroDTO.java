@@ -1,4 +1,6 @@
-package com.dam.checkinn.models;
+package com.dam.checkinn.models.dto.alojamientos;
+
+import com.dam.checkinn.models.AlojamientoModel;
 
 import java.time.LocalDate;
 import java.util.List;
