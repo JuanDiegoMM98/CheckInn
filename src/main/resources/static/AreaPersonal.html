@@ -212,7 +212,7 @@
             }
 
             try {
-              const response = await axios.patch(`${uri}/usuarios/${usuario.dni}`, datos);
+              const response = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
 
               if (response.status === 200) {
                 guardar_session(response.data);
@@ -240,7 +240,7 @@
 
             if (usuarioGuardado) {
               const usuario = JSON.parse(usuarioGuardado);
-              const response = await axios.delete(`${uri}/usuarios/${usuario.dni}`)
+              const response = await axios.delete(`${uri}/usuarios/${usuario.id}`)
 
               if (response.status === 200) {
                 window.location.href = "Index.html";
