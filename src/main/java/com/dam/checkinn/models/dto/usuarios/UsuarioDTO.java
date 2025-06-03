@@ -1,4 +1,4 @@
-package com.dam.checkinn.models;
+package com.dam.checkinn.models.dto.usuarios;
 
 import java.time.LocalDate;
 

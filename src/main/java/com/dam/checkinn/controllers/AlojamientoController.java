@@ -3,9 +3,9 @@ package com.dam.checkinn.controllers;
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.AltaAlojamientoException;
 import com.dam.checkinn.models.AlojamientoModel;
-import com.dam.checkinn.models.AlojamientoPatchDTO;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
+import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
 import com.dam.checkinn.services.AlojamientoService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -28,23 +28,6 @@ public class AlojamientoController {
     }
 
     /* MÉTODOS ********************************************************************************************************/
-
-    @PostMapping("/{dni}")
-    public ResponseEntity<AlojamientoModel> createAlojamiento(
-            @PathVariable String dni,
-            @RequestBody AlojamientoModel alojamiento) {
-        try {
-            AlojamientoModel nuevoAlojamiento = alojamientoService.createAlojamiento(dni, alojamiento);
-            URI location = URI.create("/alojamientos/" + nuevoAlojamiento.getId());
-            return ResponseEntity
-                    .created(location)
-                    .body(nuevoAlojamiento);
-        } catch (AltaAlojamientoException e) {
-            return ResponseEntity.status(409).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
-    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<UsuarioModel> deleteAlojamiento(@PathVariable int id) {
@@ -82,9 +65,9 @@ public class AlojamientoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlojamientoModel> getAlojamientoById(@PathVariable int id) {
+    public ResponseEntity<AlojamientoDTO> getAlojamientoById(@PathVariable int id) {
         try {
-            AlojamientoModel alojamiento = alojamientoService.getAlojamientoById(id);
+            AlojamientoDTO alojamiento = alojamientoService.getAlojamientoById(id);
             return ResponseEntity.ok(alojamiento);
         } catch (AlojamientoNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -94,12 +77,12 @@ public class AlojamientoController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AlojamientoModel> updateAlojamiento(
+    public ResponseEntity<AlojamientoDTO> updateAlojamiento(
             @PathVariable int id,
-            @RequestBody AlojamientoPatchDTO alojamiento) {
+            @RequestBody AlojamientoDTO alojamiento) {
 
         try {
-            AlojamientoModel alojamientoActualizado = alojamientoService.updateAlojamiento(id, alojamiento);
+            AlojamientoDTO alojamientoActualizado = alojamientoService.updateAlojamiento(id, alojamiento);
             return ResponseEntity.ok(alojamientoActualizado);
         } catch (AlojamientoNotFoundException e) {
             return ResponseEntity.status(404).build();
@@ -121,4 +104,9 @@ public class AlojamientoController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+//    @PostMapping("/{dni}")
+//    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosByDni(@PathVariable String dni) {
+//
+//    }
 }

@@ -4,11 +4,13 @@ import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.AltaAlojamientoException;
 import com.dam.checkinn.exceptions.ServerException;
 import com.dam.checkinn.models.AlojamientoModel;
-import com.dam.checkinn.models.AlojamientoPatchDTO;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
+import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Service
 public class AlojamientoService {
 
@@ -33,28 +36,6 @@ public class AlojamientoService {
 
     /* MÉTODOS ********************************************************************************************************/
 
-    public AlojamientoModel createAlojamiento(String dni, AlojamientoModel alojamientoModel) throws Exception {
-        if (alojamientoRepository.existsByNombre(alojamientoModel.getNombre())) {
-            throw new AltaAlojamientoException();
-        }
-        try {
-            Optional<UsuarioModel> usuario = usuarioRepository.findByDniIgnoreCase(dni);
-            if (usuario.isEmpty()) {
-                throw new AltaAlojamientoException();
-            }
-            UsuarioModel usuarioDueño = usuario.get();
-            if (usuarioDueño.getRol() != UsuarioModel.Rol.PRO) {
-                throw new AltaAlojamientoException();
-            }
-            alojamientoModel.setReservas(new ArrayList<>());
-            alojamientoModel.setUsuarioAlojamiento(usuarioDueño);
-            return alojamientoRepository.save(alojamientoModel);
-        } catch (Exception e) {
-            throw new ServerException();
-        }
-    }
-
-
     public List<AlojamientoModel> buscarDisponiblesConFiltro(String provincia, Double valoracionMinima, Double precioMaximo,
                                                              List<AlojamientoModel.Servicio> servicios, LocalDate fechaInicio, LocalDate fechaFin, Integer personasMaximas
     ) {
@@ -69,13 +50,23 @@ public class AlojamientoService {
     }
 
 
-    public AlojamientoModel getAlojamientoById(int id) throws Exception {
+    public AlojamientoDTO getAlojamientoById(int id) throws Exception {
+        // Comprobamos que existe
         Optional<AlojamientoModel> optionalAlojamiento = alojamientoRepository.findById(id);
-
         if (optionalAlojamiento.isEmpty()) {
             throw new AlojamientoNotFoundException();
         }
-        return optionalAlojamiento.get();
+        AlojamientoModel alojamientoModel = optionalAlojamiento.get();
+
+        // Recuperamos sus reservas
+        List<ReservaModel> reservasAlojamiento = alojamientoModel.getReservas();
+
+        // Creamos DTO y lo devolvemos
+        return new AlojamientoDTO(alojamientoModel.getNombre(), alojamientoModel.getDescripcion(),
+                alojamientoModel.getProvincia(), alojamientoModel.getDireccion(), alojamientoModel.getPrecioNoche(),
+                alojamientoModel.getCapacidad(), alojamientoModel.getImagen(), alojamientoModel.getServicios(), alojamientoModel.getInicioBloqueo(),
+                alojamientoModel.getFinBloqueo()
+        );
     }
 
     public void deleteAlojamiento(int id) throws Exception {
@@ -85,11 +76,13 @@ public class AlojamientoService {
         alojamientoRepository.deleteById(id);
     }
 
-    public AlojamientoModel updateAlojamiento(int id, AlojamientoPatchDTO dto) throws Exception {
+    public AlojamientoDTO updateAlojamiento(int id, AlojamientoDTO dto) throws Exception {
+        // comprobamos existencia
         if (!alojamientoRepository.existsById(id)) {
             throw new AlojamientoNotFoundException();
         }
 
+        // Buscamos el alojamiento y modificamos sus datos con los que vienen
         AlojamientoModel alojamiento = alojamientoRepository.findById(id).get();
 
         alojamiento.setNombre(dto.nombre());
@@ -99,6 +92,8 @@ public class AlojamientoService {
         alojamiento.setPrecioNoche(dto.precioNoche());
         alojamiento.setCapacidad(dto.capacidad());
         alojamiento.setImagen(dto.imagen());
+
+        // Verificamos lo que nos envía el frontal
         if (dto.servicios() != null) {
             alojamiento.setServicios(dto.servicios());
         }
@@ -109,7 +104,15 @@ public class AlojamientoService {
             alojamiento.setFinBloqueo(dto.finBloqueo());
         }
 
-        return alojamientoRepository.save(alojamiento);
+        // Obtenemos la modificación
+        AlojamientoModel alojamientoModificadoBD = alojamientoRepository.save(alojamiento);
+
+        // Devolvemos el DTO
+        return new AlojamientoDTO(alojamientoModificadoBD.getNombre(), alojamientoModificadoBD.getDescripcion(),
+                alojamientoModificadoBD.getProvincia(), alojamientoModificadoBD.getDireccion(), alojamientoModificadoBD.getPrecioNoche(),
+                alojamientoModificadoBD.getCapacidad(), alojamientoModificadoBD.getImagen(), alojamientoModificadoBD.getServicios(), alojamientoModificadoBD.getInicioBloqueo(),
+                alojamientoModificadoBD.getFinBloqueo()
+        );
     }
 
     public List<ReservaModel> getAllReservasByIdAlojamiento(int id) throws Exception {

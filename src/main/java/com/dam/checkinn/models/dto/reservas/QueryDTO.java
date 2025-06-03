@@ -1,4 +1,4 @@
-package com.dam.checkinn.models;
+package com.dam.checkinn.models.dto.reservas;
 
 public record QueryDTO(
         String provincia,
