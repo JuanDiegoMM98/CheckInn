@@ -1,3 +1,4 @@
+
 axios.get('/api/usuario/estancias') // Cambia por tu endpoint real
   .then(function(response) {
     const { esPro, estancias } = response.data;
