@@ -104,26 +104,26 @@
                     let contenidoCard = `
                         <div class="flex flex-col h-full">
                             <img
-                                src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}"
+                                src="${reserva.imagen || 'https://via.placeholder.com/300x100'}"
                                 onerror="this.onerror=null;this.src='FondoLogin.jpg';"
                                 class="w-full h-44 object-cover rounded-t-2xl"
                                 alt="Imagen alojamiento"
                             />
                             <div class="flex-1 flex flex-col justify-between p-4">
                                 <div class="text-center">
-                                    <h2 class="text-xl font-bold text-black mb-2">${reserva.alojamiento.nombre}</h2>
+                                    <h2 class="text-xl font-bold text-black mb-2">${reserva.nombre}</h2>
                                 </div>
                                 <div class="text-sm text-gray-700 text-left space-y-1 mt-2">
-                                    <p>📍 ${reserva.alojamiento.provincia}</p>
+                                    <p>📍 ${reserva.direccion}</p>
                                     <p><strong>Entrada:</strong> ${reserva.fechaInicio}</p>
                                     <p><strong>Salida:</strong> ${reserva.fechaFin}</p>
-                                    <p><strong>Huéspedes:</strong> ${reserva.alojamiento.capacidad}</p>
+                                    <p><strong>Capacidad:</strong> ${reserva.capacidad}</p>
                                 </div>`;
 
                     if (new Date(reserva.fechaFin) < new Date()) {
                         // Finalizada
                         contenidoCard += `
-                                <form id="form-valorar-${reserva.id}" class="mt-4 space-y-3">
+                                <form id="form-valorar-${reserva.idReserva}" class="mt-4 space-y-3">
                                     <input
                                         type="number"
                                         min="1"
@@ -131,7 +131,7 @@
                                         step="1"
                                         value="5"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-xl text-center text-lg font-medium text-gray-800"
-                                        id="input-valoracion-${reserva.id}"
+                                        id="input-valoracion-${reserva.idReserva}"
                                     />
                                     <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-600 transition-colors">
                                         Valorar
@@ -140,7 +140,7 @@
                     } else if (reserva.motivoCancelacion == null) {
                         // Activa
                         contenidoCard += `
-                                <button onclick="solicitarCancelacion(${reserva.id})"
+                                <button onclick="solicitarCancelacion(${reserva.idReserva})"
                                         class="mt-6 bg-red-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-red-600 transition-colors">
                                     Solicitar cancelación
                                 </button>`;
@@ -156,11 +156,11 @@
                     card.innerHTML = contenidoCard;
                     cardsWrapper.appendChild(card);
 
-                    const formValorar = card.querySelector(`#form-valorar-${reserva.id}`);
+                    const formValorar = card.querySelector(`#form-valorar-${reserva.idReserva}`);
                     if (formValorar) {
                         formValorar.addEventListener("submit", function (e) {
                             e.preventDefault();
-                            const valor = parseInt(document.getElementById(`input-valoracion-${reserva.id}`).value);
+                            const valor = parseInt(document.getElementById(`input-valoracion-${reserva.idReserva}`).value);
                             enviarValoracion(reserva.id, valor);
                         });
                     }
