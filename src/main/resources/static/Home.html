@@ -1,283 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CheckInn - Home</title>
-    <link href="styles.css" rel="stylesheet"/>
-    <style>
-
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .label-servicios {
-            display: block;
-            margin-top: 5px;
-            margin-right: -18px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        /* Filtros */
-        .filters {
-            max-width: 800px;
-            margin: 0 auto 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-content: center;
-            gap: 15px;
-        }
-
-        .filters select,
-        .filters input[type="number"],
-        .filters input[type="text"],
-        .filters input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .inputNumeros {
-            max-width: 150px;
-            width: 80%;
-        }
-
-        .filters .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            justify-content: center;
-            align-content: center;
-            align-items: center;
-        }
-
-        .filters .checkbox-group .row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filters .form-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .filters .form-row > * {
-            flex: 1;
-        }
-
-        .filters .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .filters button {
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .navbar-left,
-            .navbar-right {
-                flex-direction: row;
-                justify-content: space-between;
-                width: 100%;
-            }
-
-            nav {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .filters .form-row {
-                flex-direction: column;
-            }
-
-            .filters .buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .filters .checkbox-group .row {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .filters .checkbox-group {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-            }
-
-            .carousel-container {
-                padding: 0 10px;
-            }
-
-            .nav-arrow {
-                display: none;
-            }
-
-            .card {
-                flex: 0 0 80%; /* ocupan el 80% del ancho en móviles */
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-<header class="navbar">
-    <div class="navbar-left">
-        <img class="logo" src="https://via.placeholder.com/40" alt="Logo"/>
-        <nav>
-            <a href="Home.html" class="active">Home</a>
-            <a href="ListadoReservas.html">Mis reservas</a>
-            <a href="ListadoApartamentos.html">Mis Apartamentos</a>
-            <a href="AreaPersonal.html">Área personal</a>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+    <div class="flex items-center gap-6">
+        <img class="w-10 h-10" src="logo.png" alt="Logo" />
+        <nav class="flex flex-wrap gap-4 text-lg font-bold">
+            <a href="Home.html" class="text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
         </nav>
     </div>
-    <div class="navbar-right">
-        <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar"/>
-        <span name="nombre"><br><small name="rol"></small></span>
+    <div class="flex items-center gap-2 mt-4 md:mt-0">
+        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar" />
+        <span class="font-semibold text-sm">
+        <span name="nombre"></span><br />
+        <small name="rol"></small>
+      </span>
     </div>
 </header>
 
-    <h1 class="titulo-pagina">Bienvenido a CheckInn!</h1>
+<main class="max-w-6xl mx-auto px-4">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Bienvenido a CheckInn!</h1>
 
-<div class="contenido-sin-opacidad">
+    <div id="carouselContainer" class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
+        <button id="carouselLeft" class="absolute -left-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❮</button>
+        <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4" id="cardsWrapper"></div>
+        <button id="carouselRight" class="absolute -right-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❯</button>
+    </div>
 
-    <div class="carousel-container">
-        <button class="nav-arrow nav-left" onclick="scrollCards(-1)">❮</button>
-        <div class="cards-wrapper" id="cardsWrapper">
-            <!-- Aquí se generarán dinámicamente las cards -->
+    <p id="mensajeSinResultados" class="text-center text-gray-500 mt-6 hidden text-lg">
+        🛈 No se han encontrado alojamientos que cumplan con la condición de búsqueda
+    </p>
+
+    <form id="filtroForm" class="bg-white rounded-xl shadow p-8 mt-12 space-y-8 w-1/2 mx-auto">
+        <div class="grid md:grid-cols-2 gap-6">
+            <select name="provincia" class="w-full p-3 border border-gray-300 rounded">
+                <option>Madrid</option>
+                <option>Barcelona</option>
+                <option>Valencia</option>
+            </select>
+            <select name="valoracionMinima" class="w-full p-3 border border-gray-300 rounded">
+                <option value="">Valoración mínima</option>
+                <option value="1">1 Estrella</option>
+                <option value="2">2 Estrellas</option>
+                <option value="3">3 Estrellas</option>
+                <option value="4">4 Estrellas</option>
+                <option value="5">5 Estrellas</option>
+            </select>
         </div>
-        <button class="nav-arrow nav-right" onclick="scrollCards(1)">❯</button>
-    </div>
-
-    <div class="fondo-filtro">
-        <form id="filtroForm" class="filters">
-            <h2>Filtro de búsqueda</h2>
-
-            <select name="provincia">
-                <option selected value="">Seleccione una provincia</option>
-                <option>Alava</option>
-                <!-- ... más opciones ... -->
-            </select>
-
-            <select name="valoracionMinima">
-                <option selected value="">Seleccione una valoración</option>
-                <option value=1>1 Estrella</option>
-                <option value=2>2 Estrellas</option>
-                <option value=3>3 Estrellas</option>
-                <option value=4>4 Estrellas</option>
-                <option value=5>5 Estrellas</option>
-            </select>
-
-            <div class="div-row">
-                <input type="number" class="inputNumeros" placeholder="Precio máximo" name="precioMaximo"/>
-                <input type="number" class="inputNumeros" placeholder="Personas" name="personasMaximas"/>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <input type="number" name="precioMaximo" placeholder="Precio máximo" class="w-full p-3 border border-gray-300 rounded" />
+            <input type="number" name="personasMaximas" placeholder="Personas" class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="flex flex-col">
+                <label for="fechaInicio" class="mb-1 font-semibold">Fecha de entrada</label>
+                <input type="date" name="fechaInicio" id="fechaInicio" class="w-full p-3 border border-gray-300 rounded" />
             </div>
-
-            <div class="checkbox-group">
-                <label class="subtitulo-categoria">Servicios</label>
-                <div class="div-row">
-                    <label class="label-servicios">Wifi</label>
-                    <input type="checkbox" name="servicios" value="WIFI"/>
-                    <label class="label-servicios">Piscina</label>
-                    <input type="checkbox" name="servicios" value="PISCINA"/>
-                    <label class="label-servicios">Barbacoa</label>
-                    <input type="checkbox" name="servicios" value="BARBACOA"/>
-                </div>
+            <div class="flex flex-col">
+                <label for="fechaFin" class="mb-1 font-semibold">Fecha de salida</label>
+                <input type="date" name="fechaFin" id="fechaFin" class="w-full p-3 border border-gray-300 rounded" />
             </div>
-
-            <div class="form-row">
-                <label>Entrada</label>
-                <input type="date" placeholder="Entrada" name="fechaInicio"/>
-                <label>Salida</label>
-                <input type="date" placeholder="Salida" name="fechaFin"/>
+        </div>
+        <div class="flex flex-col items-center">
+            <span class="font-bold mb-2">Servicios:</span>
+            <div class="flex flex-wrap justify-center gap-4">
+                <label class="flex items-center gap-1">
+                    <input type="checkbox" name="servicios" value="WIFI" /> WiFi
+                </label>
+                <label class="flex items-center gap-1">
+                    <input type="checkbox" name="servicios" value="PISCINA" /> Piscina
+                </label>
+                <label class="flex items-center gap-1">
+                    <input type="checkbox" name="servicios" value="BARBACOA" /> Barbacoa
+                </label>
             </div>
+        </div>
+        <div class="flex justify-center gap-6">
+            <button type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar</button>
+            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva rápida</button>
+        </div>
+    </form>
+</main>
 
-            <div class="buttons">
-                <button class="btn-buscar">Buscar</button>
-                <button class="btn-reservar">Reserva rápida</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="app.js"></script>
 <script>
-    const cardsWrapper = document.getElementById("cardsWrapper");
-
-    // Mostrar nombre y rol del usuario guardado en sessionStorage
-    document.addEventListener("DOMContentLoaded", function () {
-        const usuarioGuardado = sessionStorage.getItem("nombre");
-
-        if (usuarioGuardado) {
-            const usuario = JSON.parse(usuarioGuardado);
-
-            const nombreElement = document.querySelector('span[name="nombre"]');
-            const rolElement = document.querySelector('small[name="rol"]');
-
-            if (nombreElement && rolElement) {
-                nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
-            }
-        }
-
-        // Cargar alojamientos al inicio
-        cargarAlojamientos();
-
-        // Asignar el evento al botón "Buscar"
-        const botonBuscar = document.querySelector(".btn-buscar");
-        if (botonBuscar) {
-            botonBuscar.addEventListener("click", aplicarFiltro);
-        }
-    });
-
-    // Función para renderizar tarjetas de alojamientos
-    function renderizarAlojamientos(lista) {
-        cardsWrapper.innerHTML = ""; // Limpiar contenido anterior
-
-        lista.forEach(apto => {
-            const card = document.createElement("a");
-            card.className = "card-link";
-            card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
-
-            card.innerHTML = `
-        <div class="card">
-          <img src="${apto.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-          <div class="title">${apto.nombre}</div>
-          <div class="description">${apto.descripcion || 'Sin descripción.'}</div>
-          <span class="reservar">Reservar</span>
-        </div>
-      `;
-
-            cardsWrapper.appendChild(card);
-        });
-
-        // Centramos las tarjetas luego de renderizarlas
-        updateCarouselLayout();
-    }
-
-    // Función para cargar todos los alojamientos
     async function cargarAlojamientos() {
         try {
             const response = await axios.get(`${uri}/alojamientos`);
@@ -292,94 +107,78 @@
         }
     }
 
-    // Función que aplica el filtro con el botón "Buscar"
-    async function aplicarFiltro(event) {
-        event.preventDefault();
-
-        const filtroForm = document.getElementById("filtroForm");
-        if (!filtroForm) return;
-
-        const formData = new FormData(filtroForm);
-        const params = new URLSearchParams();
-
-        for (const [key, value] of formData.entries()) {
-            if (value) {
-                if (key === "servicios") {
-                    params.append("servicios", value);
-                } else {
-                    params.set(key, value);
-                }
-            }
+    document.addEventListener("DOMContentLoaded", function () {
+        const usuarioGuardado = sessionStorage.getItem("nombre");
+        if (usuarioGuardado) {
+            const usuario = JSON.parse(usuarioGuardado);
+            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+            document.querySelector('small[name="rol"]').textContent = usuario.rol;
         }
 
-        try {
-            const response = await axios.get(`${uri}/alojamientos?${params.toString()}`);
-            if (response.status === 200) {
-                renderizarAlojamientos(response.data);
-            } else {
-                alert("Error al cargar los apartamentos filtrados.");
-            }
-        } catch (error) {
-            console.error("Error al filtrar alojamientos:", error);
-            cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos filtrados.</p>";
-        }
-    }
+        cargarAlojamientos();
+        document.querySelector(".btn-buscar")?.addEventListener("click", aplicarFiltro);
+    });
 
-    // Función para centrar las tarjetas
-    function centrarCards() {
-        if (!cardsWrapper) return;
+    function renderizarAlojamientos(lista) {
+        const carouselContainer = document.getElementById("carouselContainer");
+        const cardsWrapper = document.getElementById("cardsWrapper");
+        const arrowLeft = document.getElementById("carouselLeft");
+        const arrowRight = document.getElementById("carouselRight");
+        const mensajeSinResultados = document.getElementById("mensajeSinResultados");
 
-        const totalWidth = cardsWrapper.scrollWidth;
-        const visibleWidth = cardsWrapper.clientWidth;
-        const scrollAmount = (totalWidth - visibleWidth) / 2;
-
-        cardsWrapper.scrollTo({
-            left: scrollAmount,
-            behavior: "smooth"
-        });
-    }
-
-    // Carrusel horizontal con flechas
-    function scrollCards(direction) {
-        const scrollAmount = 320;
-        cardsWrapper.scrollBy({
-            left: direction * scrollAmount,
-            behavior: "smooth"
+        cardsWrapper.innerHTML = "";
+        arrowLeft.addEventListener("click", () => {
+            cardsWrapper.scrollBy({ left: -340, behavior: "smooth" });
         });
 
-        setTimeout(centrarCards, 500);
-        updateCarouselLayout();
-    }
+        arrowRight.addEventListener("click", () => {
+            cardsWrapper.scrollBy({ left: 340, behavior: "smooth" });
+        });
 
-    function updateCarouselLayout() {
-        const wrapper = document.getElementById("cardsWrapper");
-        const cards = wrapper.querySelectorAll(".card");
-        const totalCardWidth = cards.length * (300 + 20); // ancho card + gap
-        const visibleWidth = wrapper.offsetWidth;
-
-        if (totalCardWidth > visibleWidth) {
-            wrapper.classList.add("full");
-        } else {
-            wrapper.classList.remove("full");
-        }
-    }
-
-    function updateCarouselLayout() {
-        const wrapper = document.getElementById("cardsWrapper");
-        const cards = wrapper.querySelectorAll(".card");
-        const scrollWidth = wrapper.scrollWidth;
-        const clientWidth = wrapper.clientWidth;
-
-        // Cambia justificación dependiendo de si hay overflow horizontal
-        if (scrollWidth > clientWidth) {
-            wrapper.classList.add("full");
-        } else {
-            wrapper.classList.remove("full");
+        if (!lista.length) {
+            mensajeSinResultados.classList.remove("hidden");
+            carouselContainer.classList.add("hidden");
+            return;
         }
 
-        // Oculta flechas si no hace falta scroll
-        document.querySelector('.nav-left').style.display = scrollWidth > clientWidth ? 'block' : 'none';
-        document.querySelector('.nav-right').style.display = scrollWidth > clientWidth ? 'block' : 'none';
+        mensajeSinResultados.classList.add("hidden");
+        carouselContainer.classList.remove("hidden");
+
+        if (lista.length <= 3) {
+            arrowLeft.classList.add("hidden");
+            arrowRight.classList.add("hidden");
+            cardsWrapper.classList.add("justify-center");
+        } else {
+            arrowLeft.classList.remove("hidden");
+            arrowRight.classList.remove("hidden");
+            cardsWrapper.classList.remove("justify-center");
+        }
+
+        lista.forEach(apto => {
+            const card = document.createElement("a");
+            card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+            card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
+
+            card.innerHTML = `
+          <div class="flex flex-col h-full">
+            <img src="\${apto.imagen || 'https://via.placeholder.com/300x100'}" onerror="this.onerror=null;this.src='FondoLogin.jpg';" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />
+            <div class="flex-1 px-4 py-3 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
+                <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
+              </div>
+              <div class="mt-4 text-left">
+                <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
+                <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+              </div>
+            </div>
+            <div class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl hover:bg-orange-600 transition-colors cursor-pointer">
+              Reservar
+            </div>
+          </div>
+        `;
+            cardsWrapper.appendChild(card);
+        });
     }
 </script>
 </body>

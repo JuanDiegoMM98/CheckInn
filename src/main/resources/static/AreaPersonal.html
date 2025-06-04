@@ -4,279 +4,145 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Área Personal</title>
-  <link href="styles.css" rel="stylesheet">
-  <style>
-
-    h2 {
-      color: orange;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px 40px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 20px;
-      border: 1px solid #999;
-      box-sizing: border-box;
-    }
-
-    .campo {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .obligatorio {
-      grid-column: span 2;
-      color: red;
-      font-size: 0.9em;
-    }
-
-    .botones {
-      grid-column: span 2;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .botones button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .borrar {
-      background-color: rgb(233, 102, 102);
-    }
-
-    .cancelar {
-      background-color: #ccc;
-      color: #333;
-    }
-
-    .guardar {
-      background-color: orange;
-      color: white;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<!-- Menú superior -->
-<header class="navbar">
-  <div class="navbar-left">
-    <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
-    <nav>
-      <a href="Home.html">Home</a>
-      <a href="ListadoReservas.html">Mis reservas</a>
-      <a href="ListadoApartamentos.html">Mis Apartamentos</a>
-      <a href="AreaPersonal.html" class="active">Área personal</a>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+  <div class="flex items-center gap-6">
+    <img class="w-10 h-10" src="logo.png" alt="Logo">
+    <nav class="flex flex-wrap gap-4 text-lg font-bold">
+      <a href="Home.html" class="hover:text-orange-500">Home</a>
+      <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
+      <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+      <a href="AreaPersonal.html" class="text-orange-500">Área personal</a>
     </nav>
   </div>
-  <div class="navbar-right">
-    <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-    <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
+  <div class="flex items-center gap-2 mt-4 md:mt-0">
+    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+    <span class="font-semibold text-sm">
+        <span name="nombreUsuario"></span><br>
+        <small name="rolUsuario"></small>
+      </span>
   </div>
 </header>
 
-<div class="form-container">
-  <h2>Área personal</h2>
-  <form>
-    <div class="campo">
-      <label>Nombre (*)</label>
-      <input type="text" name="nombre" value="" />
-    </div>
+<main class="max-w-4xl mx-auto px-4 py-12">
 
-    <div class="campo">
-      <label>Correo electrónico (*)</label>
-      <input type="email" name="correo" value="" />
-    </div>
+  <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Área Personal</h1>
 
-    <div class="campo">
-      <label>Apellido 1 (*)</label>
-      <input type="text" name="apellido1" value="" />
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow rounded-2xl p-8">
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Nombre *</label>
+      <input type="text" name="nombre" class="p-3 border border-gray-300 rounded" />
     </div>
-
-    <div class="campo">
-      <label>Apellido 2 (*)</label>
-      <input type="text" name="apellido2" value="" />
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Correo electrónico *</label>
+      <input type="email" name="correo" class="p-3 border border-gray-300 rounded" />
     </div>
-
-    <div class="campo">
-      <label>Fecha de nacimiento (*)</label>
-      <input type="date" name="fechaNacimiento" value="" />
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Apellido 1 *</label>
+      <input type="text" name="apellido1" class="p-3 border border-gray-300 rounded" />
     </div>
-
-    <div class="campo">
-      <label>Dirección (*)</label>
-      <input type="text" name="direccion" value="" />
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Apellido 2 *</label>
+      <input type="text" name="apellido2" class="p-3 border border-gray-300 rounded" />
     </div>
-
-    <div class="campo">
-      <label>Género</label>
-      <select name="genero">
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Fecha de nacimiento *</label>
+      <input type="date" name="fechaNacimiento" class="p-3 border border-gray-300 rounded" />
+    </div>
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Dirección *</label>
+      <input type="text" name="direccion" class="p-3 border border-gray-300 rounded" />
+    </div>
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Género</label>
+      <select name="genero" class="p-3 border border-gray-300 rounded">
         <option value="MASCULINO">Masculino</option>
         <option value="FEMENINO">Femenino</option>
         <option></option>
       </select>
     </div>
-
-    <div class="campo">
-      <label>Teléfono de contacto</label>
-      <input type="tel" name="telefono" maxlength="9" value="" />
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Teléfono de contacto</label>
+      <input type="tel" name="telefono" maxlength="9" class="p-3 border border-gray-300 rounded" />
     </div>
-
-    <div class="campo">
-      <label>Tarjeta de crédito</label>
-      <input type="text" maxlength="12" name="tarjetaBancaria" value="" />
+    <div class="flex flex-col md:col-span-2">
+      <label class="font-semibold mb-1">Tarjeta de crédito</label>
+      <input type="text" name="tarjetaBancaria" maxlength="12" class="p-3 border border-gray-300 rounded" />
     </div>
-
-    <div class="obligatorio">Los campos marcados con (*) son obligatorios</div>
-
-    <div class="botones">
-      <button class="borrar" type="reset">Borrar datos</button>
-      <button id="btn-cancelar" class="cancelar" type="button">Cancelar</button>
-      <button class="guardar" type="submit">Guardar</button>
+    <div class="text-sm text-red-500 md:col-span-2">Los campos marcados con (*) son obligatorios</div>
+    <div class="flex justify-center gap-4 md:col-span-2 mt-4">
+      <button type="reset" class="px-6 py-2 rounded bg-red-500 text-white hover:bg-red-600">Borrar datos</button>
+      <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar</button>
+      <button type="submit" class="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Guardar</button>
     </div>
   </form>
-</div>
+</main>
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="app.js"></script>
-  <script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="app.js"></script>
+<script>
+  const usuarioGuardado = sessionStorage.getItem("nombre");
+  document.addEventListener("DOMContentLoaded", async function () {
+    if (usuarioGuardado) {
+      const usuario = JSON.parse(usuarioGuardado);
+      document.querySelector('[name="nombreUsuario"]').innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
 
-    // Formatear género
-    /* En desuso (No hace falta, usarlo hacía que no se reconociera los géneros)
-    function formatearGenero(texto) {
-      if (!texto || typeof texto !== 'string') return ''; // Maneja null, undefined o vacío
-      texto = texto.trim().toLowerCase(); // Elimina espacios y pone todo en minúscula
-      return texto.charAt(0).toUpperCase() + texto.slice(1);
-    }
-    */
+      const responseGet = axios.get(`${uri}/usuarios/${usuario.id}`);
 
-    // Cargar datos usuario
+      if (responseGet.status === 200) {
+        const campos = [
+          "nombre", "correo", "apellido1", "apellido2",
+          "fechaNacimiento", "direccion", "genero", "telefono", "tarjetaBancaria"
+        ];
 
-    const usuarioGuardado = sessionStorage.getItem("nombre");
 
-    document.addEventListener("DOMContentLoaded", async function() {
+        campos.forEach(campo => {
+          if (usuario[campo]) document.querySelector(`[name="${campo}"]`).value = usuario[campo];
+        });
 
-      // Mostrar nombre y rol del usuario guardado en sessionStorage
-
-        if (usuarioGuardado) {
-          const usuario = JSON.parse(usuarioGuardado);
-
-          const nombreElement = document.querySelector('span[name="nombreUsuario"]');
-          const rolElement = document.querySelector('small[name="rolUsuario"]');
-
-          document.querySelector('[name="nombre"]').value = usuario.nombre
-          document.querySelector('[name="correo"]').value = usuario.correo
-          document.querySelector('[name="apellido1"]').value = usuario.apellido1
-          document.querySelector('[name="apellido2"]').value = usuario.apellido2
-          document.querySelector('[name="fechaNacimiento"]').value = usuario.fechaNacimiento
-          document.querySelector('[name="direccion"]').value = usuario.direccion
-          document.querySelector('[name="genero"]').value = usuario.genero
-          document.querySelector('[name="telefono"]').value = usuario.telefono
-          document.querySelector('[name="tarjetaBancaria"]').value = usuario.tarjetaBancaria
-
-          if (nombreElement && rolElement) {
-            nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
+        document.querySelector("form").addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+          const datos = Object.fromEntries(formData.entries());
+          datos.rol = usuario.rol;
+          datos.contraseña = usuario.contraseña;
+          try {
+            const response = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
+            if (response.status === 200) {
+              guardar_session(response.data);
+              window.location.href = "Home.html";
+            } else {
+              alert("Modificación fallida");
+            }
+          } catch {
+            alert("Error al conectar con el servidor");
           }
+        });
 
-          //Petición actualizar usuario
-          document.querySelector("form").addEventListener("submit", async function(event) {
-            event.preventDefault();
-
-            const formData = new FormData(event.target);
-            const datos = Object.fromEntries(formData.entries());
-
-            if (usuarioGuardado) {
-              const usuario = JSON.parse(usuarioGuardado);
-              datos.rol = usuario.rol;
-              datos.contraseña = usuario.contraseña;
+        document.querySelector("form").addEventListener("reset", async function (e) {
+          e.preventDefault();
+          if (confirm("¿Eliminar cuenta? Esta acción es irreversible.")) {
+            const response = await axios.delete(`${uri}/usuarios/${usuario.dni}`);
+            if (response.status === 200) {
+              window.location.href = "Index.html";
+            } else {
+              alert("Error al eliminar usuario");
             }
-
-            try {
-              const response = await axios.patch(`${uri}/usuarios/${usuario.dni}`, datos);
-
-              if (response.status === 200) {
-                guardar_session(response.data);
-                window.location.href = "Home.html";
-              } else if (response.status === 404) {
-                alert("Modificación de datos fallida");
-              } else {
-                alert("Ha habido un error al actualizar los datos");
-              }
-            } catch (error) {
-              /*
-                console.error("Error:", error);
-                alert("Error al conectar con el servidor.");
-                */
-            }
-          });
-
-          // Eliminar usuario
-          document.querySelector("form").addEventListener("reset", async function(event) {
-            event.preventDefault();
-
-            const confirmacion = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
-
-            if (!confirmacion) return; // El usuario canceló
-
-            if (usuarioGuardado) {
-              const usuario = JSON.parse(usuarioGuardado);
-              const response = await axios.delete(`${uri}/usuarios/${usuario.dni}`)
-
-              if (response.status === 200) {
-                window.location.href = "Index.html";
-              } else if (response.status === 404) {
-                alert("No se ha encontrado el usuario en la base de datos");
-              } else {
-                alert("Error al intentar eliminar el usuario");
-              }
-            }
-          });
-
-          // Botón de cancelar
-          document.getElementById("btn-cancelar").addEventListener("click", function(event) {
-            event.preventDefault();
-            window.location.href = "ListadoReservas.html";
-          });
-        }
-
-
-
-          /*
-          const response = axios.get(`${uri}/usuarios/${usuario.dni}`);
-          if (response.status === 200) {
-
-            const datosUsuario = response.data;
-
-           */
-
-
-/*
-          } else {
-            alert("Error al obtener los datos de usuario");
           }
+        });
+
+        document.getElementById("btn-cancelar").addEventListener("click", function () {
+          window.location.href = "ListadoReservas.html";
+        });
+      } else if (responseGet.status === 404) {
+        alert("No se ha encontrado el usuario en base de datos");
       } else {
-        alert("Error al acceder a los datos de inicio de sesión");
+        alert("Error al intentar acceder a la información del usuario");
       }
-      */
-    });
-  </script>
+    }
+  });
+</script>
 </body>
 </html>

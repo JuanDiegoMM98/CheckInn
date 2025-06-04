@@ -1,439 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mis reservas</title>
-  <link href="styles.css" rel="stylesheet"> 
-  <style>
-
-    input[type="number"]{
-      width: 50%;
-      padding: 10px;
-      text-align: center;
-      border-radius: 20px;
-      border: 1px solid #444;
-      box-sizing: border-box;
-      font-size: 0.95rem;
-      font-weight: bold;
-      color: orange;
-      padding-left: 25px;
-    }
-
-    h2 {
-      text-align: center;
-      color: orange;
-      margin-bottom: 30px;
-      font-size: 2rem;
-    }
-
-    .card {
-      width: 400px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      text-align: center;
-      padding: 15px;
-      background-color: #f9f9f9;
-      box-sizing: border-box;
-    }
-
-    .card img {
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      object-fit: cover;
-      border-radius: 5px;
-      background-color: #e0e0e0;
-    }
-
-    .card h4 {
-      margin: 10px 0 5px;
-    }
-
-    .card p {
-      margin: 5px 0 10px;
-      color: #666;
-    }
-
-    .cancelar-link {
-      font-size: 0.85rem;
-      color: orange;
-      text-decoration: none;
-    }
-
-    .rating {
-      color: orange;
-      font-size: 1.2rem;
-      margin-top: 5px;
-    }
-
-    .boton-buscar {
-      display: block;
-      margin: 30px auto 0;
-      background-color: orange;
-      color: white;
-      padding: 10px 25px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .boton-buscar:hover {
-      background-color: darkorange;
-    }
-
-    /* Carrusel con flechas */
-    .carousel-container {
-      display: flex;
-      justify-content: center;
-      position: relative;
-      margin: 20px auto 40px;
-      padding: 0 40px;
-      overflow: hidden;
-    }
-
-    .cards-wrapper {
-      display: flex;
-      justify-content: start;
-      gap: 20px;
-      padding: 10px 0;
-      scroll-behavior: smooth;
-      overflow-x: auto;
-      width: fit-content;
-      min-width: 100%;
-      margin: 0 auto;
-    }
-    .cards-wrapper::-webkit-scrollbar {
-      display: none;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-      flex: 0 0 auto;
-    }
-
-    .card {
-      background-color: #f5f7fb;
-      border-radius: 12px;
-      padding: 20px;
-      width: 300px;
-      height: 400px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    .card img {
-      width: 100%;
-      height: 100px;
-      background-color: #dcdcdc;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      object-fit: cover;
-    }
-    .card .title {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-    }
-    .card .description {
-      font-size: 0.9rem;
-      color: #555;
-      flex-grow: 1;
-    }
-    .card .reservar {
-      margin-top: 10px;
-      color: orange;
-      font-weight: bold;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .nav-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: white;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1;
-      padding: 8px;
-      border-radius: 50%;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    .nav-left {
-      left: 10px;
-    }
-    .nav-right {
-      right: 10px;
-    }
-
-    /* RESPONSIVE DESIGN */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .navbar-left {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-
-      .navbar nav a {
-        display: block;
-        margin: 5px 0;
-      }
-
-      .card {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .container {
-        padding: 15px;
-      }
-
-      h2 {
-        font-size: 1.6rem;
-      }
-
-      .boton-buscar {
-        width: 100%;
-        padding: 12px;
-        font-size: 1.1rem;
-      }
-
-      .navbar-right {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-      }
-
-      .navbar-right span {
-        text-align: left;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .navbar nav a {
-        font-size: 0.95rem;
-      }
-
-      h2 {
-        font-size: 1.4rem;
-      }
-
-      .card h4 {
-        font-size: 1.1rem;
-      }
-
-      .card p,
-      .cancelar-link {
-        font-size: 0.95rem;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Reservas - CheckInn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header class="navbar">
-    <div class="navbar-left">
-      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
-      <nav>
-        <a href="Home.html">Home</a>
-        <a href="ListadoReservas.html" class="active">Mis reservas</a>
-        <a href="ListadoApartamentos.html">Mis Apartamentos</a>
-        <a href="AreaPersonal.html">Área personal</a>
-      </nav>
-    </div>
-    <div class="navbar-right">
-      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
-    </div>
-  </header>
-
-    <div class="carousel-container">
-      <button class="nav-arrow nav-left" onclick="scrollCards(-1)">❮</button>
-      <div class="cards-wrapper" id="cardsWrapper">
-        <!-- Aquí se generarán dinámicamente las cards -->
-      </div>
-      <button class="nav-arrow nav-right" onclick="scrollCards(1)">❯</button>
-    </div>
-
-    <form>
-      <button id="btn-cancelar" type="button" class="boton-buscar">Buscar alojamiento</button>
-    </form>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+  <div class="flex items-center gap-6">
+    <img class="w-10 h-10" src="logo.png" alt="Logo">
+    <nav class="flex flex-wrap gap-4 text-lg font-bold">
+      <a href="Home.html" class="hover:text-orange-500">Home</a>
+      <a href="ListadoReservas.html" class="text-orange-500">Mis reservas</a>
+      <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+      <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+    </nav>
   </div>
-    <script src="app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-      const hoy = new Date();
-      const fechaHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-      const cardsWrapper = document.getElementById("cardsWrapper");
-      const usuarioGuardado = sessionStorage.getItem("nombre");
+  <div class="flex items-center gap-2 mt-4 md:mt-0">
+    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+    <span class="font-semibold text-sm">
+        <span name="nombre"></span><br>
+        <small name="rol"></small>
+      </span>
+  </div>
+</header>
 
-      if (usuarioGuardado) {
-        const usuario = JSON.parse(usuarioGuardado);
+<main class="max-w-6xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-extrabold text-orange-500 mb-6 text-center">Mis Reservas</h1>
 
-        document.addEventListener("DOMContentLoaded", function () {
-          const nombreElement = document.querySelector('span[name="nombreUsuario"]');
-          const rolElement = document.querySelector('small[name="rolUsuario"]');
+  <div id="carouselContainer" class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden w-[150%] mx-auto translate-x-[-12.5%]">
+    <button id="carouselLeft" class="absolute -left-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❮</button>
+    <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4" id="cardsWrapper"></div>
+    <button id="carouselRight" class="absolute -right-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❯</button>
+  </div>
 
-          if (nombreElement && rolElement) {
-            nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
-          }
+  <p id="mensajeSinReservas" class="text-center text-gray-500 mt-10 hidden">🛈 No tienes reservas registradas.</p>
+</main>
 
-          cargarReservas();
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const usuarioGuardado = sessionStorage.getItem("nombre");
+    if (usuarioGuardado) {
+      const usuario = JSON.parse(usuarioGuardado);
+      document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+      document.querySelector('small[name="rol"]').textContent = usuario.rol;
+    }
 
-          document.getElementById("btn-cancelar").addEventListener("click", function(event) {
-            event.preventDefault();
-            window.location.href = "Home.html";
-          });
-        });
+    cargarReservas();
+  });
 
-        function renderizarReservas(lista) {
-          cardsWrapper.innerHTML = "";
+  async function cargarReservas() {
+    const cardsWrapper = document.getElementById("cardsWrapper");
+    const carouselContainer = document.getElementById("carouselContainer");
+    const arrowLeft = document.getElementById("carouselLeft");
+    const arrowRight = document.getElementById("carouselRight");
+    const mensaje = document.getElementById("mensajeSinReservas");
 
-          lista.forEach(reserva => {
-            const card = document.createElement("a");
-            card.className = "card-link";
+    try {
+      const response = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
+      const reservas = response.data;
 
-            if (new Date(reserva.fechaFin) <= fechaHoy) {
-              card.innerHTML = `
-            <div class="card">
-              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-              <div class="title">${reserva.alojamiento.nombre}</div>
-              <div class="description">${reserva.precio + "€" || ''}</div>
-              <form class="form-valorar" data-id="${reserva.id}" data-id-alojamiento="${reserva.alojamiento.id}">
-                <input class="valoracion" type="number" min="1" max="5" maxlength="1" minlength="1" value="5">
-                <button type="submit" class="boton-buscar">Valorar reserva</button>
-              </form>
-            </div>
-          `;
-            } else if (!reserva.cancelada && reserva.motivoCancelacion == null) {
-              card.innerHTML = `
-            <div class="card">
-              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-              <div class="title">${reserva.alojamiento.nombre}</div>
-              <div class="description">${reserva.precio + "€" || ''}</div>
-              <a href="CancelacionReserva.html?idReserva=${reserva.id}&fechaInicio=${reserva.fechaInicio}&fechaFin=${reserva.fechaFin}&precio=${reserva.precio}&idApartamento=${reserva.alojamiento.id}"
-               class="cancelar-link">
-               Solicitar cancelación
-              </a>
-            </div>
-          `;
-            } else if (reserva.motivoCancelacion != null && reserva.cancelada === false) {
-              card.innerHTML = `
-            <div class="card">
-              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-              <div class="title">${reserva.alojamiento.nombre}</div>
-              <div class="description">${reserva.precio + "€" || ''}</div>
-              <div class="title">Cancelación solicitada</div>
-            </div>
-          `;
-            } else {
-              card.innerHTML = `
-            <div class="card">
-              <img src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}" alt="Imagen alojamiento">
-              <div class="title">${reserva.alojamiento.nombre}</div>
-              <div class="description">${reserva.precio + "€" || ''}</div>
-              <div class="title">Esta reserva está cancelada</div>
-            </div>
-          `;
-            }
-
-            cardsWrapper.appendChild(card);
-          });
-
-          // Evento para valorar reservas
-          cardsWrapper.addEventListener("submit", async function (e) {
-            if (e.target.matches(".form-valorar")) {
-              e.preventDefault();
-              const form = e.target;
-              const valoracion = form.querySelector(".valoracion").value;
-              const idReserva = form.dataset.id;
-              const idAlojamiento = form.dataset.idAlojamiento;
-
-              try {
-                const response = await axios.patch(`${uri}/reservas/${idReserva}`, {
-                  valoracion: valoracion,
-                  idAlojamiento: idAlojamiento,
-                  idReserva: idReserva,
-                });
-                if (response.status === 200){
-                  alert("Reserva valorada correctamente");
-                } else if (response.status === 404) {
-                  alert("No se ha encontrado la reserva");
-                } else {
-                  alert("Ha habido un error al intentar hacer la valoración");
-                }
-              } catch (error) {
-                console.error(error);
-                alert("Hubo un error al valorar");
-              }
-            }
-          });
-
-          // Validación para inputs de valoración
-          document.querySelectorAll(".valoracion").forEach(input => {
-            input.addEventListener("keydown", function(e) {
-              const allowedKeys = ["ArrowUp", "ArrowDown", "Tab"];
-              if (!allowedKeys.includes(e.key)) {
-                e.preventDefault();
-              }
-            });
-          });
-
-          centrarCards();
-        }
-
-        async function cargarReservas() {
-          try {
-            const response = await axios.get(`${uri}/usuarios/${usuario.dni}/reservas`);
-            if (response.status === 200) {
-              renderizarReservas(response.data);
-            } else if (response.status === 404) {
-              alert("No se ha encontrado información del usuario");
-            } else {
-              alert("Error al cargar las reservas.");
-            }
-          } catch (error) {
-            console.error("Error al cargar reservas:", error);
-            cardsWrapper.innerHTML = "<p>No se pudieron cargar las reservas.</p>";
-          }
-        }
-
-        function centrarCards() {
-          if (!cardsWrapper) return;
-          const totalWidth = cardsWrapper.scrollWidth;
-          const visibleWidth = cardsWrapper.clientWidth;
-          const scrollAmount = (totalWidth - visibleWidth) / 2;
-
-          cardsWrapper.scrollTo({
-            left: scrollAmount,
-            behavior: "smooth"
-          });
-        }
-
-        function scrollCards(direction) {
-          const scrollAmount = 320;
-          cardsWrapper.scrollBy({
-            left: direction * scrollAmount,
-            behavior: "smooth"
-          });
-          setTimeout(centrarCards, 500);
-        }
+      if (!reservas.length) {
+        mensaje.classList.remove("hidden");
+        carouselContainer.classList.add("hidden");
+        return;
       }
-    </script>
+
+      mensaje.classList.add("hidden");
+      carouselContainer.classList.remove("hidden");
+
+      if (reservas.length <= 3) {
+        arrowLeft.classList.add("hidden");
+        arrowRight.classList.add("hidden");
+        cardsWrapper.classList.add("justify-center");
+      } else {
+        arrowLeft.classList.remove("hidden");
+        arrowRight.classList.remove("hidden");
+        cardsWrapper.classList.remove("justify-center");
+      }
+
+      reservas.forEach(reserva => {
+        const card = document.createElement("div");
+        card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+
+        card.innerHTML = `
+          <div class="flex flex-col h-full p-4">
+            <div class="mb-4">
+              <h2 class="text-xl font-semibold text-orange-500 mb-1">${reserva.nombreAlojamiento}</h2>
+              <p class="text-gray-700 text-sm">📍 ${reserva.provincia}</p>
+            </div>
+            <div class="text-sm text-gray-600 flex-1 text-left">
+              <p><strong>Entrada:</strong> ${reserva.fechaInicio}</p>
+              <p><strong>Salida:</strong> ${reserva.fechaFin}</p>
+              <p><strong>Huéspedes:</strong> ${reserva.numPersonas}</p>
+            </div>
+            <div class="mt-4">
+              <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cancelar reserva</button>
+            </div>
+          </div>
+        `;
+
+        cardsWrapper.appendChild(card);
+      });
+    } catch (error) {
+      console.error("Error al cargar reservas:", error);
+      mensaje.textContent = "Error al cargar tus reservas.";
+      mensaje.classList.remove("hidden");
+    }
+  }
+</script>
 </body>
 </html>
