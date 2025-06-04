@@ -187,11 +187,11 @@
     }
 
     .btn-aceptar {
-        background-color: var(--primary-color);
+        background-color: orange;
         color: white;
         border: none;
         padding: 1rem 2.5rem;
-        font-size: var(--font-lg);
+        font-size: 1.5rem;
         border-radius: 10px;
         cursor: pointer;
         float: right;

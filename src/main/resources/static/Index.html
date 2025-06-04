@@ -6,13 +6,6 @@
   <title>Iniciar sesión - CheckInn</title>
   <link href="styles.css" rel="stylesheet"/>
   <style>
-    :root {
-      --primary-color: orange;
-      --font-lg: 1.5rem;
-      --font-md: 1.2rem;
-      --font-sm: 1rem;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -22,6 +15,7 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #fff;
+      background-image: url("loginMasOpaco.jpg");
       display: flex;
       justify-content: center;
       align-items: center;
@@ -48,7 +42,7 @@
     }
 
     .header h1 {
-      color: var(--primary-color);
+      color: orange;
       font-size: 2.5rem;
     }
 
@@ -61,7 +55,7 @@
       display: block;
       margin-bottom: 0.75rem;
       font-weight: bold;
-      font-size: var(--font-lg);
+      font-size: 1.5rem;
     }
 
     input[type="text"],
@@ -70,13 +64,13 @@
       width: 100%;
       padding: 1.2rem;
       margin-bottom: 2rem;
-      font-size: var(--font-lg);
+      font-size: 1.5rem;
       border: 1.5px solid #000;
       border-radius: 30px;
     }
 
     .register {
-      font-size: var(--font-lg);
+      font-size: 1.5rem;
       margin-bottom: 2rem;
     }
 
@@ -87,21 +81,6 @@
 
     .register a:hover {
       text-decoration: underline;
-    }
-
-    .btn-aceptar {
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 1rem 2.5rem;
-      font-size: var(--font-lg);
-      border-radius: 10px;
-      cursor: pointer;
-      float: right;
-    }
-
-    .btn-aceptar:hover {
-      background-color: darkorange;
     }
 
     /* Responsive adjustments */
@@ -121,17 +100,17 @@
       }
 
       label {
-        font-size: var(--font-md);
+        font-size: 1.2rem;
       }
 
       input[type="email"],
       input[type="password"] {
-        font-size: var(--font-md);
+        font-size: 1.2rem;
         padding: 1rem;
       }
 
       .register {
-        font-size: var(--font-md);
+        font-size: 1.2rem;
         text-align: center;
       }
 
@@ -139,7 +118,7 @@
         float: none;
         display: block;
         margin: 1rem auto 0 auto;
-        font-size: var(--font-md);
+        font-size: 1.2rem;
       }
     }
 
@@ -149,7 +128,7 @@
       }
 
       .btn-aceptar {
-        font-size: var(--font-sm);
+        font-size: 1rem;
         padding: 0.75rem 2rem;
       }
 
@@ -159,12 +138,12 @@
 
       input[type="email"],
       input[type="password"] {
-        font-size: var(--font-sm);
+        font-size: 1rem;
         padding: 0.9rem;
       }
 
       label, .register {
-        font-size: var(--font-sm);
+        font-size: 1rem;
       }
     }
   </style>
@@ -178,7 +157,6 @@
   <form>
     <label for="dni">DNI</label>
     <input type="text" id="dni" name="dni" required>
-
 
     <label for="password">Contraseña</label>
     <input type="password" id="password" name="contraseña" required>
@@ -194,7 +172,7 @@
 <script src="app.js"></script>
 <script>
   document.querySelector("form").addEventListener("submit", async function(event) {
-    event.preventDefault(); // Detiene el envío "normal"
+    event.preventDefault();
 
     const formData = new FormData(event.target);
     const datos = Object.fromEntries(formData.entries());
@@ -218,4 +196,3 @@
 </script>
 </body>
 </html>
-  
