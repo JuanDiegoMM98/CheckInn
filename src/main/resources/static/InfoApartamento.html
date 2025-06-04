@@ -4,333 +4,185 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Info Apartamento</title>
-  <link href="styles.css" rel="stylesheet"> 
-  <style>
-
-    .filters input[type="number"],
-    .filters input[type="text"],
-    .filters input[type="date"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .label-fechas {
-      display: block;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .subtitle{
-      margin-top: 80px;
-      margin-bottom: 20px;
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .info-apartamento h2 {
-      color: #f90;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .info-contenido {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .info-imagen {
-      width: 300px;
-      height: auto;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .info-imagen img {
-      width: 300px;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 10px;
-      background-color: #eee;
-    }
-    .estrellas {
-      margin-top: 1rem;
-      font-size: 1.5rem;
-      color: orange;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.25rem;
-    }
-
-    .valoracion {
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .info-detalles {
-      flex: 2;
-      min-width: 300px;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .form-group {
-      flex: 1;
-      min-width: 140px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 0.3rem;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    .checkbox-row {
-      margin-top: 1rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .checkbox-row label {
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .boton-reserva {
-      text-align: center;
-      margin-top: 2rem;
-      padding: 12px 24px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .btn-guardar:hover {
-      background-color: #e69500;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-    <header class="navbar">
-    <div class="navbar-left">
-      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
-      <nav>
-        <a href="Home.html">Home</a>
-        <a href="ListadoReservas.html">Mis reservas</a>
-        <a href="ListadoApartamentos.html">Mis Apartamentos</a>
-        <a href="AreaPersonal.html">Área personal</a>
-      </nav>
-    </div>
-    <div class="navbar-right">
-      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span name="nombre"><br><small name="rol"></small></span>
-    </div>
-  </header>
-
-  <div class="form-container">
-    <h2>Villa Chirinos</h2>
-
-    <div class="info-contenido">
-      <!-- Imagen y estrellas -->
-      <div class="info-imagen">
-        <img src="placeholder.jpg" alt="Imagen del apartamento" />
-        <div class="estrellas">
-          <span class="estrella">&#9733;</span>
-          <span class="estrella">&#9733;</span>
-          <span class="estrella">&#9733;</span>
-          <span class="estrella">&#9734;</span>
-          <span class="estrella">&#9734;</span>
-          <span class="valoracion">(3,7)</span>
-        </div>
-      </div>
-
-      <!-- Detalles -->
-      <div class="info-detalles">
-        <div class="input-row">
-          <div class="form-group">
-            <label>Provincia</label>
-            <input type="text" name="provincia" value="" readonly />
-          </div>
-          <div class="form-group">
-            <label>Dirección</label>
-            <input type="text" name="direccion" value="" readonly />
-          </div>
-        </div>
-
-        <div class="input-row">
-          <div class="form-group">
-            <label>Capacidad</label>
-            <input type="number" name="capacidad" value="" readonly />
-          </div>
-          <div class="form-group">
-            <label>Precio por noche</label>
-            <input type="number" name="precio" value="" readonly />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea rows="8" name="descripcion" readonly></textarea>
-        </div>
-
-        <div class="checkbox-row">
-          <label class="readonly-checkbox"><input type="checkbox" name="wifi"/> WiFi</label>
-          <label class="readonly-checkbox"><input type="checkbox" name="piscina" /> Piscina</label>
-          <label class="readonly-checkbox"><input type="checkbox" name="barbacoa" /> Barbacoa</label>
-        </div>
-
-        <label class="subtitle">Fechas de reserva</label>
-        <form>
-          <div class="form-row" name="fechasReserva">
-            <label class="label-fechas">Entrada</label>
-            <input type="date" name="fechaInicio" placeholder="Entrada" required ="fechaInicio"/>
-            <label class="label-fechas">Salida</label>
-            <input type="date" name="fechaFin" placeholder="Salida" required ="fechaFin"/>
-          </div>
-          <br>
-          <div class="boton-reserva">
-            <button type="submit" class="btn-guardar">Reservar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+  <div class="flex items-center gap-6">
+    <img class="w-10 h-10" src="logo.png" alt="Logo">
+    <nav class="flex flex-wrap gap-4 text-lg font-bold">
+      <a href="Home.html" class="hover:text-orange-500">Home</a>
+      <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
+      <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+      <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+    </nav>
   </div>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="app.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", async function () {
-        // Mostrar nombre y rol del usuario guardado en sessionStorage
-        const usuarioGuardado = sessionStorage.getItem("nombre");
+  <div class="flex items-center gap-2 mt-4 md:mt-0">
+    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+    <span class="font-semibold text-sm">
+        <span name="nombre"></span><br>
+        <small name="rol"></small>
+    </span>
+  </div>
+</header>
 
-        if (usuarioGuardado) {
-          const usuario = JSON.parse(usuarioGuardado);
+<main class="max-w-6xl mx-auto px-4 py-10">
+  <h1 class="text-4xl font-extrabold text-orange-500 text-center mb-10">Villa Chirinos</h1>
+  <div class="flex flex-wrap gap-10">
+    <div class="w-full md:w-[300px] flex flex-col items-center">
+      <img src="placeholder.jpg" alt="Imagen del apartamento" class="w-full h-48 object-cover rounded-xl bg-gray-200">
 
-          const nombreElement = document.querySelector('span[name="nombre"]');
-          const rolElement = document.querySelector('small[name="rol"]');
+      <!-- Botón de Reservar debajo de la imagen -->
+      <button
+              id="reservarBtn"
+              type="submit"
+              form="reservaForm"
+              class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed"
+              disabled
+      >
+        Reservar
+      </button>
 
-          if (nombreElement) {
-            nombreElement.textContent = usuario.nombre;
-          }
-          if (rolElement) {
-            rolElement.textContent = usuario.rol;
-          }
+      <div class="flex justify-center items-center text-orange-500 text-xl mt-3 gap-1">
+        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
+        <span class="text-sm text-gray-700 ml-2">(3,7)</span>
+      </div>
+    </div>
+
+    <div class="flex-1 space-y-6">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="font-semibold">Provincia</label>
+          <input type="text" name="provincia" readonly class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+        <div>
+          <label class="font-semibold">Dirección</label>
+          <input type="text" name="direccion" readonly class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+        <div>
+          <label class="font-semibold">Capacidad</label>
+          <input type="number" name="capacidad" readonly class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+        <div>
+          <label class="font-semibold">Precio por noche</label>
+          <input type="number" name="precio" readonly class="w-full p-3 border border-gray-300 rounded" />
+        </div>
+      </div>
+
+      <div>
+        <label class="font-semibold">Descripción</label>
+        <textarea name="descripcion" rows="5" readonly class="w-full p-3 border border-gray-300 rounded"></textarea>
+      </div>
+
+      <div class="flex gap-6 flex-wrap">
+        <label class="flex items-center gap-2"><input type="checkbox" name="wifi" disabled> WiFi</label>
+        <label class="flex items-center gap-2"><input type="checkbox" name="piscina" disabled> Piscina</label>
+        <label class="flex items-center gap-2"><input type="checkbox" name="barbacoa" disabled> Barbacoa</label>
+      </div>
+
+      <form id="reservaForm" class="pt-6">
+        <h2 class="text-lg font-semibold mb-3">Fechas de reserva</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="font-semibold">Entrada</label>
+            <input type="date" name="fechaInicio" id="fechaInicio" required class="w-full p-3 border border-gray-300 rounded" />
+          </div>
+          <div>
+            <label class="font-semibold">Salida</label>
+            <input type="date" name="fechaFin" id="fechaFin" required class="w-full p-3 border border-gray-300 rounded" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+  document.addEventListener("DOMContentLoaded", async function () {
+
+    const usuarioGuardado = sessionStorage.getItem("nombre");
+    if (usuarioGuardado) {
+      const usuario = JSON.parse(usuarioGuardado);
+      document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+      document.querySelector('small[name="rol"]').textContent = usuario.rol;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const idAlojamiento = params.get("idAlojamiento");
+    if (!idAlojamiento) return alert("No se proporcionó el ID del apartamento en la URL.");
+
+    try {
+      const response = await axios.get(`${uri}/alojamientos/${idAlojamiento}`);
+      if (response.status === 200) {
+        const apto = response.data;
+        document.querySelector('[name="provincia"]').value = apto.provincia || '';
+        document.querySelector('[name="direccion"]').value = apto.direccion || '';
+        document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
+        document.querySelector('[name="precio"]').value = apto.precioNoche || '';
+        document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+
+        if (Array.isArray(apto.servicios)) {
+          apto.servicios.forEach(servicio => {
+            const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
+            if (checkbox) checkbox.checked = true;
+          });
         }
+      }
+    } catch (error) {
+      alert("Error al conectar con el servidor.");
+    }
+  });
 
-        // Obtener todos los parámetros de la URL
-        const params = new URLSearchParams(window.location.search);
-        const idAlojamiento = params.get("idAlojamiento");
+  document.querySelector("#reservaForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const datos = Object.fromEntries(formData.entries());
 
-        if (!idAlojamiento) {
-          alert("No se proporcionó el ID del apartamento en la URL.");
-          return;
-        }
+    const params = new URLSearchParams(window.location.search);
+    datos.idAlojamiento = params.get("idAlojamiento");
 
-        try {
-          const response = await axios.get(`${uri}/alojamientos/${idAlojamiento}`);
+    const usuarioGuardado = sessionStorage.getItem("nombre");
+    if (usuarioGuardado) {
+      const usuario = JSON.parse(usuarioGuardado);
+      datos.idUsuario = String(usuario.id);
+    }
 
-          if (response.status === 200 && response.data) {
-            const apto = response.data;
+    try {
+      const response = await axios.post(`${uri}/reservas`, datos);
+      if (response.status === 201) {
+        window.location.href = "ListadoReservas.html";
+      } else if (response.status === 409){
+        alert("Error durante la reserva.");
+      } else {
+        alert("Error del servidor al intentar crear la reserva");
+      }
+    } catch (error) {
+      alert("Error al conectar con el servidor.");
+    }
+  });
 
-            document.querySelector('[name="provincia"]').value = apto.provincia || '';
-            document.querySelector('[name="direccion"]').value = apto.direccion || '';
-            document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
-            document.querySelector('[name="precio"]').value = apto.precioNoche || '';
-            document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+  // Activar/desactivar botón según fechas
+  const fechaInicio = document.getElementById("fechaInicio");
+  const fechaFin = document.getElementById("fechaFin");
+  const reservarBtn = document.getElementById("reservarBtn");
 
-            // Marcar checkboxes de servicios
-            if (Array.isArray(apto.servicios)) {
-              apto.servicios.forEach(servicio => {
-                const checkbox = document.querySelector(`input[type="checkbox"][name="${servicio.toLowerCase()}"]`);
-                if (checkbox) {
-                  checkbox.checked = true;
-                }
-              });
-            }
-          } else if (response.status === 404) {
-            alert("No se ha encontrado el apartamento indicado.");
-          } else {
-            alert("Ha habido un error durante la búsqueda del apartamento.");
-          }
-        } catch (error) {
-          console.error("Error:", error);
-          alert("Error al conectar con el servidor.");
-        }
-      });
+  function verificarFechas() {
+    if (fechaInicio.value && fechaFin.value) {
+      reservarBtn.disabled = false;
+      reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
+      reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+    } else {
+      reservarBtn.disabled = true;
+      reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+      reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+    }
+  }
 
-      // Realizar la reserva
-      document.querySelector("form").addEventListener("submit", async function(event) {
-        event.preventDefault();
-
-        const formData = new FormData(event.target);
-        const datos = Object.fromEntries(formData.entries());
-
-        // Obtener el idAlojamiento desde la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const idAlojamiento = urlParams.get("idAlojamiento");
-
-        // Obtener el dni desde sessionStorage
-        let dni;
-        const usuarioGuardado = sessionStorage.getItem("nombre");
-        if (usuarioGuardado) {
-          const usuario = JSON.parse(usuarioGuardado);
-          dni = `${usuario.dni}`
-        }
-
-        const nombreElement = document.querySelector('span[name="nombre"]');
-
-        // Añadir estos datos al objeto que se enviará
-        datos.idAlojamiento = idAlojamiento;
-        datos.dni = dni;
-
-        try {
-          const response = await axios.post(`${uri}/reservas`, datos);
-
-          if (response.status === 201) {
-            window.location.href = "ListadoReservas.html";
-          } else if (response.status === 404) {
-            alert("Reserva fallida");
-          } else {
-            alert("Ha habido un error durante la reserva");
-          }
-        } catch (error) {
-          /*
-            console.error("Error:", error);
-            alert("Error al conectar con el servidor.");
-            */
-        }
-      });
-    </script>
+  fechaInicio.addEventListener("input", verificarFechas);
+  fechaFin.addEventListener("input", verificarFechas);
+</script>
 </body>
 </html>
