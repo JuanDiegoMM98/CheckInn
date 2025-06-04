@@ -8,6 +8,7 @@ public record MisReservasDTO(
         int id,
         double precio,
         boolean cancelada,
+        boolean valorada,
         LocalDate fechaInicio,
         LocalDate fechaFin,
         String motivoCancelacion,

@@ -21,6 +21,7 @@ public class ReservaModel {
                         UsuarioModel usuarioReserva, AlojamientoModel alojamiento, String motivoCancelacion) {
         this.precio = precio;
         this.cancelada = false;
+        this.valorada = false;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.usuarioReserva = usuarioReserva;
@@ -39,6 +40,9 @@ public class ReservaModel {
 
     @Column(nullable = false)
     private boolean cancelada;
+
+    @Column(nullable = false)
+    private boolean valorada;
 
     @Column(nullable = false)
     private LocalDate fechaInicio;
@@ -63,6 +67,14 @@ public class ReservaModel {
 
 
     /* GETTER Y SETTER ************************************************************************************************/
+
+    public boolean isValorada() {
+        return valorada;
+    }
+
+    public void setValorada(boolean valorada) {
+        this.valorada = valorada;
+    }
 
     public int getId() {
         return id;

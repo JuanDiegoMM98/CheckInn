@@ -4,7 +4,7 @@ import com.dam.checkinn.models.AlojamientoModel;
 import java.time.LocalDate;
 
 public record CrearActualizarReservaDTO(
-        String dni, // Necesario para crear
+        int idUsuario, // Necesario para crear
         int idReserva, // Necesario para actualizaciones
         int idAlojamiento, // Necesario para actualizaciones
         LocalDate fechaInicio, // Necesario para crear
