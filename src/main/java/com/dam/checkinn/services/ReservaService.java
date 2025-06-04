@@ -49,13 +49,14 @@ public class ReservaService {
         }
 
         // Comprobamos que el usuario existe
-        if (!usuarioRepository.existsById(dto.dni())) {
+        if (!usuarioRepository.existsById(dto.idUsuario())) {
             throw new AccesoDenegadoException();
         }
 
         // Obtenemos alojamiento y usuario
         AlojamientoModel alojamientoModel = alojamientoRepository.findById(dto.idAlojamiento()).get();
-        UsuarioModel usuarioModel = usuarioRepository.findByDniIgnoreCase(dto.dni()).get();
+        UsuarioModel usuarioModel = usuarioRepository.findById(dto.idUsuario()).get();
+        //        UsuarioModel usuarioModel = usuarioRepository.findByDniIgnoreCase(dto.dni()).get();
 
         // Validación de solapamiento con fechas de bloqueo
         LocalDate inicioBloqueo = alojamientoModel.getInicioBloqueo();
@@ -114,7 +115,7 @@ public class ReservaService {
             reservaModel.setCancelada(dto.cancelada());
         }
 
-        // Si tiene valoracion, modificamos las valoraciones del alojamiento
+        // Si tiene valoracion, modificamos las valoraciones del alojamiento y la ponemos como valorada
         if (dto.valoracion() != 0) {
             AlojamientoModel alojamiento = alojamientoRepository.findById(dto.idAlojamiento()).get();
             int contadorValoraciones = alojamiento.getContadorValoraciones();
@@ -124,6 +125,7 @@ public class ReservaService {
             alojamiento.setValoracionMedia(nuevaValoracionMedia);
             alojamiento.setContadorValoraciones(contadorValoraciones + 1);
             alojamientoRepository.save(alojamiento);
+            reservaModel.setValorada(true);
         }
         return reservaRepository.save(reservaModel);
     }
@@ -179,7 +181,7 @@ public class ReservaService {
                         null
                 );
                 ReservaModel reservaCreada = reservaRepository.save(reserva);
-                return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(), reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(),reservaCreada.getMotivoCancelacion(), alojamientoAleatorio);
+                return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(), false, reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(),reservaCreada.getMotivoCancelacion(), alojamientoAleatorio);
             } else {
                 throw new AlojamientoNotFoundException();
             }

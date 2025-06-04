@@ -64,7 +64,8 @@ public class AlojamientoService {
         // Creamos DTO y lo devolvemos
         return new AlojamientoDTO(alojamientoModel.getNombre(), alojamientoModel.getDescripcion(),
                 alojamientoModel.getProvincia(), alojamientoModel.getDireccion(), alojamientoModel.getPrecioNoche(),
-                alojamientoModel.getCapacidad(), alojamientoModel.getImagen(), alojamientoModel.getServicios(), alojamientoModel.getInicioBloqueo(),
+                alojamientoModel.getValoracionMedia(), alojamientoModel.getCapacidad(), alojamientoModel.getImagen(),
+                alojamientoModel.getServicios(), alojamientoModel.getInicioBloqueo(),
                 alojamientoModel.getFinBloqueo()
         );
     }
@@ -110,8 +111,8 @@ public class AlojamientoService {
         // Devolvemos el DTO
         return new AlojamientoDTO(alojamientoModificadoBD.getNombre(), alojamientoModificadoBD.getDescripcion(),
                 alojamientoModificadoBD.getProvincia(), alojamientoModificadoBD.getDireccion(), alojamientoModificadoBD.getPrecioNoche(),
-                alojamientoModificadoBD.getCapacidad(), alojamientoModificadoBD.getImagen(), alojamientoModificadoBD.getServicios(), alojamientoModificadoBD.getInicioBloqueo(),
-                alojamientoModificadoBD.getFinBloqueo()
+                alojamientoModificadoBD.getValoracionMedia(), alojamientoModificadoBD.getCapacidad(), alojamientoModificadoBD.getImagen(),
+                alojamientoModificadoBD.getServicios(), alojamientoModificadoBD.getInicioBloqueo(), alojamientoModificadoBD.getFinBloqueo()
         );
     }
 
