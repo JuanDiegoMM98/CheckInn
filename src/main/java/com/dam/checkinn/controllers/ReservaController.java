@@ -4,9 +4,9 @@ import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
-import com.dam.checkinn.models.CrearReservaDTO;
-import com.dam.checkinn.models.FiltroDTO;
-import com.dam.checkinn.models.MisReservasDTO;
+import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTO;
+import com.dam.checkinn.models.dto.alojamientos.FiltroDTO;
+import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.services.ReservaService;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class ReservaController {
     /* MÉTODOS ********************************************************************************************************/
 
     @PostMapping
-    public ResponseEntity<ReservaModel> createReserva(@RequestBody CrearReservaDTO dto) {
+    public ResponseEntity<ReservaModel> createReserva(@RequestBody CrearActualizarReservaDTO dto) {
         try {
             ReservaModel nuevaReserva = reservaService.crearReserva(dto);
             URI location = URI.create("/reservas/" + nuevaReserva.getId());
@@ -46,7 +46,7 @@ public class ReservaController {
     @PatchMapping("/{id}")
     public ResponseEntity<ReservaModel> updateReserva(
             @PathVariable int id,
-            @RequestBody CrearReservaDTO dto) {
+            @RequestBody CrearActualizarReservaDTO dto) {
         try {
             ReservaModel reservaActualizada = reservaService.actualizarReserva(id, dto);
             return ResponseEntity.ok(reservaActualizada);

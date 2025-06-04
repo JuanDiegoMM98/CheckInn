@@ -1,7 +1,9 @@
-package com.dam.checkinn.models;
+package com.dam.checkinn.models.dto.reservas;
+import com.dam.checkinn.models.AlojamientoModel;
+
 import java.time.LocalDate;
 
-public record CrearReservaDTO(
+public record CrearActualizarReservaDTO(
         String dni, // Necesario para crear
         int idReserva, // Necesario para actualizaciones
         int idAlojamiento, // Necesario para actualizaciones

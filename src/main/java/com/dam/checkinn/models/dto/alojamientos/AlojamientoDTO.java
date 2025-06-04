@@ -1,9 +1,11 @@
-package com.dam.checkinn.models;
+package com.dam.checkinn.models.dto.alojamientos;
+import com.dam.checkinn.models.AlojamientoModel;
+import com.dam.checkinn.models.ReservaModel;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public record AlojamientoPatchDTO(
+public record AlojamientoDTO(
         String nombre,
         String descripcion,
         String provincia,
