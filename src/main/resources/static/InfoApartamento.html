@@ -147,7 +147,7 @@
     const usuarioGuardado = sessionStorage.getItem("nombre");
     if (usuarioGuardado) {
       const usuario = JSON.parse(usuarioGuardado);
-      datos.id = String(usuario.id);
+      datos.idUsuario = String(usuario.id);
     }
 
     try {
