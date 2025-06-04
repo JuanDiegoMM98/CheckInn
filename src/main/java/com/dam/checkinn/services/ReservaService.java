@@ -124,8 +124,8 @@ public class ReservaService {
             double nuevaValoracionMedia = ((valoracionMedia * contadorValoraciones) + dto.valoracion()) / (contadorValoraciones + 1);
             alojamiento.setValoracionMedia(nuevaValoracionMedia);
             alojamiento.setContadorValoraciones(contadorValoraciones + 1);
-            alojamientoRepository.save(alojamiento);
             reservaModel.setValorada(true);
+            alojamientoRepository.save(alojamiento);
         }
         return reservaRepository.save(reservaModel);
     }
