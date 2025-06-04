@@ -5,13 +5,17 @@ import com.dam.checkinn.models.AlojamientoModel;
 import java.time.LocalDate;
 
 public record MisReservasDTO(
-        int id,
+        int idReserva,
         double precio,
         boolean cancelada,
         boolean valorada,
         LocalDate fechaInicio,
         LocalDate fechaFin,
         String motivoCancelacion,
-        AlojamientoModel alojamiento
+        int idAlojamiento,
+        byte[] imagen,
+        String nombre,
+        String direccion,
+        int capacidad
 ) {
 }
