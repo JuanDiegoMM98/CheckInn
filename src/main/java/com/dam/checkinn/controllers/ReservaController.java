@@ -4,7 +4,7 @@ import com.dam.checkinn.exceptions.AccesoDenegadoException;
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
-import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTO;
+import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTOFront;
 import com.dam.checkinn.models.dto.alojamientos.FiltroDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.ReservaModel;
@@ -29,7 +29,7 @@ public class ReservaController {
     /* MÉTODOS ********************************************************************************************************/
 
     @PostMapping
-    public ResponseEntity<ReservaModel> createReserva(@RequestBody CrearActualizarReservaDTO dto) {
+    public ResponseEntity<ReservaModel> createReserva(@RequestBody CrearActualizarReservaDTOFront dto) {
         try {
             ReservaModel nuevaReserva = reservaService.crearReserva(dto);
             URI location = URI.create("/reservas/" + nuevaReserva.getId());
@@ -46,7 +46,7 @@ public class ReservaController {
     @PatchMapping("/{id}")
     public ResponseEntity<ReservaModel> updateReserva(
             @PathVariable int id,
-            @RequestBody CrearActualizarReservaDTO dto) {
+            @RequestBody CrearActualizarReservaDTOFront dto) {
         try {
             ReservaModel reservaActualizada = reservaService.actualizarReserva(id, dto);
             return ResponseEntity.ok(reservaActualizada);
