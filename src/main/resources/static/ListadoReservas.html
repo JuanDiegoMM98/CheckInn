@@ -1,116 +1,216 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis Reservas - CheckInn</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reservas - CheckInn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
-  <div class="flex items-center gap-6">
-    <img class="w-10 h-10" src="logo.png" alt="Logo">
-    <nav class="flex flex-wrap gap-4 text-lg font-bold">
-      <a href="Home.html" class="hover:text-orange-500">Home</a>
-      <a href="ListadoReservas.html" class="text-orange-500">Mis reservas</a>
-      <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
-      <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
-    </nav>
-  </div>
-  <div class="flex items-center gap-2 mt-4 md:mt-0">
-    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
-    <span class="font-semibold text-sm">
+    <div class="flex items-center gap-6">
+        <img class="w-10 h-10" src="logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-lg font-bold">
+            <a href="Home.html" class="hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-2 mt-4 md:mt-0">
+        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+        <span class="font-semibold text-sm">
         <span name="nombre"></span><br>
         <small name="rol"></small>
       </span>
-  </div>
+    </div>
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-8">
-  <h1 class="text-3xl font-extrabold text-orange-500 mb-6 text-center">Mis Reservas</h1>
+    <h1 class="text-3xl font-extrabold text-orange-500 mb-6 text-center">Mis Reservas</h1>
 
-  <div id="carouselContainer" class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden w-[150%] mx-auto translate-x-[-12.5%]">
-    <button id="carouselLeft" class="absolute -left-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❮</button>
-    <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4" id="cardsWrapper"></div>
-    <button id="carouselRight" class="absolute -right-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❯</button>
-  </div>
+    <div id="carouselContainer"
+         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden w-[150%] mx-auto translate-x-[-12.5%]">
+        <button id="carouselLeft"
+                class="absolute -left-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
+            ❮
+        </button>
+        <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4"
+             id="cardsWrapper"></div>
+        <button id="carouselRight"
+                class="absolute -right-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
+            ❯
+        </button>
+    </div>
 
-  <p id="mensajeSinReservas" class="text-center text-gray-500 mt-10 hidden">🛈 No tienes reservas registradas.</p>
+    <p id="mensajeSinReservas" class="text-center text-gray-500 mt-10 hidden">🛈 No tienes reservas registradas.</p>
 </main>
 
+<script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+    let usuario = null;
     const usuarioGuardado = sessionStorage.getItem("nombre");
+
     if (usuarioGuardado) {
-      const usuario = JSON.parse(usuarioGuardado);
-      document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
-      document.querySelector('small[name="rol"]').textContent = usuario.rol;
+        usuario = JSON.parse(usuarioGuardado);
+        document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+        document.querySelector('small[name="rol"]').textContent = usuario.rol;
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            await cargarReservas();
+            configurarCarrusel();
+        });
     }
 
-    cargarReservas();
-  });
+    async function cargarReservas() {
+        const cardsWrapper = document.getElementById("cardsWrapper");
+        const carouselContainer = document.getElementById("carouselContainer");
+        const arrowLeft = document.getElementById("carouselLeft");
+        const arrowRight = document.getElementById("carouselRight");
+        const mensaje = document.getElementById("mensajeSinReservas");
 
-  async function cargarReservas() {
-    const cardsWrapper = document.getElementById("cardsWrapper");
-    const carouselContainer = document.getElementById("carouselContainer");
-    const arrowLeft = document.getElementById("carouselLeft");
-    const arrowRight = document.getElementById("carouselRight");
-    const mensaje = document.getElementById("mensajeSinReservas");
+        try {
+            const response = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
 
-    try {
-      alert("test");
-      const response = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
-      const reservas = response.data;
+            if (response.status === 200) {
+                const reservas = response.data;
 
-      if (!reservas.length) {
-        mensaje.classList.remove("hidden");
-        carouselContainer.classList.add("hidden");
-        return;
-      }
+                if (!reservas.length) {
+                    mensaje.classList.remove("hidden");
+                    carouselContainer.classList.add("hidden");
+                    return;
+                }
 
-      mensaje.classList.add("hidden");
-      carouselContainer.classList.remove("hidden");
+                mensaje.classList.add("hidden");
+                carouselContainer.classList.remove("hidden");
 
-      if (reservas.length <= 3) {
-        arrowLeft.classList.add("hidden");
-        arrowRight.classList.add("hidden");
-        cardsWrapper.classList.add("justify-center");
-      } else {
-        arrowLeft.classList.remove("hidden");
-        arrowRight.classList.remove("hidden");
-        cardsWrapper.classList.remove("justify-center");
-      }
+                if (reservas.length <= 3) {
+                    arrowLeft.classList.add("hidden");
+                    arrowRight.classList.add("hidden");
+                    cardsWrapper.classList.add("justify-center");
+                } else {
+                    arrowLeft.classList.remove("hidden");
+                    arrowRight.classList.remove("hidden");
+                    cardsWrapper.classList.remove("justify-center");
+                }
 
-      reservas.forEach(reserva => {
-        const card = document.createElement("div");
-        card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+                cardsWrapper.innerHTML = ""; // Limpiar antes de volver a cargar
 
-        card.innerHTML = `
-          <div class="flex flex-col h-full p-4">
-            <div class="mb-4">
-              <h2 class="text-xl font-semibold text-orange-500 mb-1">${reserva.nombreAlojamiento}</h2>
-              <p class="text-gray-700 text-sm">📍 ${reserva.provincia}</p>
-            </div>
-            <div class="text-sm text-gray-600 flex-1 text-left">
-              <p><strong>Entrada:</strong> ${reserva.fechaInicio}</p>
-              <p><strong>Salida:</strong> ${reserva.fechaFin}</p>
-              <p><strong>Huéspedes:</strong> ${reserva.numPersonas}</p>
-            </div>
-            <div class="mt-4">
-              <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cancelar reserva</button>
-            </div>
-          </div>
-        `;
+                reservas.forEach(reserva => {
+                    const card = document.createElement("div");
+                    card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
 
-        cardsWrapper.appendChild(card);
-      });
-    } catch (error) {
-      console.error("Error al cargar reservas:", error);
-      mensaje.textContent = "Error al cargar tus reservas.";
-      mensaje.classList.remove("hidden");
+                    let contenidoCard = `
+                        <div class="flex flex-col h-full">
+                            <img
+                                src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}"
+                                onerror="this.onerror=null;this.src='FondoLogin.jpg';"
+                                class="w-full h-44 object-cover rounded-t-2xl"
+                                alt="Imagen alojamiento"
+                            />
+                            <div class="flex-1 flex flex-col justify-between p-4">
+                                <div class="text-center">
+                                    <h2 class="text-xl font-bold text-black mb-2">${reserva.alojamiento.nombre}</h2>
+                                </div>
+                                <div class="text-sm text-gray-700 text-left space-y-1 mt-2">
+                                    <p>📍 ${reserva.alojamiento.provincia}</p>
+                                    <p><strong>Entrada:</strong> ${reserva.fechaInicio}</p>
+                                    <p><strong>Salida:</strong> ${reserva.fechaFin}</p>
+                                    <p><strong>Huéspedes:</strong> ${reserva.alojamiento.capacidad}</p>
+                                </div>`;
+
+                    if (new Date(reserva.fechaFin) < new Date()) {
+                        // Finalizada
+                        contenidoCard += `
+                                <form id="form-valorar-${reserva.id}" class="mt-4 space-y-3">
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="5"
+                                        step="1"
+                                        value="5"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-xl text-center text-lg font-medium text-gray-800"
+                                        id="input-valoracion-${reserva.id}"
+                                    />
+                                    <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-600 transition-colors">
+                                        Valorar
+                                    </button>
+                                </form>`;
+                    } else if (reserva.motivoCancelacion == null) {
+                        // Activa
+                        contenidoCard += `
+                                <button onclick="solicitarCancelacion(${reserva.id})"
+                                        class="mt-6 bg-red-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-red-600 transition-colors">
+                                    Solicitar cancelación
+                                </button>`;
+                    } else {
+                        // Cancelada
+                        contenidoCard += `
+                                <div class="mt-6 bg-gray-200 text-gray-600 py-3 w-full rounded-xl text-lg font-semibold">
+                                    Cancelada
+                                </div>`;
+                    }
+
+                    contenidoCard += `</div></div>`;
+                    card.innerHTML = contenidoCard;
+                    cardsWrapper.appendChild(card);
+
+                    const formValorar = card.querySelector(`#form-valorar-${reserva.id}`);
+                    if (formValorar) {
+                        formValorar.addEventListener("submit", function (e) {
+                            e.preventDefault();
+                            const valor = parseInt(document.getElementById(`input-valoracion-${reserva.id}`).value);
+                            enviarValoracion(reserva.id, valor);
+                        });
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error al cargar reservas:", error);
+            mensaje.textContent = "Error al cargar tus reservas.";
+            mensaje.classList.remove("hidden");
+        }
     }
-  }
+
+    async function enviarValoracion(reservaId, puntuacion) {
+        try {
+            const response = await axios.post(`${uri}/reservas/${reservaId}/valorar`, { puntuacion });
+            alert("Valoración enviada correctamente");
+        } catch (error) {
+            console.error("Error al enviar valoración:", error);
+            alert("Hubo un error al enviar tu valoración.");
+        }
+    }
+
+    async function solicitarCancelacion(reservaId) {
+        const motivo = prompt("¿Cuál es el motivo de la cancelación?");
+        if (!motivo) return;
+
+        try {
+            const response = await axios.post(`${uri}/reservas/${reservaId}/cancelar`, { motivo });
+            alert("Solicitud de cancelación enviada");
+            await cargarReservas(); // Recargar vista
+        } catch (error) {
+            console.error("Error al solicitar cancelación:", error);
+            alert("Error al solicitar la cancelación.");
+        }
+    }
+
+    function configurarCarrusel() {
+        const wrapper = document.getElementById("cardsWrapper");
+        const btnLeft = document.getElementById("carouselLeft");
+        const btnRight = document.getElementById("carouselRight");
+
+        btnLeft.addEventListener("click", () => {
+            wrapper.scrollBy({ left: -350, behavior: "smooth" });
+        });
+
+        btnRight.addEventListener("click", () => {
+            wrapper.scrollBy({ left: 350, behavior: "smooth" });
+        });
+    }
 </script>
+
 </body>
 </html>
