@@ -59,6 +59,7 @@
     const mensaje = document.getElementById("mensajeSinReservas");
 
     try {
+      alert("test");
       const response = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
       const reservas = response.data;
 
