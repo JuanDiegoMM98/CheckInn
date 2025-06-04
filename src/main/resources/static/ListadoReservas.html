@@ -399,7 +399,7 @@
 
         async function cargarReservas() {
           try {
-            const response = await axios.get(`${uri}/usuarios/${usuario.dni}/reservas`);
+            const response = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
             if (response.status === 200) {
               renderizarReservas(response.data);
             } else if (response.status === 404) {
