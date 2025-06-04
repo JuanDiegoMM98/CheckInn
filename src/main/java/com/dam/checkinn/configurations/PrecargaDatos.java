@@ -89,6 +89,108 @@ public class PrecargaDatos {
 
                 alojamientoRepository.save(alojamiento);
 
+                AlojamientoModel alojamiento2 = new AlojamientoModel(
+                        "Casa Rural El Bosqu2",
+                        "Una casa rural acogedora en plena naturaleza.",
+                        "Asturias",
+                        "Calle Falsa 123",
+                        120.0,
+                        5,
+                        0,
+                        Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
+                        servicios,
+                        LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
+                        LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
+                        u2
+                );
+
+                alojamientoRepository.save(alojamiento2);
+
+                AlojamientoModel alojamiento3 = new AlojamientoModel(
+                        "Casa Rural El Bosqu3",
+                        "Una casa rural acogedora en plena naturaleza.",
+                        "Asturias",
+                        "Calle Falsa 123",
+                        120.0,
+                        5,
+                        0,
+                        Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
+                        servicios,
+                        LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
+                        LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
+                        u2
+                );
+
+                alojamientoRepository.save(alojamiento3);
+
+                AlojamientoModel alojamiento4 = new AlojamientoModel(
+                        "Casa Rural El Bosqu4",
+                        "Una casa rural acogedora en plena naturaleza.",
+                        "Asturias",
+                        "Calle Falsa 123",
+                        120.0,
+                        5,
+                        0,
+                        Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
+                        servicios,
+                        LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
+                        LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
+                        u2
+                );
+
+                alojamientoRepository.save(alojamiento4);
+
+                AlojamientoModel alojamiento5 = new AlojamientoModel(
+                        "Casa Rural El Bosqu5",
+                        "Una casa rural acogedora en plena naturaleza.",
+                        "Asturias",
+                        "Calle Falsa 123",
+                        120.0,
+                        5,
+                        0,
+                        Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
+                        servicios,
+                        LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
+                        LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
+                        u2
+                );
+
+                alojamientoRepository.save(alojamiento5);
+
+                AlojamientoModel alojamiento6 = new AlojamientoModel(
+                        "Casa Rural El Bosqu6",
+                        "Una casa rural acogedora en plena naturaleza.",
+                        "Asturias",
+                        "Calle Falsa 123",
+                        120.0,
+                        5,
+                        0,
+                        Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
+                        servicios,
+                        LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
+                        LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
+                        u2
+                );
+
+                alojamientoRepository.save(alojamiento6);
+
+                AlojamientoModel alojamiento7 = new AlojamientoModel(
+                        "Casa Rural El Bosqu7",
+                        "Una casa rural acogedora en plena naturaleza.",
+                        "Asturias",
+                        "Calle Falsa 123",
+                        120.0,
+                        5,
+                        0,
+                        Files.readAllBytes(Paths.get("src/main/resources/images/ejemplo.jpg")),
+                        servicios,
+                        LocalDate.of(2025, Month.JUNE, 15),   // inicioBloqueo
+                        LocalDate.of(2025, Month.JUNE, 18),   // finBloqueo
+                        u2
+                );
+
+                alojamientoRepository.save(alojamiento7);
+
                 // RESERVAS
                 ReservaModel reserva = new ReservaModel(
                         240.0,                                // precio

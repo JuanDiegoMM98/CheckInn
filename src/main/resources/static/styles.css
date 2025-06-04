@@ -3,9 +3,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background-color: white;
+      background-color: #faf6eb;
       border-bottom: 1px solid #ccc;
       padding: 10px 30px;
+      width: 100%;
     }
 
     .navbar-left {
@@ -45,21 +46,60 @@
       font-weight: bold;
     }
 
+    .navbar-left nav a:hover {
+        color: orange;
+    }
+
     /* Contenedor principal */
     .form-container {
-    max-width: 1200px;
-    margin: 40px auto 60px auto; /* más margen arriba, sin centrado vertical */
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 40px;
-    border-radius: 10px;
-  }
+      max-width: 1200px;
+      margin: 40px auto 60px auto; /* más margen arriba, sin centrado vertical */
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 40px;
+      border-radius: 10px;
+    }
 
+
+    .cabecera-titulo {
+        height: fit-content;
+        padding-bottom: 20px;
+        width: 100%;
+        background-color: #edeff1;
+        border-radius: 20px;
+        align-content: center;
+        justify-content: center;
+        display: flex;
+    }
+
+    /* Cuerpo de todas las pantallas */
     body {
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #fff;
+      /*background-image: url('loginMasOpaco.jpg');*/
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .fondo-pagina {
+        height: 100vh;
+        background-color: rgba(237, 239, 241, 0.7); /* color con opacidad */
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 50px;
+        padding-top: 50px;
+        border-radius: 20px;
+    }
+
+    .fondo-filtro {
+        height: fit-content;
+        width: 100%;
+        background-color: #edeff1;
+        border-radius: 20px;
+        align-content: center;
+        justify-content: center;
+        display: flex;
     }
 
     .form-container h2 {
@@ -69,10 +109,25 @@
       font-size: 28px;
     }
 
+    .div-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
     .main-form {
       display: flex;
       gap: 60px;
       justify-content: space-between;
+    }
+
+    .main-container-filas {
+        display: flex;
+        flex: 1;
+        padding: 20px 30px;
+        gap: 20px;
     }
 
     .form-column {
@@ -88,13 +143,108 @@
       display: block;
     }
 
+    /* Botones */
+
+    .button {
+        padding: 12px 24px;
+        border-radius: 8px;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    button:hover{
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .botones button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-borrar {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .btn-borrar:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-buscar {
+        background-color: #bdc3c7;
+        color: #2c3e50;
+    }
+
+    .btn-buscar:hover {
+        background-color: #95a5a6;
+    }
+
+    .btn-aceptar {
+        background-color: orange;
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        font-size: 1.5rem;
+        border-radius: 10px;
+        cursor: pointer;
+        float: right;
+    }
+
+    .btn-aceptar:hover {
+        background-color: darkorange;
+    }
+
+    .btn-cancelar {
+      background-color: #bdc3c7;
+      color: #2c3e50;
+    }
+
+    .btn-cancelar:hover {
+      background-color: #95a5a6;
+    }
+
+    .btn-reservar {
+        background-color: orange;
+        color: white;
+    }
+
+    .btn-reservar:hover {
+        background-color: #e67e22;
+    }
+
+    .btn-guardar {
+      background-color: #f39c12;
+      color: white;
+    }
+
+    .btn-guardar:hover {
+      background-color: #e67e22;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    input[type="email"],
     input[type="date"],
+    input[type="number"],
+    input[type="tel"],
     select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
+      padding: 10px;
       border-radius: 20px;
-      font-size: 1rem;
+      border: 1px solid #444;
+      box-sizing: border-box;
+      font-size: 0.95rem;
+    }
+
+    input[type="checkbox"]:hover{
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .form-buttons {
@@ -104,25 +254,11 @@
       margin-top: 40px;
     }
 
-    .btn-cancelar {
-      background-color: #dee2e6;
-      color: #000;
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-guardar {
-      background-color: orange;
-      color: white;
-      padding: 14px 28px;
-      border-radius: 8px;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-    }
+    /*h1 {*/
+    /*    text-align: center;*/
+    /*    color: orange;*/
+    /*    margin-bottom: 60px;*/
+    /*}*/
 
     h2 {
       text-align: center;
@@ -130,20 +266,142 @@
       margin-bottom: 40px;
     }
 
-    h1 {
-      text-align: center;
-      color: orange;
-      margin-bottom: 40px;
+    .titulo-pagina {
+        text-align: center;
+        margin: 30px 0 60px;
+        color: orange;
+        font-size: 60px;
+    }
+
+    .titulo-categoria {
+        text-align: center;
+        margin-bottom: 20px;
+        color: orange;
+        font-size: 60px;
+    }
+
+    .subtitulo-categoria {
+        color: orange;
     }
 
     .readonly-checkbox {
       pointer-events: none;
     }
 
-    .button {
-      padding: 12px 24px;
-      border-radius: 8px;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
+    .form-filtros {
+        background-color: #edeff1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        margin: 30px 0 30px 0; /* Lo dejamos sin margen izquierdo ni derecho */
+        border-radius: 20px;
+        gap: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: fit-content;
+        max-width: 100%;
+        height: 100vh;
     }
+
+/* Carrusel con flechas */
+    .carousel-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin: 20px auto 40px;
+        padding: 0 40px;
+        overflow: hidden;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cards-wrapper {
+        display: flex;
+        gap: 20px;
+        padding: 10px 0;
+        scroll-behavior: smooth;
+        overflow-x: auto;
+        flex: 1;
+        justify-content: center; /* por defecto centrado */
+    }
+
+    .cards-wrapper.full {
+        justify-content: flex-start;
+    }
+
+    .cards-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .card {
+        background-color: #faf6eb;
+        border-radius: 12px;
+        padding: 20px;
+        width: 300px;
+        height: 400px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s;
+        }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .card img {
+        width: 100%;
+        height: 100px;
+        background-color: #dcdcdc;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        object-fit: cover;
+    }
+
+    .card .title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+
+    .card .description {
+        font-size: 0.9rem;
+        color: #555;
+        flex-grow: 1;
+    }
+
+    .card .reservar {
+        margin-top: 10px;
+        color: orange;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: white;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 1;
+        padding: 8px;
+        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-left {
+        left: 10px;
+    }
+
+    .nav-right {
+        right: 10px;
+    }
+
