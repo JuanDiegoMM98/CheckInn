@@ -145,7 +145,7 @@ public class UsuarioService {
 
         List<MisReservasDTO> misReservasDTO = new ArrayList<>();
         reservas.forEach( r -> {
-            MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), r.getFechaInicio(), r.getFechaFin(),r.getMotivoCancelacion(), r.getAlojamiento());
+            MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), false, r.getFechaInicio(), r.getFechaFin(),r.getMotivoCancelacion(), r.getAlojamiento());
             misReservasDTO.add(reservaDTO);
         });
         return misReservasDTO;

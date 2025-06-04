@@ -91,13 +91,13 @@ public class AlojamientoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;     // PK
 
-    @Column(nullable = false, length = 20, unique = true)
+    @Column(nullable = false, length = 50, unique = true)
     private String nombre;
 
     @Column(nullable = false)
     private String descripcion;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 30)
     private String provincia;
 
     @Column(nullable = false, length = 100)

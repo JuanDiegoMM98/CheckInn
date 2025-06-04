@@ -11,6 +11,7 @@ public record AlojamientoDTO(
         String provincia,
         String direccion,
         double precioNoche,
+        double valoracionMedia,
         int capacidad,
         byte[] imagen,
         List<AlojamientoModel.Servicio> servicios,
