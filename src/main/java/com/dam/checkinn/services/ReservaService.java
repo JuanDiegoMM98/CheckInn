@@ -5,7 +5,7 @@ import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
 import com.dam.checkinn.exceptions.ReservaNoValidaException;
 import com.dam.checkinn.exceptions.ReservaNotFoundException;
 import com.dam.checkinn.models.*;
-import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTO;
+import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTOFront;
 import com.dam.checkinn.models.dto.alojamientos.FiltroDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.dto.reservas.QueryDTO;
@@ -41,7 +41,7 @@ public class ReservaService {
 
     /* MÉTODOS ********************************************************************************************************/
 
-    public ReservaModel crearReserva(CrearActualizarReservaDTO dto) throws Exception {
+    public ReservaModel crearReserva(CrearActualizarReservaDTOFront dto) throws Exception {
 
         // Comprobamos que el alojamiento existe
         if (!alojamientoRepository.existsById(dto.idAlojamiento())) {
@@ -92,7 +92,7 @@ public class ReservaService {
         return reservaRepository.save(reservaModel);
     }
 
-    public ReservaModel actualizarReserva(int id, CrearActualizarReservaDTO dto) throws Exception {
+    public ReservaModel actualizarReserva(int id, CrearActualizarReservaDTOFront dto) throws Exception {
         // Comprobar que existe reserva
         if (!reservaRepository.existsById(id)) {
             throw new ReservaNotFoundException();
@@ -181,7 +181,10 @@ public class ReservaService {
                         null
                 );
                 ReservaModel reservaCreada = reservaRepository.save(reserva);
-                return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(), false, reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(),reservaCreada.getMotivoCancelacion(), alojamientoAleatorio);
+                return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(),
+                        false, reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(),reservaCreada.getMotivoCancelacion(),
+                        reserva.getAlojamiento().getId(), reserva.getAlojamiento().getImagen(), reserva.getAlojamiento().getNombre(),
+                        reserva.getAlojamiento().getDireccion(), reserva.getAlojamiento().getCapacidad());
             } else {
                 throw new AlojamientoNotFoundException();
             }

@@ -50,7 +50,9 @@ public class Security {
 //                        .requestMatchers("app.js", "/images/**").permitAll()
 //
 //                        .anyRequest().authenticated();
-//        })
+//        }).exceptionHandling(ex -> ex
+//                        .authenticationEntryPoint(new Redireccionador("/Index.html"))
+//                )
 ////                .formLogin(form -> form
 ////                        .loginPage("/Index.html")               // Ruta a tu formulario personalizado
 ////                        .loginProcessingUrl("/api/v1/login")   // Donde se enviará el formulario (POST)

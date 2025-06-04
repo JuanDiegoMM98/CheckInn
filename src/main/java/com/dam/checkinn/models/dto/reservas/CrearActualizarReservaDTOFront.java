@@ -3,7 +3,7 @@ import com.dam.checkinn.models.AlojamientoModel;
 
 import java.time.LocalDate;
 
-public record CrearActualizarReservaDTO(
+public record CrearActualizarReservaDTOFront(
         int idUsuario, // Necesario para crear
         int idReserva, // Necesario para actualizaciones
         int idAlojamiento, // Necesario para actualizaciones
