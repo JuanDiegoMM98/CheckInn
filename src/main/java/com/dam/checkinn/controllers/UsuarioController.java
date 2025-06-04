@@ -133,7 +133,6 @@ public class UsuarioController {
         } catch (AltaAlojamientoException | AccesoDenegadoException e) {
             return ResponseEntity.status(409).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
     }
