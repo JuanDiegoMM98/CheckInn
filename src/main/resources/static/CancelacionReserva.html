@@ -74,8 +74,9 @@
   </form>
 </main>
 
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  const uri = "http://localhost:3000"; // o tu endpoint real
   const usuarioGuardado = sessionStorage.getItem("nombre");
   if (usuarioGuardado) {
     const usuario = JSON.parse(usuarioGuardado);
@@ -90,9 +91,6 @@
       const urlParams = new URLSearchParams(window.location.search);
       const idReserva = urlParams.get("idReserva");
       const idApartamento = urlParams.get("idApartamento");
-      const fechaInicio = urlParams.get("fechaInicio");
-      const fechaFin = urlParams.get("fechaFin");
-      const precio = urlParams.get("precio");
 
       document.getElementById("nombre").value = usuario.nombre;
       document.getElementById("dni").value = usuario.dni;
@@ -103,7 +101,7 @@
 
       // Obtener datos del alojamiento
       try {
-        const res = await axios.get(`${uri}/alojamientos/${idApartamento}`);
+        const res = await axios.get(`${uri}/reservas/${idReserva}`);
         const alojamiento = res.data;
 
         document.getElementById("nombreAlojamiento").textContent = alojamiento.nombre;
