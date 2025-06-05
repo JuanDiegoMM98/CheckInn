@@ -154,11 +154,16 @@
                                     class="mt-6 bg-red-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-red-600 transition-colors">
                                 Solicitar cancelación
                             </button>`;
-                    } else {
+                    } else if (reserva.cancelada === true){
                         // Cancelada
                         contenidoCard += `
                             <div class="mt-6 bg-gray-200 text-gray-600 py-3 w-full rounded-xl text-lg font-semibold">
                                 Cancelada
+                            </div>`;
+                    } else if (reserva.motivoCancelacion !== null && reserva.cancelada === false) {
+                        contenidoCard += `
+                            <div class="mt-6 bg-yellow-100 text-yellow-800 py-3 w-full rounded-xl text-lg font-semibold">
+                                Solicitud de cancelación enviada
                             </div>`;
                     }
 

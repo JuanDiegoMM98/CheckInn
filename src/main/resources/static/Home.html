@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>CheckInn - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-10 h-10" src="../images/logo.png" alt="Logo" />
+        <img class="w-10 h-10" src="../images/logo.png" alt="Logo"/>
         <nav class="flex flex-wrap gap-4 text-lg font-bold">
             <a href="Home.html" class="text-orange-500">Home</a>
             <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
@@ -18,9 +18,9 @@
         </nav>
     </div>
     <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar" />
+        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar"/>
         <span class="font-semibold text-sm">
-        <span name="nombre"></span><br />
+        <span name="nombre"></span><br/>
         <small name="rol"></small>
       </span>
     </div>
@@ -29,10 +29,18 @@
 <main class="max-w-6xl mx-auto px-4">
     <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Bienvenido a CheckInn!</h1>
 
-    <div id="carouselContainer" class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
-        <button id="carouselLeft" class="absolute -left-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❮</button>
-        <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4" id="cardsWrapper"></div>
-        <button id="carouselRight" class="absolute -right-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">❯</button>
+    <div id="carouselContainer"
+         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
+        <button id="carouselLeft"
+                class="absolute -left-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
+            ❮
+        </button>
+        <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4"
+             id="cardsWrapper"></div>
+        <button id="carouselRight"
+                class="absolute -right-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
+            ❯
+        </button>
     </div>
 
     <p id="mensajeSinResultados" class="text-center text-gray-500 mt-6 hidden text-lg">
@@ -41,51 +49,124 @@
 
     <form id="filtroForm" class="bg-white rounded-xl shadow p-8 mt-12 space-y-8 w-1/2 mx-auto">
         <div class="grid md:grid-cols-2 gap-6">
-            <select name="provincia" class="w-full p-3 border border-gray-300 rounded">
-                <option>Madrid</option>
-                <option>Barcelona</option>
-                <option>Valencia</option>
-            </select>
-            <select name="valoracionMinima" class="w-full p-3 border border-gray-300 rounded">
-                <option value="">Valoración mínima</option>
-                <option value="1">1 Estrella</option>
-                <option value="2">2 Estrellas</option>
-                <option value="3">3 Estrellas</option>
-                <option value="4">4 Estrellas</option>
-                <option value="5">5 Estrellas</option>
-            </select>
+            <div class="flex flex-col">
+                <label for="provincia" class="font-semibold mb-1">Provincia</label>
+                <select name="provincia" id="provincia" class="w-full p-3 border border-gray-300 rounded">
+                    <option value="">Todas</option>
+                    <option>Álava</option>
+                    <option>Albacete</option>
+                    <option>Alicante</option>
+                    <option>Almería</option>
+                    <option>Asturias</option>
+                    <option>Ávila</option>
+                    <option>Badajoz</option>
+                    <option>Barcelona</option>
+                    <option>Burgos</option>
+                    <option>Cáceres</option>
+                    <option>Cádiz</option>
+                    <option>Cantabria</option>
+                    <option>Castellón</option>
+                    <option>Ciudad Real</option>
+                    <option>Córdoba</option>
+                    <option>Cuenca</option>
+                    <option>Girona</option>
+                    <option>Granada</option>
+                    <option>Guadalajara</option>
+                    <option>Guipúzcoa</option>
+                    <option>Huelva</option>
+                    <option>Huesca</option>
+                    <option>Illes Balears</option>
+                    <option>Jaén</option>
+                    <option>La Coruña</option>
+                    <option>La Rioja</option>
+                    <option>Las Palmas</option>
+                    <option>León</option>
+                    <option>Lleida</option>
+                    <option>Lugo</option>
+                    <option>Madrid</option>
+                    <option>Málaga</option>
+                    <option>Murcia</option>
+                    <option>Navarra</option>
+                    <option>Ourense</option>
+                    <option>Palencia</option>
+                    <option>Pontevedra</option>
+                    <option>Salamanca</option>
+                    <option>Santa Cruz de Tenerife</option>
+                    <option>Segovia</option>
+                    <option>Sevilla</option>
+                    <option>Soria</option>
+                    <option>Tarragona</option>
+                    <option>Teruel</option>
+                    <option>Toledo</option>
+                    <option>Valencia</option>
+                    <option>Valladolid</option>
+                    <option>Vizcaya</option>
+                    <option>Zamora</option>
+                    <option>Zaragoza</option>
+                    <option>Ceuta</option>
+                    <option>Melilla</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="valoracionMinima" class="font-semibold mb-1">Valoración mínima</label>
+                <select name="valoracionMinima" id="valoracionMinima" class="w-full p-3 border border-gray-300 rounded">
+                    <option value="">Selecciona</option>
+                    <option value="1">1 Estrella</option>
+                    <option value="2">2 Estrellas</option>
+                    <option value="3">3 Estrellas</option>
+                    <option value="4">4 Estrellas</option>
+                    <option value="5">5 Estrellas</option>
+                </select>
+            </div>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input type="number" name="precioMaximo" placeholder="Precio máximo" class="w-full p-3 border border-gray-300 rounded" />
-            <input type="number" name="personasMaximas" placeholder="Personas" class="w-full p-3 border border-gray-300 rounded" />
+            <div class="flex flex-col">
+                <label for="precioMaximo" class="font-semibold mb-1">Precio máximo (€)</label>
+                <input type="number" id="precioMaximo" name="precioMaximo" placeholder="Precio máximo"
+                       class="w-full p-3 border border-gray-300 rounded"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="personasMaximas" class="font-semibold mb-1">Número de personas</label>
+                <input type="number" id="personasMaximas" name="personasMaximas" placeholder="Personas"
+                       class="w-full p-3 border border-gray-300 rounded"/>
+            </div>
         </div>
+
         <div class="grid md:grid-cols-2 gap-6">
             <div class="flex flex-col">
-                <label for="fechaInicio" class="mb-1 font-semibold">Fecha de entrada</label>
-                <input type="date" name="fechaInicio" id="fechaInicio" class="w-full p-3 border border-gray-300 rounded" />
+                <label for="fechaInicio" class="font-semibold mb-1">Fecha de entrada</label>
+                <input type="date" name="fechaInicio" id="fechaInicio"
+                       class="w-full p-3 border border-gray-300 rounded"/>
             </div>
             <div class="flex flex-col">
-                <label for="fechaFin" class="mb-1 font-semibold">Fecha de salida</label>
-                <input type="date" name="fechaFin" id="fechaFin" class="w-full p-3 border border-gray-300 rounded" />
+                <label for="fechaFin" class="font-semibold mb-1">Fecha de salida</label>
+                <input type="date" name="fechaFin" id="fechaFin" class="w-full p-3 border border-gray-300 rounded"/>
             </div>
         </div>
+
         <div class="flex flex-col items-center">
             <span class="font-bold mb-2">Servicios:</span>
             <div class="flex flex-wrap justify-center gap-4">
                 <label class="flex items-center gap-1">
-                    <input type="checkbox" name="servicios" value="WIFI" /> WiFi
+                    <input type="checkbox" name="servicios" value="WIFI"/> WiFi
                 </label>
                 <label class="flex items-center gap-1">
-                    <input type="checkbox" name="servicios" value="PISCINA" /> Piscina
+                    <input type="checkbox" name="servicios" value="PISCINA"/> Piscina
                 </label>
                 <label class="flex items-center gap-1">
-                    <input type="checkbox" name="servicios" value="BARBACOA" /> Barbacoa
+                    <input type="checkbox" name="servicios" value="BARBACOA"/> Barbacoa
                 </label>
             </div>
         </div>
+
         <div class="flex justify-center gap-6">
             <button type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar</button>
-            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva rápida</button>
+            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva
+                rápida
+            </button>
         </div>
     </form>
 </main>
@@ -126,13 +207,25 @@
         const arrowRight = document.getElementById("carouselRight");
         const mensajeSinResultados = document.getElementById("mensajeSinResultados");
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputsNumericos = document.querySelectorAll('input[type="number"]');
+            inputsNumericos.forEach(input => {
+                input.addEventListener("keydown", function (e) {
+                    if (["e", "E", "+", "-"].includes(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+
+
         cardsWrapper.innerHTML = "";
         arrowLeft.addEventListener("click", () => {
-            cardsWrapper.scrollBy({ left: -340, behavior: "smooth" });
+            cardsWrapper.scrollBy({left: -340, behavior: "smooth"});
         });
 
         arrowRight.addEventListener("click", () => {
-            cardsWrapper.scrollBy({ left: 340, behavior: "smooth" });
+            cardsWrapper.scrollBy({left: 340, behavior: "smooth"});
         });
 
         if (!lista.length) {
