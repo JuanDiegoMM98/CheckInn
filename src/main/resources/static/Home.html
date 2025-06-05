@@ -163,7 +163,7 @@
         </div>
 
         <div class="flex justify-center gap-6">
-            <button type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar</button>
+            <button id="filtrar" type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar</button>
             <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva
                 rápida
             </button>
@@ -200,6 +200,36 @@
         document.querySelector(".btn-buscar")?.addEventListener("click", aplicarFiltro);
     });
 
+    document.getElementById("filtroForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const datos = Object.fromEntries(formData.entries());
+
+        const serviciosSeleccionados = [...form.querySelectorAll('input[name="servicios"]:checked')].map(cb => cb.value);
+        datos.servicios = serviciosSeleccionados;
+
+        const submitter = e.submitter;
+        if (submitter && submitter.id === "filtrar") {
+            try {
+                const response = await axios.get(`${uri}/alojamientos`, {
+                    params: datos,
+                });
+
+                if (response.status === 200) {
+                    alert("Test");
+                    renderizarAlojamientos(response.data);
+                } else {
+                    alert("Error del servidor al buscar los alojamientos");
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+                alert("Error de red o servidor");
+            }
+        }
+    });
+
     function renderizarAlojamientos(lista) {
         const carouselContainer = document.getElementById("carouselContainer");
         const cardsWrapper = document.getElementById("cardsWrapper");
@@ -218,6 +248,16 @@
             });
         });
 
+        document.addEventListener("submit", function () {
+            const inputsNumericos = document.querySelectorAll('input[type="number"]');
+            inputsNumericos.forEach(input => {
+                input.addEventListener("keydown", function (e) {
+                    if (["e", "E", "+", "-"].includes(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
 
         cardsWrapper.innerHTML = "";
         arrowLeft.addEventListener("click", () => {
