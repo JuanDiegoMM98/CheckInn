@@ -1,4 +1,4 @@
-package com.dam.checkinn.configurations;
+package com.dam.checkinn.configurations.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

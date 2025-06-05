@@ -182,7 +182,7 @@ public class ReservaService {
                 );
                 ReservaModel reservaCreada = reservaRepository.save(reserva);
                 return new MisReservasDTO(reservaCreada.getId(), reservaCreada.getPrecio(), reservaCreada.isCancelada(),
-                        false, reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(),reservaCreada.getMotivoCancelacion(),
+                        false, reservaCreada.getFechaInicio(), reservaCreada.getFechaFin(), reservaCreada.getMotivoCancelacion(),
                         reserva.getAlojamiento().getId(), reserva.getAlojamiento().getImagen(), reserva.getAlojamiento().getNombre(),
                         reserva.getAlojamiento().getDireccion(), reserva.getAlojamiento().getCapacidad());
             } else {
@@ -220,5 +220,25 @@ public class ReservaService {
         }
 
         return true;
+    }
+
+    public MisReservasDTO getReservaIndividual(int id) throws Exception {
+        // Comprobar que existe reserva
+        if (!reservaRepository.existsById(id)) {
+            throw new ReservaNotFoundException();
+        }
+
+        // La obtenemos de BD
+        ReservaModel reservaModel = reservaRepository.findById(id).get();
+
+        // Mapeamos la respuesta
+        MisReservasDTO dto = new MisReservasDTO(
+                reservaModel.getId(), reservaModel.getPrecio(), reservaModel.isCancelada(), reservaModel.isValorada(),
+                reservaModel.getFechaInicio(), reservaModel.getFechaFin(), reservaModel.getMotivoCancelacion(),
+                reservaModel.getAlojamiento().getId(), reservaModel.getAlojamiento().getImagen(),
+                reservaModel.getAlojamiento().getNombre(), reservaModel.getAlojamiento().getDireccion(), reservaModel.getAlojamiento().getCapacidad()
+        );
+
+        return dto;
     }
 }
