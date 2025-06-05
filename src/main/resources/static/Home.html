@@ -20,9 +20,9 @@
     <div class="flex items-center gap-2 mt-4 md:mt-0">
         <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar"/>
         <span class="font-semibold text-sm">
-        <span name="nombre"></span><br/>
-        <small name="rol"></small>
-      </span>
+      <span name="nombre"></span><br/>
+      <small name="rol"></small>
+    </span>
     </div>
 </header>
 
@@ -48,6 +48,7 @@
     </p>
 
     <form id="filtroForm" class="bg-white rounded-xl shadow p-8 mt-12 space-y-8 w-1/2 mx-auto">
+        <!-- Campos de filtro -->
         <div class="grid md:grid-cols-2 gap-6">
             <div class="flex flex-col">
                 <label for="provincia" class="font-semibold mb-1">Provincia</label>
@@ -110,7 +111,8 @@
 
             <div class="flex flex-col">
                 <label for="valoracionMinima" class="font-semibold mb-1">Valoración mínima</label>
-                <select name="valoracionMinima" id="valoracionMinima" class="w-full p-3 border border-gray-300 rounded">
+                <select name="valoracionMinima" id="valoracionMinima"
+                        class="w-full p-3 border border-gray-300 rounded">
                     <option value="">Selecciona</option>
                     <option value="1">1 Estrella</option>
                     <option value="2">2 Estrellas</option>
@@ -164,16 +166,77 @@
 
         <div class="flex justify-center gap-6">
             <button id="filtrar" type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar</button>
-            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva
-                rápida
-            </button>
+            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva rápida</button>
         </div>
     </form>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Mostrar usuario si existe
+        const usuarioGuardado = sessionStorage.getItem("nombre");
+        if (usuarioGuardado) {
+            const usuario = JSON.parse(usuarioGuardado);
+            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+            document.querySelector('small[name="rol"]').textContent = usuario.rol;
+        }
+
+        cargarAlojamientos(); //Carga inicial de todos los alojamientos
+
+        // 2) Suscribimos el evento SUBMIT del formulario
+        document.getElementById("filtroForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            // Convertir a objeto sin campos vacíos
+            const provisional = Object.fromEntries(formData.entries());
+            const datos = {};
+            for (const [key, value] of Object.entries(provisional)) {
+                if (value !== "") datos[key] = value;
+            }
+
+            // Añadir servicios seleccionados como array
+            const serviciosSeleccionados = [
+                ...form.querySelectorAll('input[name="servicios"]:checked')
+            ].map(cb => cb.value);
+
+            if (serviciosSeleccionados.length > 0) {
+                datos.servicios = serviciosSeleccionados;
+            }
+
+            // Construir URL con solo los campos útiles
+            const searchParams = new URLSearchParams();
+            for (const [key, value] of Object.entries(datos)) {
+                if (Array.isArray(value)) {
+                    value.forEach(v => searchParams.append(key, v));
+                } else {
+                    searchParams.append(key, value);
+                }
+            }
+
+            const finalURL = `${uri}/alojamientos?${searchParams.toString()}`;
+
+            try {
+                const response = await axios.get(finalURL);
+                if (response.status === 200) {
+                    renderizarAlojamientos(response.data);
+                } else {
+                    alert("Error del servidor al buscar los alojamientos");
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+                alert("Error de red o servidor");
+            }
+        });
+    });
+
+    // -------------------------------------------------
+    // Función para cargar todos los alojamientos al inicio
     async function cargarAlojamientos() {
         try {
             const response = await axios.get(`${uri}/alojamientos`);
@@ -184,52 +247,12 @@
             }
         } catch (error) {
             console.error("Error al cargar alojamientos:", error);
-            cardsWrapper.innerHTML = "<p>No se pudieron cargar los alojamientos.</p>";
+            document.getElementById("cardsWrapper").innerHTML = "<p>No se pudieron cargar los alojamientos.</p>";
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const usuarioGuardado = sessionStorage.getItem("nombre");
-        if (usuarioGuardado) {
-            const usuario = JSON.parse(usuarioGuardado);
-            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
-            document.querySelector('small[name="rol"]').textContent = usuario.rol;
-        }
-
-        cargarAlojamientos();
-        document.querySelector(".btn-buscar")?.addEventListener("click", aplicarFiltro);
-    });
-
-    document.getElementById("filtroForm").addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const form = e.target;
-        const formData = new FormData(form);
-        const datos = Object.fromEntries(formData.entries());
-
-        const serviciosSeleccionados = [...form.querySelectorAll('input[name="servicios"]:checked')].map(cb => cb.value);
-        datos.servicios = serviciosSeleccionados;
-
-        const submitter = e.submitter;
-        if (submitter && submitter.id === "filtrar") {
-            try {
-                const response = await axios.get(`${uri}/alojamientos`, {
-                    params: datos,
-                });
-
-                if (response.status === 200) {
-                    alert("Test");
-                    renderizarAlojamientos(response.data);
-                } else {
-                    alert("Error del servidor al buscar los alojamientos");
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-                alert("Error de red o servidor");
-            }
-        }
-    });
-
+    // -------------------------------------------------
+    // Función que renderiza las tarjetas de alojamiento
     function renderizarAlojamientos(lista) {
         const carouselContainer = document.getElementById("carouselContainer");
         const cardsWrapper = document.getElementById("cardsWrapper");
@@ -237,35 +260,25 @@
         const arrowRight = document.getElementById("carouselRight");
         const mensajeSinResultados = document.getElementById("mensajeSinResultados");
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const inputsNumericos = document.querySelectorAll('input[type="number"]');
-            inputsNumericos.forEach(input => {
-                input.addEventListener("keydown", function (e) {
-                    if (["e", "E", "+", "-"].includes(e.key)) {
-                        e.preventDefault();
-                    }
-                });
+        // Bloquear e, E, +, - en inputs numéricos (solo un ejemplo)
+        const inputsNumericos = document.querySelectorAll('input[type="number"]');
+        inputsNumericos.forEach(input => {
+            input.addEventListener("keydown", function (eve) {
+                if (["e", "E", "+", "-"].includes(eve.key)) {
+                    eve.preventDefault();
+                }
             });
         });
 
-        document.addEventListener("submit", function () {
-            const inputsNumericos = document.querySelectorAll('input[type="number"]');
-            inputsNumericos.forEach(input => {
-                input.addEventListener("keydown", function (e) {
-                    if (["e", "E", "+", "-"].includes(e.key)) {
-                        e.preventDefault();
-                    }
-                });
-            });
-        });
-
+        // Limpiar contenido previo
         cardsWrapper.innerHTML = "";
-        arrowLeft.addEventListener("click", () => {
-            cardsWrapper.scrollBy({left: -340, behavior: "smooth"});
-        });
 
+        // Configurar flechas
+        arrowLeft.addEventListener("click", () => {
+            cardsWrapper.scrollBy({ left: -340, behavior: "smooth" });
+        });
         arrowRight.addEventListener("click", () => {
-            cardsWrapper.scrollBy({left: 340, behavior: "smooth"});
+            cardsWrapper.scrollBy({ left: 340, behavior: "smooth" });
         });
 
         if (!lista.length) {
@@ -293,23 +306,23 @@
             card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
 
             card.innerHTML = `
-  <div class="flex flex-col h-full">
-    <img src="${apto.imagen}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />
-    <div class="flex-1 px-4 py-3 flex flex-col justify-between">
-      <div>
-        <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
-        <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
-      </div>
-      <div class="mt-4 text-left">
-        <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
-        <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
-      </div>
-    </div>
-    <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
-      Reservar
-    </button>
-  </div>
-`;
+        <div class="flex flex-col h-full">
+          <img src="${apto.imagen}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />
+          <div class="flex-1 px-4 py-3 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
+              <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
+            </div>
+            <div class="mt-4 text-left">
+              <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
+              <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+            </div>
+          </div>
+          <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
+            Reservar
+          </button>
+        </div>
+      `;
             cardsWrapper.appendChild(card);
         });
     }
