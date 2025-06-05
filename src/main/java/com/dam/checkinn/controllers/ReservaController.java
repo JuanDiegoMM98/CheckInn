@@ -28,6 +28,19 @@ public class ReservaController {
 
     /* MÉTODOS ********************************************************************************************************/
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MisReservasDTO> getReservaIndividual(@PathVariable int id) {
+        try {
+            MisReservasDTO reservaDTO = reservaService.getReservaIndividual(id);
+            return ResponseEntity.ok(reservaDTO);
+        } catch (ReservaNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+
     @PostMapping
     public ResponseEntity<ReservaModel> createReserva(@RequestBody CrearActualizarReservaDTOFront dto) {
         try {

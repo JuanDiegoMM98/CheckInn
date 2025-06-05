@@ -11,7 +11,11 @@ import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +36,7 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final AlojamientoRepository alojamientoRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, ReservaRepository reservaRepository, AlojamientoRepository alojamientoRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository,  AlojamientoRepository alojamientoRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.alojamientoRepository = alojamientoRepository;
@@ -86,10 +90,24 @@ public class UsuarioService {
 
 
     // GET USUARIO INDIVIDUAL (AREA PERSONAL)
-    public UsuarioModel getUserById(int id) throws Exception {
+    public UsuarioModel getUserById(int id
+//                                    Authentication auth
+//                                    HttpServletRequest request,
+//                                    HttpServletResponse response
+    ) throws Exception {
+
         if (!usuarioRepository.existsById(id)) {
             throw new AccesoDenegadoException();
         }
+
+//        // Seguridad
+//        String dniUsuarioLogado = auth.getName();
+//        UsuarioModel usuarioLogado = usuarioRepository.getUsuarioModelByDni(dniUsuarioLogado);
+//        if (id != usuarioLogado.getId()) {
+//            request.getSession().invalidate(); // Invalida la sesión
+//            SecurityContextHolder.clearContext(); // Limpia el contexto de seguridad
+//            response.sendRedirect("/Index.html"); // Redirige manualmente
+//        }
 
         return usuarioRepository.findById(id).get();
     }
@@ -144,9 +162,9 @@ public class UsuarioService {
         List<ReservaModel> reservas = usuarioModel.getReservas();
 
         List<MisReservasDTO> misReservasDTO = new ArrayList<>();
-        reservas.forEach( r -> {
+        reservas.forEach(r -> {
             MisReservasDTO reservaDTO = new MisReservasDTO(r.getId(), r.getPrecio(), r.isCancelada(), r.isValorada(),
-                    r.getFechaInicio(), r.getFechaFin(),r.getMotivoCancelacion(), r.getAlojamiento().getId(), r.getAlojamiento().getImagen(),
+                    r.getFechaInicio(), r.getFechaFin(), r.getMotivoCancelacion(), r.getAlojamiento().getId(), r.getAlojamiento().getImagen(),
                     r.getAlojamiento().getNombre(), r.getAlojamiento().getDireccion(), r.getAlojamiento().getCapacidad());
             misReservasDTO.add(reservaDTO);
         });
@@ -194,5 +212,9 @@ public class UsuarioService {
 
         // Devolvemos el alojamiento creado
         return alojamientoModel;
+    }
+
+    public UsuarioModel getUserByDni(String dniUsuarioLogado) {
+        return usuarioRepository.getUsuarioModelByDni(dniUsuarioLogado);
     }
 }

@@ -8,7 +8,11 @@ import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.dto.usuarios.UsuarioDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.services.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -61,9 +65,18 @@ public class UsuarioController {
 
     // Get usuario individual (area personal)
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<UsuarioModel> getUsuario(@PathVariable int id) {
+    public ResponseEntity<UsuarioModel> getUsuario(
+            @PathVariable int id
+//            Authentication auth,
+//            HttpServletRequest request, HttpServletResponse response
+    ) {
+
         try {
             UsuarioModel usuario = usuarioService.getUserById(id);
+//                    auth,
+//                    request,
+//                    response
+
             return ResponseEntity.ok(usuario);
         } catch (AccesoDenegadoException e) {
             return ResponseEntity.status(404).build();

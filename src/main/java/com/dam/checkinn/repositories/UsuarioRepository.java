@@ -27,4 +27,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioModel, String> {
     boolean existsById(int id);
 
     boolean existsByCorreoLikeIgnoreCase(String correo);
+
+    UsuarioModel getUsuarioModelByDni(String dni);
 }
