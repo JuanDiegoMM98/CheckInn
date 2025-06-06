@@ -1,7 +1,7 @@
 package com.dam.checkinn.controllers;
 
 import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
-import com.dam.checkinn.exceptions.AltaAlojamientoException;
+import com.dam.checkinn.exceptions.DatosNoValidosException;
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - CheckInn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cover bg-center min-h-screen flex items-center justify-center" style="background-image: url('../images/loginMasOpaco.jpg')">
+<main class="bg-white/90 p-12 shadow-xl w-full max-w-2xl rounded-2xl">
+  <div class="flex items-center justify-end gap-4 mb-8">
+    <h1 class="text-5xl font-bold text-orange-500">CheckInn</h1>
+    <img src="../images/logo.png" alt="Logo" class="w-12 h-12" />
+  </div>
+  <form class="space-y-5" method="post" action="/api/v1/login">
+    <div>
+      <label for="dni" class="block font-semibold text-lg mb-2">DNI</label>
+      <input name="dni" id="dni" type="text" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400" />
+    </div>
+    <div>
+      <label for="contraseña" class="block font-semibold text-lg mb-2">Contraseña</label>
+      <input name="contraseña" id="contraseña" type="password" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400" />
+    </div>
+    <div class="flex justify-center">
+      <button type="submit" class="bg-orange-500 text-white text-lg px-10 py-3 rounded-lg hover:bg-orange-600 transition-all">Entrar</button>
+    </div>
+  </form>
+  <p class="text-center text-sm text-gray-700 mt-6">¿No tienes cuenta? <a href="Registro.html" class="text-orange-500 hover:underline font-semibold">Regístrate aquí</a></p>
+</main>
+</body>
+</html>
