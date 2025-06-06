@@ -1,6 +1,7 @@
 package com.dam.checkinn.controllers;
 
-import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
+import com.dam.checkinn.exceptions.AccesoDenegadoException;
+import com.dam.checkinn.exceptions.RecursoNotFoundException;
 import com.dam.checkinn.exceptions.DatosNoValidosException;
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
@@ -34,8 +35,10 @@ public class AlojamientoController {
         try {
             alojamientoService.deleteAlojamiento(id);
             return ResponseEntity.ok().build();
-        } catch (AlojamientoNotFoundException e) {
-            return ResponseEntity.status(409).build();
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
+            return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
@@ -69,7 +72,7 @@ public class AlojamientoController {
         try {
             AlojamientoDTO alojamiento = alojamientoService.getAlojamientoById(id);
             return ResponseEntity.ok(alojamiento);
-        } catch (AlojamientoNotFoundException e) {
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
@@ -84,7 +87,7 @@ public class AlojamientoController {
         try {
             AlojamientoDTO alojamientoActualizado = alojamientoService.updateAlojamiento(id, alojamiento);
             return ResponseEntity.ok(alojamientoActualizado);
-        } catch (AlojamientoNotFoundException e) {
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -98,15 +101,11 @@ public class AlojamientoController {
         try {
             List<ReservaModel> allReservasByIdAlojamiento = alojamientoService.getAllReservasByIdAlojamiento(id);
             return ResponseEntity.ok(allReservasByIdAlojamiento);
-        } catch (AlojamientoNotFoundException e) {
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }
 
-//    @PostMapping("/{dni}")
-//    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosByDni(@PathVariable String dni) {
-//
-//    }
 }

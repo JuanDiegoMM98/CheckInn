@@ -24,4 +24,6 @@ public interface AlojamientoRepository extends JpaRepository<AlojamientoModel, I
             @Param("precioMaximo") Double precioMaximo,
             @Param("personasMaximas") Integer personasMaximas
     );
+
+    List<AlojamientoModel> findAllByUsuarioAlojamiento_Id(int usuarioAlojamientoId);
 }

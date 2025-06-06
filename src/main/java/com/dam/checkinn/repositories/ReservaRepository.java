@@ -20,4 +20,8 @@ public interface ReservaRepository extends JpaRepository<ReservaModel, Integer> 
             @Param("nuevaInicio") LocalDate nuevaInicio,
             @Param("nuevaFin") LocalDate nuevaFin
     );
+
+    List<ReservaModel> findAllByUsuarioReserva_Id(int usuarioReservaId);
+
+    List<ReservaModel> getById(int id);
 }

@@ -3,6 +3,7 @@ package com.dam.checkinn.controllers;
 import com.dam.checkinn.exceptions.*;
 import com.dam.checkinn.models.*;
 import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
+import com.dam.checkinn.models.dto.alojamientos.MisAlojamientosDTO;
 import com.dam.checkinn.models.dto.usuarios.CredencialesLoginDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.dto.usuarios.UsuarioDTO;
@@ -122,6 +123,23 @@ public class UsuarioController {
         try {
             List<MisReservasDTO> allReservasByDniUsuario = usuarioService.getAllReservasByIdUsuario(id);
             return ResponseEntity.ok(allReservasByDniUsuario);
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
+            return ResponseEntity.status(404).build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    // Apartado mis alojamientos
+    @GetMapping("/usuarios/{id}/alojamientos")
+    public ResponseEntity<MisAlojamientosDTO> getAlojamientosIdUsuario(
+            @PathVariable int id
+    ) {
+        try {
+            MisAlojamientosDTO alojamientosByIdUsuario = usuarioService.getAlojamientosByIdUsuario(id);
+            return ResponseEntity.ok(alojamientosByIdUsuario);
         } catch (AccesoDenegadoException e) {
             return ResponseEntity.status(403).build();
         } catch (RecursoNotFoundException e) {

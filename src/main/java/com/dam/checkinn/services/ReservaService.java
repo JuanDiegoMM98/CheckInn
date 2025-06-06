@@ -1,9 +1,6 @@
 package com.dam.checkinn.services;
 
-import com.dam.checkinn.exceptions.AccesoDenegadoException;
-import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
-import com.dam.checkinn.exceptions.ReservaNoValidaException;
-import com.dam.checkinn.exceptions.ReservaNotFoundException;
+import com.dam.checkinn.exceptions.*;
 import com.dam.checkinn.models.*;
 import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTOFront;
 import com.dam.checkinn.models.dto.alojamientos.FiltroDTO;
@@ -12,16 +9,22 @@ import com.dam.checkinn.models.dto.reservas.QueryDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Service
 public class ReservaService {
 
@@ -41,22 +44,44 @@ public class ReservaService {
 
     /* MÉTODOS ********************************************************************************************************/
 
+    public MisReservasDTO getReservaIndividual(int id) throws Exception {
+        filtroSeguridad(id);
+
+        // Comprobar que existe reserva
+        if (!reservaRepository.existsById(id)) {
+            throw new RecursoNotFoundException();
+        }
+
+        // La obtenemos de BD
+        ReservaModel reservaModel = reservaRepository.findById(id).get();
+
+        // Mapeamos la respuesta
+        MisReservasDTO dto = new MisReservasDTO(
+                reservaModel.getId(), reservaModel.getPrecio(), reservaModel.isCancelada(), reservaModel.isValorada(),
+                reservaModel.getFechaInicio(), reservaModel.getFechaFin(), reservaModel.getMotivoCancelacion(),
+                reservaModel.getAlojamiento().getId(), reservaModel.getAlojamiento().getImagen(),
+                reservaModel.getAlojamiento().getNombre(), reservaModel.getAlojamiento().getDireccion(), reservaModel.getAlojamiento().getCapacidad()
+        );
+
+        return dto;
+    }
+
+    @Transactional
     public ReservaModel crearReserva(CrearActualizarReservaDTOFront dto) throws Exception {
 
         // Comprobamos que el alojamiento existe
         if (!alojamientoRepository.existsById(dto.idAlojamiento())) {
-            throw new AlojamientoNotFoundException();
+            throw new RecursoNotFoundException();
         }
 
         // Comprobamos que el usuario existe
         if (!usuarioRepository.existsById(dto.idUsuario())) {
-            throw new AccesoDenegadoException();
+            throw new RecursoNotFoundException();
         }
 
         // Obtenemos alojamiento y usuario
         AlojamientoModel alojamientoModel = alojamientoRepository.findById(dto.idAlojamiento()).get();
         UsuarioModel usuarioModel = usuarioRepository.findById(dto.idUsuario()).get();
-        //        UsuarioModel usuarioModel = usuarioRepository.findByDniIgnoreCase(dto.dni()).get();
 
         // Validación de solapamiento con fechas de bloqueo
         LocalDate inicioBloqueo = alojamientoModel.getInicioBloqueo();
@@ -65,7 +90,7 @@ public class ReservaService {
         if (inicioBloqueo != null && finBloqueo != null &&
                 !dto.fechaFin().isBefore(inicioBloqueo) &&
                 !dto.fechaInicio().isAfter(finBloqueo)) {
-            throw new ReservaNoValidaException();
+            throw new DatosNoValidosException();
         }
 
         // Validacion de solapamiento con otras reservas
@@ -73,7 +98,7 @@ public class ReservaService {
                 dto.idAlojamiento(), dto.fechaInicio(), dto.fechaFin());
 
         if (!reservasSolapadas.isEmpty()) {
-            throw new ReservaNoValidaException();
+            throw new DatosNoValidosException();
         }
 
         // Calculamos precio
@@ -92,18 +117,21 @@ public class ReservaService {
         return reservaRepository.save(reservaModel);
     }
 
-    public ReservaModel actualizarReserva(int id, CrearActualizarReservaDTOFront dto) throws Exception {
+    @Transactional
+    public ReservaModel actualizarReserva(int idReserva, CrearActualizarReservaDTOFront dto) throws Exception {
+        filtroSeguridad(idReserva);
+
         // Comprobar que existe reserva
-        if (!reservaRepository.existsById(id)) {
-            throw new ReservaNotFoundException();
+        if (!reservaRepository.existsById(idReserva)) {
+            throw new RecursoNotFoundException();
         }
 
         // Comprobar que existe alojamiento
         if (!alojamientoRepository.existsById(dto.idAlojamiento())) {
-            throw new AlojamientoNotFoundException();
+            throw new RecursoNotFoundException();
         }
 
-        ReservaModel reservaModel = reservaRepository.findById(id).get();
+        ReservaModel reservaModel = reservaRepository.findById(idReserva).get();
 
         // Si tiene motivo de cancelacion, modificamos dicha reserva
         if (dto.motivoCancelacion() != null) {
@@ -112,7 +140,7 @@ public class ReservaService {
 
         // Si el dueño del alojamiento la cancela, modificamos el valor de "cancelada"
         if (dto.cancelada()) {
-            reservaModel.setCancelada(dto.cancelada());
+            reservaModel.setCancelada(true);
         }
 
         // Si tiene valoracion, modificamos las valoraciones del alojamiento y la ponemos como valorada
@@ -130,10 +158,11 @@ public class ReservaService {
         return reservaRepository.save(reservaModel);
     }
 
+    @Transactional
     public MisReservasDTO reservaRapida(FiltroDTO dto) throws Exception {
         // Comprobamos datos necesarios
         if (dto.dni() == "" || dto.fechaInicio() == null || dto.fechaFin() == null) {
-            throw new ReservaNoValidaException();
+            throw new DatosNoValidosException();
         }
 
         // Parseamos valores a los que va a recibir el metodo
@@ -186,11 +215,60 @@ public class ReservaService {
                         reserva.getAlojamiento().getId(), reserva.getAlojamiento().getImagen(), reserva.getAlojamiento().getNombre(),
                         reserva.getAlojamiento().getDireccion(), reserva.getAlojamiento().getCapacidad());
             } else {
-                throw new AlojamientoNotFoundException();
+                throw new RecursoNotFoundException();
             }
         } else {
-            throw new AlojamientoNotFoundException();
+            throw new RecursoNotFoundException();
         }
+    }
+
+    /* SEGURIDAD ******************************************************************************************************/
+
+    private void filtroSeguridad(int idReserva) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth.getPrincipal() instanceof UsuarioModel usuario) {
+            // Usuario
+            int idUsuario = usuario.getId();
+
+            // 1. Comprobamos si el usuario tiene la reserva directamente
+            List<ReservaModel> reservasUsuario = reservaRepository.findAllByUsuarioReserva_Id(idUsuario);
+
+            boolean enReservasDelUsuario = reservasUsuario != null &&
+                    reservasUsuario.stream().anyMatch(r -> r.getId() == idReserva);
+
+            if (enReservasDelUsuario) {
+                return; // Seguridad OK
+            }
+
+            // 2. Comprobamos si alguno de sus alojamientos contiene la reserva
+            List<AlojamientoModel> alojamientosUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_Id(idUsuario);
+            boolean enAlojamientosDelUsuario = alojamientosUsuario != null &&
+                    alojamientosUsuario.stream()
+                            .flatMap(a -> a.getReservas().stream()) // a.getReservas() debe devolver lista no-nula
+                            .anyMatch(r -> r.getId() == idReserva);
+
+            if (!enAlojamientosDelUsuario) {
+                logout();
+            }
+        }
+    }
+
+    private void logout() throws Exception {
+        // Obtener el request actual
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attr.getRequest();
+        HttpServletResponse response = attr.getResponse();
+        // Invalidar la sesión
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Limpiar contexto de seguridad
+        SecurityContextHolder.clearContext();
+        throw new AccesoDenegadoException();
+//        response.sendRedirect("/login?logout");
     }
 
     /* AUXILIARES *****************************************************************************************************/
@@ -218,27 +296,6 @@ public class ReservaService {
                 return false;
             }
         }
-
         return true;
-    }
-
-    public MisReservasDTO getReservaIndividual(int id) throws Exception {
-        // Comprobar que existe reserva
-        if (!reservaRepository.existsById(id)) {
-            throw new ReservaNotFoundException();
-        }
-
-        // La obtenemos de BD
-        ReservaModel reservaModel = reservaRepository.findById(id).get();
-
-        // Mapeamos la respuesta
-        MisReservasDTO dto = new MisReservasDTO(
-                reservaModel.getId(), reservaModel.getPrecio(), reservaModel.isCancelada(), reservaModel.isValorada(),
-                reservaModel.getFechaInicio(), reservaModel.getFechaFin(), reservaModel.getMotivoCancelacion(),
-                reservaModel.getAlojamiento().getId(), reservaModel.getAlojamiento().getImagen(),
-                reservaModel.getAlojamiento().getNombre(), reservaModel.getAlojamiento().getDireccion(), reservaModel.getAlojamiento().getCapacidad()
-        );
-
-        return dto;
     }
 }
