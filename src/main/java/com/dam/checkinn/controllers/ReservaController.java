@@ -1,9 +1,6 @@
 package com.dam.checkinn.controllers;
 
-import com.dam.checkinn.exceptions.AccesoDenegadoException;
-import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
-import com.dam.checkinn.exceptions.ReservaNoValidaException;
-import com.dam.checkinn.exceptions.ReservaNotFoundException;
+import com.dam.checkinn.exceptions.*;
 import com.dam.checkinn.models.dto.reservas.CrearActualizarReservaDTOFront;
 import com.dam.checkinn.models.dto.alojamientos.FiltroDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
@@ -33,23 +30,24 @@ public class ReservaController {
         try {
             MisReservasDTO reservaDTO = reservaService.getReservaIndividual(id);
             return ResponseEntity.ok(reservaDTO);
-        } catch (ReservaNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
+            return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }
-
 
     @PostMapping
     public ResponseEntity<ReservaModel> createReserva(@RequestBody CrearActualizarReservaDTOFront dto) {
         try {
             ReservaModel nuevaReserva = reservaService.crearReserva(dto);
             URI location = URI.create("/reservas/" + nuevaReserva.getId());
-            return ResponseEntity
-                    .created(location) // Esto automáticamente pone el código 201 Created y la cabecera Location
-                    .body(nuevaReserva);
-        } catch (AlojamientoNotFoundException | AccesoDenegadoException | ReservaNoValidaException e ) {
+            return ResponseEntity.created(location).body(nuevaReserva);
+        } catch (RecursoNotFoundException e) {
+            return ResponseEntity.status(404).build();
+        } catch (DatosNoValidosException e) {
             return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
@@ -63,7 +61,9 @@ public class ReservaController {
         try {
             ReservaModel reservaActualizada = reservaService.actualizarReserva(id, dto);
             return ResponseEntity.ok(reservaActualizada);
-        } catch (ReservaNotFoundException | AlojamientoNotFoundException e) {
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
@@ -76,9 +76,9 @@ public class ReservaController {
         try {
             MisReservasDTO reservaRapida = reservaService.reservaRapida(dto);
             return ResponseEntity.ok(reservaRapida);
-        } catch (AlojamientoNotFoundException e) {
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
-        } catch (ReservaNoValidaException e) {
+        } catch (DatosNoValidosException e) {
              return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();

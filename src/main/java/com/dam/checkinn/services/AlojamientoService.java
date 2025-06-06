@@ -1,25 +1,28 @@
 package com.dam.checkinn.services;
 
-import com.dam.checkinn.exceptions.AlojamientoNotFoundException;
-import com.dam.checkinn.exceptions.DatosNoValidosException;
-import com.dam.checkinn.exceptions.ServerException;
+import com.dam.checkinn.exceptions.AccesoDenegadoException;
+import com.dam.checkinn.exceptions.RecursoNotFoundException;
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Service
 public class AlojamientoService {
 
@@ -35,6 +38,17 @@ public class AlojamientoService {
     }
 
     /* MÉTODOS ********************************************************************************************************/
+
+    @Transactional
+    public void deleteAlojamiento(int id) throws Exception {
+        filtroSeguridad(id);
+
+        if (!alojamientoRepository.existsById(id)) {
+            throw new RecursoNotFoundException();
+        }
+        alojamientoRepository.deleteById(id);
+    }
+
 
     public List<AlojamientoModel> buscarDisponiblesConFiltro(String provincia, Double valoracionMinima, Double precioMaximo,
                                                              List<AlojamientoModel.Servicio> servicios, LocalDate fechaInicio, LocalDate fechaFin, Integer personasMaximas
@@ -54,7 +68,7 @@ public class AlojamientoService {
         // Comprobamos que existe
         Optional<AlojamientoModel> optionalAlojamiento = alojamientoRepository.findById(id);
         if (optionalAlojamiento.isEmpty()) {
-            throw new AlojamientoNotFoundException();
+            throw new RecursoNotFoundException();
         }
         AlojamientoModel alojamientoModel = optionalAlojamiento.get();
 
@@ -70,17 +84,12 @@ public class AlojamientoService {
         );
     }
 
-    public void deleteAlojamiento(int id) throws Exception {
-        if (!alojamientoRepository.existsById(id)) {
-            throw new AlojamientoNotFoundException();
-        }
-        alojamientoRepository.deleteById(id);
-    }
-
+    @Transactional
     public AlojamientoDTO updateAlojamiento(int id, AlojamientoDTO dto) throws Exception {
+        filtroSeguridad(id);
         // comprobamos existencia
         if (!alojamientoRepository.existsById(id)) {
-            throw new AlojamientoNotFoundException();
+            throw new RecursoNotFoundException();
         }
 
         // Buscamos el alojamiento y modificamos sus datos con los que vienen
@@ -117,9 +126,10 @@ public class AlojamientoService {
     }
 
     public List<ReservaModel> getAllReservasByIdAlojamiento(int id) throws Exception {
+        filtroSeguridad(id);
         Optional<AlojamientoModel> alojamientoOptional = alojamientoRepository.findById(id);
         if (alojamientoOptional.isEmpty()) {
-            throw new AlojamientoNotFoundException();
+            throw new RecursoNotFoundException();
         }
         AlojamientoModel alojamientoModel = alojamientoOptional.get();
         return alojamientoModel.getReservas();
@@ -151,5 +161,43 @@ public class AlojamientoService {
         }
 
         return true;
+    }
+
+    /* SEGURIDAD ******************************************************************************************************/
+
+    private void filtroSeguridad(int id) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof UsuarioModel usuario) {
+            // Conseguimos ID de usuario
+            int idUsuario = usuario.getId();
+
+            // Conseguimos sus alojamientos
+            List<AlojamientoModel> alojamientosUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_Id(idUsuario);
+
+            // Vemos si alguno de sus IDs coincide con el id de la url
+            boolean encontrado = alojamientosUsuario.stream()
+                    .anyMatch(a -> a.getId() == id);
+
+            if (!encontrado) {
+                logout();
+            }
+        }
+    }
+
+    private void logout() throws Exception {
+        // Obtener el request actual
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attr.getRequest();
+        HttpServletResponse response = attr.getResponse();
+        // Invalidar la sesión
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Limpiar contexto de seguridad
+        SecurityContextHolder.clearContext();
+        throw new AccesoDenegadoException();
+//        response.sendRedirect("/login?logout");
     }
 }

@@ -3,6 +3,7 @@ package com.dam.checkinn.services;
 import com.dam.checkinn.exceptions.*;
 import com.dam.checkinn.models.*;
 import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
+import com.dam.checkinn.models.dto.alojamientos.MisAlojamientosDTO;
 import com.dam.checkinn.models.dto.usuarios.CredencialesLoginDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.dto.usuarios.UsuarioDTO;
@@ -217,16 +218,25 @@ public class UsuarioService {
         return alojamientoCreado;
     }
 
+
+    public MisAlojamientosDTO getAlojamientosByIdUsuario(int id) throws Exception {
+        filtroSeguridad(id);
+
+        if (!usuarioRepository.existsById(id)) {
+            throw new RecursoNotFoundException();
+        }
+        List<AlojamientoModel> alojamientosUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_Id(id);
+        return new MisAlojamientosDTO(alojamientosUsuario);
+    }
+
     /* SEGURIDAD ******************************************************************************************************/
 
     private void filtroSeguridad(int id) throws Exception {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getPrincipal() instanceof UsuarioModel) {
-            UsuarioModel usuario = (UsuarioModel) auth.getPrincipal();
+        if (auth.getPrincipal() instanceof UsuarioModel usuario) {
             if (usuario.getId() != id) {
                 logout();
             }
-
         }
     }
 
