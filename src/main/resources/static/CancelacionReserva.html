@@ -1,229 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solicitud de cancelación</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    label {
-      font-weight: bold;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      resize: vertical;
-    }
-
-    .main-form {
-      display: flex;
-      gap: 40px;
-      margin-top: 20px;
-    }
-
-    .form-column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .form-buttons {
-      margin-top: 30px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-
-    .btn-cancelar,
-    .btn-guardar {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .btn-cancelar {
-      background-color: #ccc;
-      color: #333;
-    }
-
-    .btn-guardar {
-      background-color: orange;
-      color: white;
-    }
-
-    .btn-guardar:hover {
-      background-color: darkorange;
-    }
-
-    /* ----- Responsive Styles ----- */
-    @media (max-width: 768px) {
-      .main-form {
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      .form-buttons {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .navbar {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-      }
-
-      .navbar-left, .navbar-right {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .navbar-left nav {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .form-container {
-        padding: 0 16px;
-      }
-
-      .btn-cancelar, .btn-guardar {
-        width: 100%;
-      }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CheckInn - Cancelación reserva</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body>
-
-  <!-- Menú superior -->
-  <header class="navbar">
-    <div class="navbar-left">
-      <img class="logo" src="https://via.placeholder.com/40" alt="Logo" />
-      <nav>
-        <a href="Home.html">Home</a>
-        <a href="ListadoReservas.html" class="active">Mis reservas</a>
-        <a href="ListadoApartamentos.html">Mis Apartamentos</a>
-        <a href="AreaPersonal.html">Área personal</a>
-      </nav>
-    </div>
-    <div class="navbar-right">
-      <img class="avatar" src="https://via.placeholder.com/40" alt="Avatar" />
-      <span name="nombreUsuario"><br><small name="rolUsuario"></small></span>
-    </div>
-  </header>
-
-  <div class="form-container">
-    <h2>Solicitud de cancelación</h2>
-    <form>
-      <div class="main-form">
-        <div class="form-column">
-          <div>
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" value="" readonly>
-          </div>
-          <div>
-            <label for="dni">DNI</label>
-            <input type="text" id="dni" name="dni" value="" readonly>
-          </div>
-          <div>
-            <label for="telefono">Teléfono</label>
-            <input type="text" id="telefono" name="telefono" value="" readonly>
-          </div>
-          <div>
-            <label for="precio">Cuantía</label>
-            <input type="text" id="precio" name="precio" value="" readonly>
-          </div>
-        </div>
-
-        <div class="form-column">
-          <div>
-            <label for="fechaInicio">Entrada</label>
-            <input type="date" id="fechaInicio" name="fechaInicio" value="" readonly>
-          </div>
-          <div>
-            <label for="fechaFin">Salida</label>
-            <input type="date" id="fechaFin" name="fechaFin" value="" readonly>
-          </div>
-          <div>
-            <label for="motivoCancelacion">Motivo de la solicitud</label>
-            <textarea id="motivoCancelacion" name="motivoCancelacion" rows="4"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-buttons">
-        <button type="button" id="btn-cancelar" class="btn-cancelar">Cancelar</button>
-        <button type="submit" class="btn-guardar">Guardar</button>
-      </div>
-    </form>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+  <div class="flex items-center gap-6">
+    <img class="w-10 h-10" src="../images/logo.png" alt="Logo">
+    <nav class="flex flex-wrap gap-4 text-lg font-bold">
+      <a href="Index.html" class="hover:text-orange-500">Home</a>
+      <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
+      <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+      <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+    </nav>
   </div>
-</body>
+  <div class="flex items-center gap-2 mt-4 md:mt-0">
+    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+    <span class="font-semibold text-sm">
+        <span name="nombreUsuario"></span><br>
+        <small name="rolUsuario"></small>
+      </span>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">Solicitud de cancelación</h2>
+
+  <!-- Datos del alojamiento -->
+  <div id="datosAlojamiento" class="bg-white p-6 rounded-xl shadow mb-6 flex gap-6 items-center">
+    <img id="imagenAlojamiento" src="https://via.placeholder.com/150" alt="Alojamiento" class="w-40 h-40 object-cover rounded-xl" />
+  </div>
+
+  <form class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow rounded-2xl p-8">
+    <h2 class="text-2xl font-bold md:col-span-2 mt-4">Datos de la Reserva</h2>
+
+    <div class="flex flex-col md:col-span-2">
+      <h3 id="nombreAlojamiento" class="text-xl font-semibold text-gray-800"></h3>
+    </div>
+
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Dirección</label>
+      <input readonly type="text" id="direccionAlojamiento" class="p-3 border border-gray-300 rounded w-full"/>
+    </div>
+
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Precio</label>
+      <input readonly type="text"  id="precioNoche" name="precioNoche" class="p-3 border border-gray-300 rounded w-full"/>
+    </div>
+
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Fecha de Entrada</label>
+      <input readonly type="date" id="fechaInicio" name="fechaInicio" class="p-3 border border-gray-300 rounded w-full"/>
+    </div>
+
+    <div class="flex flex-col">
+      <label class="font-semibold mb-1">Fecha de Salida</label>
+      <input readonly type="date" id="fechaFin" name="fechaFin" class="p-3 border border-gray-300 rounded w-full"/>
+    </div>
+
+    <div class="flex flex-col md:col-span-2">
+      <label class="font-semibold mb-1">Motivo de Cancelación</label>
+      <textarea name="motivoCancelacion" class="p-3 border border-gray-300 rounded w-full h-32 resize-y"></textarea>
+    </div>
+
+    <div class="flex justify-center gap-4 md:col-span-2 mt-4">
+      <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar</button>
+      <button type="submit" class="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Confirmar Cancelación</button>
+    </div>
+  </form>
+</main>
+
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  const cardsWrapper = document.getElementById("cardsWrapper");
   const usuarioGuardado = sessionStorage.getItem("nombre");
   if (usuarioGuardado) {
     const usuario = JSON.parse(usuarioGuardado);
 
-    
-    document.addEventListener("DOMContentLoaded", function () {
-
-      // Mostrar nombre y rol del usuario guardado en sessionStorage
+    document.addEventListener("DOMContentLoaded", async function () {
       const nombreElement = document.querySelector('span[name="nombreUsuario"]');
       const rolElement = document.querySelector('small[name="rolUsuario"]');
-
       if (nombreElement && rolElement) {
-        nombreElement.innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
+        nombreElement.innerHTML = `${usuario.nombre}<br><small>${usuario.rol}</small>`;
       }
 
-      
-      // Cargar datos de la url:
       const urlParams = new URLSearchParams(window.location.search);
       const idReserva = urlParams.get("idReserva");
-      const fechaInicio = urlParams.get("fechaInicio");
-      const fechaFin = urlParams.get("fechaFin");
-      const precio = urlParams.get("precio");
+      const idApartamento = urlParams.get("idApartamento");
 
-      // Insertar datos en campos correspondientes
-      document.getElementById("nombre").value = usuario.nombre;
-      document.getElementById("dni").value = usuario.dni;
-      document.getElementById("telefono").value = usuario.telefono;
-      document.getElementById("precio").value = precio;
-      document.getElementById("fechaInicio").value = fechaInicio;
-      document.getElementById("fechaFin").value = fechaFin;
+      // Obtener datos del alojamiento
+      try {
+        const res = await axios.get(`${uri}/reservas/${idReserva}`);
+        if (res.status === 200) {
+          const reserva = res.data;
 
+          document.getElementById("nombreAlojamiento").textContent = reserva.nombre;
+          document.getElementById("direccionAlojamiento").textContent = reserva.direccion;
+          document.getElementById("imagenAlojamiento").src = reserva.imagen;
+          document.getElementById("direccionAlojamiento").value = reserva.direccion;
+          document.getElementById("precioNoche").value = reserva.precio;
+          document.getElementById("fechaInicio").value = reserva.fechaInicio;
+          document.getElementById("fechaFin").value = reserva.fechaFin;
+        } else if (res.status === 404) {
+          alert("No se ha encontrado el id de la reserva en la base de datos");
+        }
+      } catch (error) {
+        console.error("Error al cargar el alojamiento:", error);
+      }
 
-      // Botón de cancelar
-      document.getElementById("btn-cancelar").addEventListener("click", function(event) {
-        event.preventDefault();
+      document.getElementById("btn-cancelar").addEventListener("click", function (e) {
+        e.preventDefault();
         window.location.href = "ListadoReservas.html";
       });
 
+      document.querySelector("form").addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-      // Petición de Update a reserva cambiar estado a cancelación
-      document.querySelector("form").addEventListener("submit", async function(event) {
-        event.preventDefault();
+        const formData = new FormData(e.target);
+        const motivo = formData.get("motivoCancelacion").trim();
 
-        const formData = new FormData(event.target);
-        const datos = { motivoCancelacion: formData.get("motivoCancelacion") };
-        datos.idReserva = idReserva;
-        datos.idAlojamiento = urlParams.get("idApartamento");
+        if (!motivo) {
+          alert("Por favor, introduce un motivo para la cancelación.");
+          return;
+        }
+
+        const fechaInicioStr = document.getElementById("fechaInicio").value;
+        const fechaInicioDate = new Date(fechaInicioStr);
+        const hoy = new Date();
+
+        hoy.setHours(0, 0, 0, 0);
+        fechaInicioDate.setHours(0, 0, 0, 0);
+
+        const diferenciaDias = Math.floor((fechaInicioDate - hoy) / (1000 * 60 * 60 * 24));
+
+        if (diferenciaDias < 3) {
+          alert("La solicitud de cancelación debe realizarse al menos con 3 días de antelación a la fecha de entrada.");
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const datos = {
+          motivoCancelacion: motivo,
+          idReserva: urlParams.get("idReserva"),
+          idAlojamiento: urlParams.get("idAlojamiento")
+        };
 
         const response = await axios.patch(`${uri}/reservas/${idReserva}`, datos);
         if (response.status === 200) {
@@ -237,4 +161,5 @@
     });
   }
 </script>
+</body>
 </html>

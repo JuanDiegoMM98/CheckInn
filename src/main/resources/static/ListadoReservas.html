@@ -11,7 +11,7 @@
     <div class="flex items-center gap-6">
         <img class="w-10 h-10" src="../images/logo.png" alt="Logo">
         <nav class="flex flex-wrap gap-4 text-lg font-bold">
-            <a href="Home.html" class="hover:text-orange-500">Home</a>
+            <a href="Index.html" class="hover:text-orange-500">Home</a>
             <a href="ListadoReservas.html" class="text-orange-500">Mis reservas</a>
             <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
             <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
@@ -30,7 +30,7 @@
     <h1 class="text-3xl font-extrabold text-orange-500 mb-6 text-center">Mis Reservas</h1>
 
     <div id="carouselContainer"
-         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden w-[150%] mx-auto translate-x-[-12.5%]">
+         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
         <button id="carouselLeft"
                 class="absolute -left-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
             ❮
@@ -104,64 +104,79 @@
                     let contenidoCard = `
                         <div class="flex flex-col h-full">
                             <img
-                                src="${reserva.alojamiento.imagen || 'https://via.placeholder.com/300x100'}"
-                                onerror="this.onerror=null;this.src='FondoLogin.jpg';"
+                                src="${reserva.imagen || 'https://via.placeholder.com/300x100'}"
+                                onerror="this.onerror=null; this.src='FondoLogin.jpg';"
                                 class="w-full h-44 object-cover rounded-t-2xl"
                                 alt="Imagen alojamiento"
                             />
                             <div class="flex-1 flex flex-col justify-between p-4">
                                 <div class="text-center">
-                                    <h2 class="text-xl font-bold text-black mb-2">${reserva.alojamiento.nombre}</h2>
+                                    <h2 class="text-xl font-bold text-black mb-2">${reserva.nombre}</h2>
                                 </div>
                                 <div class="text-sm text-gray-700 text-left space-y-1 mt-2">
-                                    <p>📍 ${reserva.alojamiento.provincia}</p>
+                                    <p>📍 ${reserva.direccion}</p>
                                     <p><strong>Entrada:</strong> ${reserva.fechaInicio}</p>
                                     <p><strong>Salida:</strong> ${reserva.fechaFin}</p>
-                                    <p><strong>Huéspedes:</strong> ${reserva.alojamiento.capacidad}</p>
+                                    <p><strong>Capacidad:</strong> ${reserva.capacidad}</p>
                                 </div>`;
 
                     if (new Date(reserva.fechaFin) < new Date()) {
-                        // Finalizada
-                        contenidoCard += `
-                                <form id="form-valorar-${reserva.id}" class="mt-4 space-y-3">
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="5"
-                                        step="1"
-                                        value="5"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-xl text-center text-lg font-medium text-gray-800"
-                                        id="input-valoracion-${reserva.id}"
-                                    />
-                                    <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-600 transition-colors">
-                                        Valorar
-                                    </button>
-                                </form>`;
+                        if (!reserva.valorada) {
+                            // No valorada
+                            contenidoCard += `
+                            <form id="form-valorar-${reserva.idReserva}" class="mt-4 space-y-3">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="5"
+                                    step="1"
+                                    value="5"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-xl text-center text-lg font-medium text-gray-800"
+                                    id="input-valoracion-${reserva.idReserva}"
+                                />
+                                <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-xl text-lg font-semibold hover:bg-blue-600 transition-colors">
+                                    Valorar
+                                </button>
+                            </form>`;
+                        } else {
+                            // Valorada
+                            contenidoCard += `
+                            <div class="mt-4 space-y-3">
+                                <div class="mt-6 bg-blue-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-blue-600 transition-colors text-center">
+                                    Alojamiento valorado
+                                </div>
+                            </div>`;
+                        }
                     } else if (reserva.motivoCancelacion == null) {
                         // Activa
                         contenidoCard += `
-                                <button onclick="solicitarCancelacion(${reserva.id})"
-                                        class="mt-6 bg-red-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-red-600 transition-colors">
-                                    Solicitar cancelación
-                                </button>`;
-                    } else {
+                            <button onclick="solicitarCancelacion('${reserva.idReserva}', '${reserva.idAlojamiento}')"
+                                    class="mt-6 bg-red-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-red-600 transition-colors">
+                                Solicitar cancelación
+                            </button>`;
+                    } else if (reserva.cancelada === true){
                         // Cancelada
                         contenidoCard += `
-                                <div class="mt-6 bg-gray-200 text-gray-600 py-3 w-full rounded-xl text-lg font-semibold">
-                                    Cancelada
-                                </div>`;
+                            <div class="mt-6 bg-gray-200 text-gray-600 py-3 w-full rounded-xl text-lg font-semibold">
+                                Cancelada
+                            </div>`;
+                    } else if (reserva.motivoCancelacion !== null && reserva.cancelada === false) {
+                        contenidoCard += `
+                            <div class="mt-6 bg-yellow-100 text-yellow-800 py-3 w-full rounded-xl text-lg font-semibold">
+                                Solicitud de cancelación enviada
+                            </div>`;
                     }
 
                     contenidoCard += `</div></div>`;
                     card.innerHTML = contenidoCard;
                     cardsWrapper.appendChild(card);
 
-                    const formValorar = card.querySelector(`#form-valorar-${reserva.id}`);
+                    const formValorar = card.querySelector(`#form-valorar-${reserva.idReserva}`);
                     if (formValorar) {
                         formValorar.addEventListener("submit", function (e) {
                             e.preventDefault();
-                            const valor = parseInt(document.getElementById(`input-valoracion-${reserva.id}`).value);
-                            enviarValoracion(reserva.id, valor);
+                            const valor = parseInt(document.getElementById(`input-valoracion-${reserva.idReserva}`).value);
+                            enviarValoracion(reserva.idReserva, valor, reserva.idAlojamiento);
                         });
                     }
                 });
@@ -173,44 +188,38 @@
         }
     }
 
-    async function enviarValoracion(reservaId, puntuacion) {
+    async function enviarValoracion(reservaId, puntuacion, idAlojamiento) {
+        const datosValoracion = {
+            idAlojamiento: idAlojamiento,
+            idReserva: reservaId,
+            valoracion: puntuacion
+        };
         try {
-            const response = await axios.post(`${uri}/reservas/${reservaId}/valorar`, { puntuacion });
-            alert("Valoración enviada correctamente");
+            const response = await axios.patch(`${uri}/reservas/${reservaId}`, datosValoracion);
+            if (response.status === 200) {
+                window.location.href = "ListadoReservas.html";
+            } else if (response.status === 404) {
+                alert("No se ha encontrado el alojamiento a valorar.");
+            } else {
+                alert("Error del servidor al intentar enviar la valoración del alojamiento.");
+            }
         } catch (error) {
             console.error("Error al enviar valoración:", error);
             alert("Hubo un error al enviar tu valoración.");
         }
     }
 
-    async function solicitarCancelacion(reservaId) {
-        const motivo = prompt("¿Cuál es el motivo de la cancelación?");
-        if (!motivo) return;
-
-        try {
-            const response = await axios.post(`${uri}/reservas/${reservaId}/cancelar`, { motivo });
-            alert("Solicitud de cancelación enviada");
-            await cargarReservas(); // Recargar vista
-        } catch (error) {
-            console.error("Error al solicitar cancelación:", error);
-            alert("Error al solicitar la cancelación.");
-        }
-    }
-
     function configurarCarrusel() {
         const wrapper = document.getElementById("cardsWrapper");
-        const btnLeft = document.getElementById("carouselLeft");
-        const btnRight = document.getElementById("carouselRight");
-
-        btnLeft.addEventListener("click", () => {
+        document.getElementById("carouselLeft").addEventListener("click", () => {
             wrapper.scrollBy({ left: -350, behavior: "smooth" });
         });
-
-        btnRight.addEventListener("click", () => {
+        document.getElementById("carouselRight").addEventListener("click", () => {
             wrapper.scrollBy({ left: 350, behavior: "smooth" });
         });
     }
-</script>
 
-</body>
-</html>
+    function solicitarCancelacion(idReserva, idAlojamiento) {
+        window.location.href = `CancelacionReserva.html?idReserva=${idReserva}&idAlojamiento=${idAlojamiento}`;
+    }
+</script>
