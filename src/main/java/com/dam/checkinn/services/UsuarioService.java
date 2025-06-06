@@ -7,18 +7,20 @@ import com.dam.checkinn.models.dto.usuarios.CredencialesLoginDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.dto.usuarios.UsuarioDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
-import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
     private final AlojamientoRepository alojamientoRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository,  AlojamientoRepository alojamientoRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository, AlojamientoRepository alojamientoRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.alojamientoRepository = alojamientoRepository;
@@ -64,14 +66,15 @@ public class UsuarioService {
     }
 
     // CREAR
+    @Transactional
     public UsuarioModel createUser(UsuarioModel usuario) throws Exception {
 
         if (usuarioRepository.existsByDni(usuario.getDni()) || usuarioRepository.existsByCorreoLikeIgnoreCase(usuario.getCorreo())) {
-            throw new AltaUsuarioException();
+            throw new DatosNoValidosException();
         }
 
         if (LocalDate.now().getYear() - usuario.getFechaNacimiento().getYear() < 18) {
-            throw new AltaUsuarioException();
+            throw new DatosNoValidosException();
         }
 
         try {
@@ -84,30 +87,19 @@ public class UsuarioService {
             }
             return usuarioRepository.save(usuario);
         } catch (DataIntegrityViolationException e) {
-            throw new AltaUsuarioException();
+            throw new DatosNoValidosException();
         }
     }
 
 
     // GET USUARIO INDIVIDUAL (AREA PERSONAL)
-    public UsuarioModel getUserById(int id
-//                                    Authentication auth
-//                                    HttpServletRequest request,
-//                                    HttpServletResponse response
-    ) throws Exception {
+    public UsuarioModel getUserById(int id) throws Exception {
+        // Seguridad
+        filtroSeguridad(id);
 
         if (!usuarioRepository.existsById(id)) {
-            throw new AccesoDenegadoException();
+            throw new RecursoNotFoundException();
         }
-
-//        // Seguridad
-//        String dniUsuarioLogado = auth.getName();
-//        UsuarioModel usuarioLogado = usuarioRepository.getUsuarioModelByDni(dniUsuarioLogado);
-//        if (id != usuarioLogado.getId()) {
-//            request.getSession().invalidate(); // Invalida la sesión
-//            SecurityContextHolder.clearContext(); // Limpia el contexto de seguridad
-//            response.sendRedirect("/Index.html"); // Redirige manualmente
-//        }
 
         return usuarioRepository.findById(id).get();
     }
@@ -115,8 +107,9 @@ public class UsuarioService {
     // BORRADO
     @Transactional
     public void deleteUser(int id) throws Exception {
+        filtroSeguridad(id);
         if (!usuarioRepository.existsById(id)) {
-            throw new BorradoUsuarioException();
+            throw new RecursoNotFoundException();
         }
         usuarioRepository.deleteById(id);
     }
@@ -124,8 +117,10 @@ public class UsuarioService {
     // ACTUALIZACION
     @Transactional
     public UsuarioModel updateUser(int id, UsuarioDTO dto) throws Exception {
+        filtroSeguridad(id);
+
         if (!usuarioRepository.existsById(id)) {
-            throw new AccesoDenegadoException();
+            throw new RecursoNotFoundException();
         }
 
         UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
@@ -141,7 +136,7 @@ public class UsuarioService {
             if (LocalDate.now().getYear() - dto.fechaNacimiento().getYear() >= 18) {
                 usuarioModel.setFechaNacimiento(dto.fechaNacimiento());
             } else {
-                throw new AltaUsuarioException();
+                throw new DatosNoValidosException();
             }
         }
         usuarioModel.setFechaNacimiento(dto.fechaNacimiento());
@@ -153,8 +148,10 @@ public class UsuarioService {
     }
 
     public List<MisReservasDTO> getAllReservasByIdUsuario(int id) throws Exception {
+        filtroSeguridad(id);
+
         if (!usuarioRepository.existsById(id)) {
-            throw new AccesoDenegadoException();
+            throw new RecursoNotFoundException();
         }
 
         UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
@@ -173,13 +170,15 @@ public class UsuarioService {
 
     @Transactional
     public AlojamientoModel guardarAlojamientoDeUsuario(int id, AlojamientoDTO alojamientoDTO) throws Exception {
+        filtroSeguridad(id);
+
         if (!usuarioRepository.existsById(id)) {
-            throw new AccesoDenegadoException();
+            throw new RecursoNotFoundException();
         }
 
         // Comprobamos que no exista alojamiento con el mismo nombre
         if (alojamientoRepository.existsByNombre(alojamientoDTO.nombre())) {
-            throw new AltaAlojamientoException();
+            throw new DatosNoValidosException();
         }
         // Creamos alojamiento
         AlojamientoModel alojamientoModel = new AlojamientoModel(
@@ -201,20 +200,50 @@ public class UsuarioService {
 
         // Si no es pro, no le dejamos
         if (usuarioModel.getRol() != UsuarioModel.Rol.PRO) {
-            throw new AltaAlojamientoException();
+            throw new DatosNoValidosException();
         }
 
         // Le añadimos su alojamiento
         usuarioModel.getAlojamientos().add(alojamientoModel);
 
         // Guardamos el usuario
-        usuarioRepository.save(usuarioModel);
+        UsuarioModel usuarioActualizado = usuarioRepository.save(usuarioModel);
+        AlojamientoModel alojamientoCreado = usuarioActualizado.getAlojamientos().stream()
+                .filter(a -> a
+                        .getNombre().equals(alojamientoModel.getNombre()))
+                .findFirst().get();
 
         // Devolvemos el alojamiento creado
-        return alojamientoModel;
+        return alojamientoCreado;
     }
 
-    public UsuarioModel getUserByDni(String dniUsuarioLogado) {
-        return usuarioRepository.getUsuarioModelByDni(dniUsuarioLogado);
+    /* SEGURIDAD ******************************************************************************************************/
+
+    private void filtroSeguridad(int id) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof UsuarioModel) {
+            UsuarioModel usuario = (UsuarioModel) auth.getPrincipal();
+            if (usuario.getId() != id) {
+                logout();
+            }
+
+        }
+    }
+
+    private void logout() throws Exception {
+        // Obtener el request actual
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attr.getRequest();
+        HttpServletResponse response = attr.getResponse();
+        // Invalidar la sesión
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Limpiar contexto de seguridad
+        SecurityContextHolder.clearContext();
+        throw new AccesoDenegadoException();
+//        response.sendRedirect("/login?logout");
     }
 }

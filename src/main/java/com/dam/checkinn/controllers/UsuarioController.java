@@ -6,13 +6,8 @@ import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
 import com.dam.checkinn.models.dto.usuarios.CredencialesLoginDTO;
 import com.dam.checkinn.models.dto.reservas.MisReservasDTO;
 import com.dam.checkinn.models.dto.usuarios.UsuarioDTO;
-import com.dam.checkinn.repositories.AlojamientoRepository;
 import com.dam.checkinn.services.UsuarioService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -56,7 +51,7 @@ public class UsuarioController {
             return ResponseEntity
                     .created(location) // Esto automáticamente pone el código 201 Created y la cabecera Location
                     .body(nuevoUsuario);
-        } catch (AltaUsuarioException e) {
+        } catch (DatosNoValidosException e) {
             return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -67,18 +62,13 @@ public class UsuarioController {
     @GetMapping("/usuarios/{id}")
     public ResponseEntity<UsuarioModel> getUsuario(
             @PathVariable int id
-//            Authentication auth,
-//            HttpServletRequest request, HttpServletResponse response
     ) {
-
         try {
             UsuarioModel usuario = usuarioService.getUserById(id);
-//                    auth,
-//                    request,
-//                    response
-
             return ResponseEntity.ok(usuario);
         } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -90,10 +80,11 @@ public class UsuarioController {
         try {
             usuarioService.deleteUser(id);
             return ResponseEntity.ok().build();
-        } catch (BorradoUsuarioException e) {
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
@@ -107,9 +98,11 @@ public class UsuarioController {
         try {
             UsuarioModel usuarioActualizado = usuarioService.updateUser(id, dto);
             return ResponseEntity.ok(usuarioActualizado);
-        } catch (AccesoDenegadoException e) {
+        } catch (AccesoDenegadoException e ){
+             return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
-        } catch (AltaUsuarioException e) {
+        } catch (DatosNoValidosException e) {
             return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -125,6 +118,8 @@ public class UsuarioController {
             List<MisReservasDTO> allReservasByDniUsuario = usuarioService.getAllReservasByIdUsuario(id);
             return ResponseEntity.ok(allReservasByDniUsuario);
         } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
@@ -143,7 +138,11 @@ public class UsuarioController {
             return ResponseEntity
                     .created(location)
                     .body(nuevoAlojamiento);
-        } catch (AltaAlojamientoException | AccesoDenegadoException e) {
+        } catch (AccesoDenegadoException e) {
+            return ResponseEntity.status(403).build();
+        } catch (RecursoNotFoundException e) {
+            return ResponseEntity.status(404).build();
+        } catch (DatosNoValidosException e) {
             return ResponseEntity.status(409).build();
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
