@@ -40,6 +40,11 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioModel> me() {
+        return ResponseEntity.ok(usuarioService.me());
+    }
+
     // Crear usuario
     @PostMapping("/usuarios")
     public ResponseEntity<UsuarioModel> createUser(

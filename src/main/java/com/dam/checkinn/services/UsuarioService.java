@@ -246,4 +246,15 @@ public class UsuarioService {
         throw new AccesoDenegadoException();
 //        response.sendRedirect("/login?logout");
     }
+
+    public UsuarioModel me() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof UsuarioModel) {
+            UsuarioModel usuario = (UsuarioModel) auth.getPrincipal();
+            int idUsuario = usuario.getId();
+            UsuarioModel usuarioModel = usuarioRepository.findById(idUsuario).get();
+            return usuarioModel;
+        }
+        return null;
+    }
 }

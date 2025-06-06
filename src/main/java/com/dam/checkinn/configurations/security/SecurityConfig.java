@@ -1,5 +1,7 @@
 package com.dam.checkinn.configurations.security;
 
+import com.dam.checkinn.models.UsuarioModel;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,7 +28,19 @@ public class SecurityConfig {
                         .loginProcessingUrl("/api/v1/login")
                         .usernameParameter("dni")
                         .passwordParameter("contraseña")// URL a la que se envía el form para autenticación
-                        .defaultSuccessUrl("/Index.html", true)  // URL a la que se redirige si login es exitoso
+//                                .successHandler((request, response, authentication) -> {
+//                                    if (authentication.getPrincipal() instanceof UsuarioModel usuario) {
+//                                        int id = usuario.getId();
+//                                        // Enviar código 200 OK (o lo que desees)
+//                                        response.setStatus(HttpServletResponse.SC_ACCEPTED);
+//                                        response.getWriter().write(usuario.getId());
+//                                        response.getWriter().flush();
+//
+//                                    }
+//
+//
+//                                })
+                        .defaultSuccessUrl("/Index.html", true)  // URL a la que se redirige si login es exitoso // TODO ESTO VA
                         .permitAll()
                 )
                 .logout(Customizer.withDefaults())
