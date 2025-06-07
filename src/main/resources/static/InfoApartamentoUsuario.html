@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Info Apartamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+    <div class="flex items-center gap-6">
+        <img class="w-10 h-10" src="../images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-lg font-bold">
+            <a href="Index.html" class="hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-2 mt-4 md:mt-0">
+        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+        <span class="font-semibold text-sm">
+        <span name="nombre"></span><br>
+        <small name="rol"></small>
+    </span>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-10">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mb-10">Villa Chirinos</h1>
+    <div class="flex flex-wrap gap-10">
+        <div class="w-full md:w-[300px] flex flex-col items-center">
+            <img src="placeholder.jpg" alt="Imagen del apartamento"
+                 class="w-full h-48 object-cover rounded-xl bg-gray-200">
+
+            <div class="flex justify-center items-center text-orange-500 text-xl mt-3 gap-1">
+                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
+                <span class="text-sm text-gray-700 ml-2">(3,7)</span>
+            </div>
+        </div>
+
+        <form id="formApartamentoUsuario">
+            <div class="flex-1 space-y-6">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-semibold">Provincia</label>
+                        <select id="provincia" name="provincia" class="w-full p-3 border border-gray-300 rounded">
+                            <option>Álava</option>
+                            <option>Albacete</option>
+                            <option>Alicante</option>
+                            <option>Almería</option>
+                            <option>Asturias</option>
+                            <option>Ávila</option>
+                            <option>Badajoz</option>
+                            <option>Barcelona</option>
+                            <option>Burgos</option>
+                            <option>Cáceres</option>
+                            <option>Cádiz</option>
+                            <option>Cantabria</option>
+                            <option>Castellón</option>
+                            <option>Ciudad Real</option>
+                            <option>Córdoba</option>
+                            <option>Cuenca</option>
+                            <option>Girona</option>
+                            <option>Granada</option>
+                            <option>Guadalajara</option>
+                            <option>Guipúzcoa</option>
+                            <option>Huelva</option>
+                            <option>Huesca</option>
+                            <option>Illes Balears</option>
+                            <option>Jaén</option>
+                            <option>La Coruña</option>
+                            <option>La Rioja</option>
+                            <option>Las Palmas</option>
+                            <option>León</option>
+                            <option>Lleida</option>
+                            <option>Lugo</option>
+                            <option>Madrid</option>
+                            <option>Málaga</option>
+                            <option>Murcia</option>
+                            <option>Navarra</option>
+                            <option>Ourense</option>
+                            <option>Palencia</option>
+                            <option>Pontevedra</option>
+                            <option>Salamanca</option>
+                            <option>Santa Cruz de Tenerife</option>
+                            <option>Segovia</option>
+                            <option>Sevilla</option>
+                            <option>Soria</option>
+                            <option>Tarragona</option>
+                            <option>Teruel</option>
+                            <option>Toledo</option>
+                            <option>Valencia</option>
+                            <option>Valladolid</option>
+                            <option>Vizcaya</option>
+                            <option>Zamora</option>
+                            <option>Zaragoza</option>
+                            <option>Ceuta</option>
+                            <option>Melilla</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-semibold">Dirección</label>
+                        <input type="text" id="direccion" name="direccion" readonly class="w-full p-3 border border-gray-300 rounded"/>
+                    </div>
+                    <div>
+                        <label class="font-semibold">Capacidad</label>
+                        <input type="number" id="capacidad" name="capacidad" readonly
+                               class="w-full p-3 border border-gray-300 rounded"/>
+                    </div>
+                    <div>
+                        <label class="font-semibold">Precio por noche</label>
+                        <input type="number" id="precio" name="precio" readonly class="w-full p-3 border border-gray-300 rounded"/>
+                    </div>
+                    <div>
+                        <p id="capacidadError" class="text-red-500 hidden">Capacidad no puede tener un valor negativo.</p>
+                    </div>
+                    <div>
+                        <p id="precioError" class="text-red-500 hidden">Precio no puede tener un valor negativo.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="font-semibold">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" rows="5" readonly
+                              class="w-full p-3 border border-gray-300 rounded"></textarea>
+                </div>
+
+                <div class="flex gap-6 flex-wrap" id="servicios">
+                    <label class="flex items-center gap-2"><input type="checkbox" value="WIFI"> WiFi</label>
+                    <label class="flex items-center gap-2"><input type="checkbox" value="PISCINA">
+                        Piscina</label>
+                    <label class="flex items-center gap-2"><input type="checkbox" value="BARBACOA">
+                        Barbacoa</label>
+                </div>
+
+                <div class="pt-6">
+                    <h2 class="text-lg font-semibold mb-3">Fechas en que el apartamento esta bloqueado</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="font-semibold">Inicio</label>
+                            <input type="date" name="fechaInicio" id="fechaInicio"
+                                   class="w-full p-3 border border-gray-300 rounded"/>
+                        </div>
+                        <div>
+                            <label class="font-semibold">Fin</label>
+                            <input type="date" name="fechaFin" id="fechaFin"
+                                   class="w-full p-3 border border-gray-300 rounded"/>
+                        </div>
+                    </div>
+                </div>
+                <p id="mensajeError" class="text-red-500"></p>
+                <div class="pt-6 flex gap-4">
+                    <button
+                            id="updateBtn"
+                            type="submit"
+                            class="bg-blue-500 text-white w-full py-3 rounded-lg hover:bg-blue-600">
+                        Actualizar alojamiento
+                    </button>
+                    <button
+                            id="deleteBtn"
+                            type="button"
+                            class="bg-red-500 text-white w-full py-3 rounded-lg hover:bg-red-600">
+                        Eliminar alojamiento
+                    </button>
+                    <button
+                            id="cancelBtn"
+                            type="button"
+                            class="bg-gray-300 text-gray-800 hover:bg-gray-400 w-full py-3 rounded-lg">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+    const params = new URLSearchParams(window.location.search);
+    const idAlojamiento = params.get("idAlojamiento");
+
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const response = await axios.get(`${uri}/me`);
+
+        if (response.status ===200) {
+            const usuario = response.data;
+            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+            document.querySelector('small[name="rol"]').textContent = usuario.rol;
+
+            // Update alojamiento
+            document.getElementById("formApartamentoUsuario").addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                if (validarFormulario()) {
+                    const formData = new FormData(event.target);
+                    const datos = Object.fromEntries(formData.entries());
+
+                    const serviciosSeleccionados = [];
+                    document.querySelectorAll("#servicios input[type=checkbox]:checked").forEach(checkbox => {
+                        serviciosSeleccionados.push(checkbox.value);
+                    });
+
+                    datos.servicios = serviciosSeleccionados;
+
+                    const response = await axios.patch(`${uri}/alojamientos/${idAlojamiento}`, datos);
+                    if (response.status === 200) {
+                        alert("Alta correcta");
+                        window.location.href="ListadoReservas.html";
+                    } else if (response.status === 404) {
+                        alert("No se ha encontrado el alojamiento");
+                    } else {
+                        alert("Error del servidor al intentar actualizar los datos del alojamiento");
+                    }
+                }
+            });
+
+            document.getElementById("deleteBtn").addEventListener("click", async function (event) {
+                event.preventDefault();
+                if (confirm("¿Eliminar alojamiento? Esta acción es irreversible.")) {
+                    const response = await axios.delete(`${uri}/alojamientos/${idAlojamiento}`);
+                    if (response.status === 200) {
+                        window.location.href="ListadoApartamentos.html";
+                    } else if (response.status === 404) {
+                        alert("No se pudo encontrar el alojamiento en la base de datos");
+                    } else {
+                        alert("Error de servidor al intentar borrar el alojamiento");
+                    }
+                }
+            });
+
+            document.getElementById("cancelBtn").addEventListener("click", function (event) {
+                event.preventDefault();
+
+                window.location.href="ListadoApartamentos.html";
+            });
+
+        } else {
+            alert(`${mensajeErrorDatosUsuario}`);
+        }
+
+        if (!idAlojamiento) return alert("No se proporcionó el ID del apartamento en la URL.");
+
+        try {
+            const response = await axios.get(`${uri}/alojamientos/${idAlojamiento}`);
+            if (response.status === 200) {
+                const apto = response.data;
+                document.querySelector('[name="provincia"]').value = apto.provincia || '';
+                document.querySelector('[name="direccion"]').value = apto.direccion || '';
+                document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
+                document.querySelector('[name="precio"]').value = apto.precioNoche || '';
+                document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+
+                if (Array.isArray(apto.servicios)) {
+                    apto.servicios.forEach(servicio => {
+                        const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+            }
+        } catch (error) {
+            alert("Error al conectar con el servidor.");
+        }
+    });
+
+    function validarFormulario() {
+        const form = document.querySelector("form");
+        const inputs = form.querySelectorAll("input:not([name='fechaInicio']):not([name='fechaFin']), textarea");
+        const fechaInicio = document.getElementById("fechaInicio").value;
+        const fechaFin = document.getElementById("fechaFin").value;
+
+        let todosLlenos = true;
+
+        // Validar campos vacíos
+        inputs.forEach(input => {
+            if (input.value.trim() === "") {
+                todosLlenos = false;
+                input.classList.add("border-red-500");
+            } else {
+                input.classList.remove("border-red-500");
+            }
+        });
+
+        // Validar fechas solo si están presentes
+        const hoy = new Date();
+        let fechasValidas = true;
+        let mensajeError = document.getElementById("mensajeError");
+        const capacidad = document.getElementById("capacidad");
+        const precio = document.getElementById("precio");
+
+        if (fechaInicio && fechaFin) {
+            const inicio = new Date(document.getElementById('fechaInicio').value);
+            const fin = new Date(document.getElementById('fechaFin').value);
+
+            if (inicio >= fin) {
+                fechasValidas = false;
+                mensajeError.textContent = "La fecha de inicio debe ser anterior a la fecha de fin.";
+            } else if (fin <= hoy) {
+                fechasValidas = false;
+                mensajeError.textContent = "La fecha de fin debe ser posterior a la fecha actual.";
+            }
+        }
+
+        if (capacidad.value < 0) {
+            document.getElementById("capacidadError").classList.remove("hidden");
+        } else {
+            document.getElementById("capacidadError").classList.add("hidden");
+        }
+
+        if (precio.value < 0) {
+            document.getElementById("precioError").classList.remove("hidden");
+        } else {
+            document.getElementById("precioError").classList.add("hidden");
+        }
+        // Mostrar errores si hay
+        if (!todosLlenos || !fechasValidas) {
+            if (mensajeError) alert(mensajeError);
+            else mensajeError.textContent = "Por favor, completa todos los campos obligatorios.";
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

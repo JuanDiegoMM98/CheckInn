@@ -5,6 +5,8 @@ function obtener_session() {
     console.log(nombre);
 }
 
+const mensajeErrorDatosUsuario = "Error al cargar los datos del usuario";
+
 function guardar_session(dataArray) {
     let usuario = dataArray;
 
