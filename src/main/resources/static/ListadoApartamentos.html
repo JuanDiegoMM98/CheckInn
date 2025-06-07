@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CheckInn - Home</title>
+    <title>CheckInn - Mis Alojamientos</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
@@ -27,7 +27,7 @@
 </header>
 
 <main class="max-w-6xl mx-auto px-4">
-    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Bienvenido a CheckInn!</h1>
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Mis Alojamientos</h1>
 
     <div id="carouselContainer"
          class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
@@ -44,7 +44,10 @@
     </div>
 
     <p id="mensajeSinResultados" class="text-center text-gray-500 mt-6 hidden text-lg">
-        🛈 No se han encontrado alojamientos que cumplan con la condición de búsqueda
+        Aun no tienes ningún alojamiento
+    </p>
+    <p id="mensajeNoPro" class="text-center text-gray-500 mt-6 hidden text-lg">
+        Hazte cliente PRO para poder rentar alojamientos.
     </p>
 </main>
 
@@ -68,26 +71,8 @@
 
                 await cargarAlojamientos(usuario.id); //Carga inicial de todos los alojamientos
 
-                // 2) Suscribimos el evento SUBMIT del formulario
-                document.getElementById("filtroForm").addEventListener("submit", async function (e) {
-                    e.preventDefault();
-
-                    const finalURL = `${uri}/alojamientos?${searchParams.toString()}`;
-
-                    try {
-                        const response = await axios.get(finalURL);
-                        if (response.status === 200) {
-                            renderizarAlojamientos(response.data);
-                        } else {
-                            alert("Error del servidor al buscar los alojamientos");
-                        }
-                    } catch (error) {
-                        console.error("Error en la solicitud:", error);
-                        alert("Error de red o servidor");
-                    }
-                });
             } else {
-                alert("No es pro")
+                document.getElementById("mensajeNoPro").classList.remove("hidden");
             }
 
         } else {
@@ -120,16 +105,6 @@
         const arrowRight = document.getElementById("carouselRight");
         const mensajeSinResultados = document.getElementById("mensajeSinResultados");
 
-        // Bloquear e, E, +, - en inputs numéricos (solo un ejemplo)
-        const inputsNumericos = document.querySelectorAll('input[type="number"]');
-        inputsNumericos.forEach(input => {
-            input.addEventListener("keydown", function (eve) {
-                if (["e", "E", "+", "-"].includes(eve.key)) {
-                    eve.preventDefault();
-                }
-            });
-        });
-
         // Limpiar contenido previo
         cardsWrapper.innerHTML = "";
 
@@ -141,7 +116,7 @@
             cardsWrapper.scrollBy({ left: 340, behavior: "smooth" });
         });
 
-        if (!lista.length) {
+        if (!lista.alojamientos.length) {
             mensajeSinResultados.classList.remove("hidden");
             carouselContainer.classList.add("hidden");
             return;
@@ -150,7 +125,7 @@
         mensajeSinResultados.classList.add("hidden");
         carouselContainer.classList.remove("hidden");
 
-        if (lista.length <= 3) {
+        if (lista.alojamientos.length <= 3) {
             arrowLeft.classList.add("hidden");
             arrowRight.classList.add("hidden");
             cardsWrapper.classList.add("justify-center");
@@ -175,7 +150,7 @@
 
         cardsWrapper.appendChild(cardNueva);
 
-        lista.forEach(apto => {
+        lista.alojamientos.forEach(apto => {
             const card = document.createElement("a");
             card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
             card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
@@ -193,9 +168,6 @@
               <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
             </div>
           </div>
-          <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
-            Reservar
-          </button>
         </div>
       `;
             cardsWrapper.appendChild(card);
