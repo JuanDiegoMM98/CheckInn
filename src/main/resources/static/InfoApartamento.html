@@ -1,188 +1,221 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Info Apartamento</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Info Apartamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
-  <div class="flex items-center gap-6">
-    <img class="w-10 h-10" src="../images/logo.png" alt="Logo">
-    <nav class="flex flex-wrap gap-4 text-lg font-bold">
-      <a href="Index.html" class="hover:text-orange-500">Home</a>
-      <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
-      <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
-      <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
-    </nav>
-  </div>
-  <div class="flex items-center gap-2 mt-4 md:mt-0">
-    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
-    <span class="font-semibold text-sm">
+    <div class="flex items-center gap-6">
+        <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
+            <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="text-xl hover:text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="text-xl hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="text-xl hover:text-orange-500">Área personal</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-2 mt-4 md:mt-0">
+        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+        <span class="font-semibold text-sm">
         <span name="nombre"></span><br>
         <small name="rol"></small>
     </span>
-  </div>
+    </div>
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-10">
-  <h1 class="text-4xl font-extrabold text-orange-500 text-center mb-10">Villa Chirinos</h1>
-  <div class="flex flex-wrap gap-10">
-    <div class="w-full md:w-[300px] flex flex-col items-center">
-      <img src="placeholder.jpg" alt="Imagen del apartamento" class="w-full h-48 object-cover rounded-xl bg-gray-200">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mb-10">Villa Chirinos</h1>
+    <div class="flex flex-wrap gap-10">
+        <div class="w-full md:w-[300px] flex flex-col items-center">
+            <img src="placeholder.jpg" alt="Imagen del apartamento"
+                 class="w-full h-48 object-cover rounded-xl bg-gray-200">
 
-      <!-- Botón de Reservar debajo de la imagen -->
-      <button
-              id="reservarBtn"
-              type="submit"
-              form="reservaForm"
-              class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed"
-              disabled
-      >
-        Reservar
-      </button>
+            <!-- Botón de Reservar debajo de la imagen -->
+            <button
+                    id="reservarBtn"
+                    type="submit"
+                    form="reservaForm"
+                    class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed"
+                    disabled
+            >
+                Reservar
+            </button>
 
-      <div class="flex justify-center items-center text-orange-500 text-xl mt-3 gap-1">
-        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
-        <span class="text-sm text-gray-700 ml-2">(3,7)</span>
-      </div>
+            <div class="flex justify-center items-center text-orange-500 text-xl mt-3 gap-1">
+                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
+                <span class="text-sm text-gray-700 ml-2">(3,7)</span>
+            </div>
+        </div>
+
+        <div class="flex-1 space-y-6">
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="font-semibold">Provincia</label>
+                    <input type="text" name="provincia" readonly class="w-full p-3 border border-gray-300 rounded"/>
+                </div>
+                <div>
+                    <label class="font-semibold">Dirección</label>
+                    <input type="text" name="direccion" readonly class="w-full p-3 border border-gray-300 rounded"/>
+                </div>
+                <div>
+                    <label class="font-semibold">Capacidad</label>
+                    <input type="number" name="capacidad" readonly class="w-full p-3 border border-gray-300 rounded"/>
+                </div>
+                <div>
+                    <label class="font-semibold">Precio por noche</label>
+                    <input type="number" name="precio" readonly class="w-full p-3 border border-gray-300 rounded"/>
+                </div>
+            </div>
+
+            <div>
+                <label class="font-semibold">Descripción</label>
+                <textarea name="descripcion" rows="5" readonly
+                          class="w-full p-3 border border-gray-300 rounded"></textarea>
+            </div>
+
+            <div class="flex gap-6 flex-wrap">
+                <label class="flex items-center gap-2"><input type="checkbox" name="wifi" disabled> WiFi</label>
+                <label class="flex items-center gap-2"><input type="checkbox" name="piscina" disabled> Piscina</label>
+                <label class="flex items-center gap-2"><input type="checkbox" name="barbacoa" disabled> Barbacoa</label>
+            </div>
+
+            <form id="reservaForm" class="pt-6">
+                <h2 class="text-lg font-semibold mb-3">Fechas de reserva</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-semibold">Entrada</label>
+                        <input type="date" name="fechaInicio" id="fechaInicio" required
+                               class="w-full p-3 border border-gray-300 rounded"/>
+                    </div>
+                    <div>
+                        <label class="font-semibold">Salida</label>
+                        <input type="date" name="fechaFin" id="fechaFin" required
+                               class="w-full p-3 border border-gray-300 rounded"/>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="flex-1 space-y-6">
-      <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label class="font-semibold">Provincia</label>
-          <input type="text" name="provincia" readonly class="w-full p-3 border border-gray-300 rounded" />
-        </div>
-        <div>
-          <label class="font-semibold">Dirección</label>
-          <input type="text" name="direccion" readonly class="w-full p-3 border border-gray-300 rounded" />
-        </div>
-        <div>
-          <label class="font-semibold">Capacidad</label>
-          <input type="number" name="capacidad" readonly class="w-full p-3 border border-gray-300 rounded" />
-        </div>
-        <div>
-          <label class="font-semibold">Precio por noche</label>
-          <input type="number" name="precio" readonly class="w-full p-3 border border-gray-300 rounded" />
-        </div>
-      </div>
-
-      <div>
-        <label class="font-semibold">Descripción</label>
-        <textarea name="descripcion" rows="5" readonly class="w-full p-3 border border-gray-300 rounded"></textarea>
-      </div>
-
-      <div class="flex gap-6 flex-wrap">
-        <label class="flex items-center gap-2"><input type="checkbox" name="wifi" disabled> WiFi</label>
-        <label class="flex items-center gap-2"><input type="checkbox" name="piscina" disabled> Piscina</label>
-        <label class="flex items-center gap-2"><input type="checkbox" name="barbacoa" disabled> Barbacoa</label>
-      </div>
-
-      <form id="reservaForm" class="pt-6">
-        <h2 class="text-lg font-semibold mb-3">Fechas de reserva</h2>
-        <div class="grid md:grid-cols-2 gap-4">
-          <div>
-            <label class="font-semibold">Entrada</label>
-            <input type="date" name="fechaInicio" id="fechaInicio" required class="w-full p-3 border border-gray-300 rounded" />
-          </div>
-          <div>
-            <label class="font-semibold">Salida</label>
-            <input type="date" name="fechaFin" id="fechaFin" required class="w-full p-3 border border-gray-300 rounded" />
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
 </main>
 
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
-  document.addEventListener("DOMContentLoaded", async function () {
+    document.addEventListener("DOMContentLoaded", async function () {
 
-    const usuarioGuardado = sessionStorage.getItem("nombre");
-    if (usuarioGuardado) {
-      const usuario = JSON.parse(usuarioGuardado);
-      document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
-      document.querySelector('small[name="rol"]').textContent = usuario.rol;
-    }
+        const response = await axios.get(`${uri}/me`);
 
-    const params = new URLSearchParams(window.location.search);
-    const idAlojamiento = params.get("idAlojamiento");
-    if (!idAlojamiento) return alert("No se proporcionó el ID del apartamento en la URL.");
+        if (response.status === 200) {
+            const usuario = response.data;
+            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+            document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
-    try {
-      const response = await axios.get(`${uri}/alojamientos/${idAlojamiento}`);
-      if (response.status === 200) {
-        const apto = response.data;
-        document.querySelector('[name="provincia"]').value = apto.provincia || '';
-        document.querySelector('[name="direccion"]').value = apto.direccion || '';
-        document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
-        document.querySelector('[name="precio"]').value = apto.precioNoche || '';
-        document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+            fechaInicio.addEventListener("input", verificarFechas);
+            fechaFin.addEventListener("input", verificarFechas);
 
-        if (Array.isArray(apto.servicios)) {
-          apto.servicios.forEach(servicio => {
-            const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
-            if (checkbox) checkbox.checked = true;
-          });
+            const params = new URLSearchParams(window.location.search);
+            const idAlojamiento = params.get("idAlojamiento");
+
+            if (!idAlojamiento) return alert("No se proporcionó el ID del apartamento en la URL.");
+
+            const responseGet = await axios.get(`${uri}/alojamientos/${idAlojamiento}`);
+
+            if (responseGet.status === 200) {
+                const apto = responseGet.data;
+                document.querySelector('[name="provincia"]').value = apto.provincia || '';
+                document.querySelector('[name="direccion"]').value = apto.direccion || '';
+                document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
+                document.querySelector('[name="precio"]').value = apto.precioNoche || '';
+                document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+
+                if (Array.isArray(apto.servicios)) {
+                    apto.servicios.forEach(servicio => {
+                        const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+
+                document.querySelector("#reservaForm").addEventListener("submit", async function (event) {
+                    event.preventDefault();
+                    const formData = new FormData(event.target);
+                    const datos = Object.fromEntries(formData.entries());
+
+                    const params = new URLSearchParams(window.location.search);
+                    datos.idAlojamiento = params.get("idAlojamiento");
+                    datos.idUsuario = String(usuario.id);
+
+                    try {
+                        const response = await axios.post(`${uri}/reservas`, datos);
+                        if (response.status === 201) {
+                            window.location.href = "ListadoReservas.html";
+                        } else if (response.status === 409) {
+                            alert("Error durante la reserva.");
+                        } else {
+                            alert("Error del servidor al intentar crear la reserva");
+                        }
+                    } catch (error) {
+                        alert("Error al conectar con el servidor.");
+                    }
+                });
+            } else {
+                alert("Error del servidor al intentar cargar la informacion del alojamiento)");
+            }
+        } else {
+            alert(mensajeErrorDatosUsuario)
+            window.location.href = "Login.html";
         }
-      }
-    } catch (error) {
-      alert("Error al conectar con el servidor.");
+    });
+
+    // Este esta solo para testeos, hay que modificarlo por el de abajo
+    function verificarFechas() {
+
+        const fechaInicio = document.getElementById("fechaInicio");
+        const fechaFin = document.getElementById("fechaFin");
+        const reservarBtn = document.getElementById("reservarBtn");
+
+        if (fechaInicio.value && fechaFin.value) {
+            reservarBtn.disabled = false;
+            reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
+            reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+        } else {
+            reservarBtn.disabled = true;
+            reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+            reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+        }
     }
-  });
 
-  document.querySelector("#reservaForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const datos = Object.fromEntries(formData.entries());
-
-    const params = new URLSearchParams(window.location.search);
-    datos.idAlojamiento = params.get("idAlojamiento");
-
-    const usuarioGuardado = sessionStorage.getItem("nombre");
-    if (usuarioGuardado) {
-      const usuario = JSON.parse(usuarioGuardado);
-      datos.idUsuario = String(usuario.id);
-    }
-
-    try {
-      const response = await axios.post(`${uri}/reservas`, datos);
-      if (response.status === 201) {
-        window.location.href = "ListadoReservas.html";
-      } else if (response.status === 409){
-        alert("Error durante la reserva.");
-      } else {
-        alert("Error del servidor al intentar crear la reserva");
-      }
-    } catch (error) {
-      alert("Error al conectar con el servidor.");
-    }
-  });
-
-  // Activar/desactivar botón según fechas
-  const fechaInicio = document.getElementById("fechaInicio");
-  const fechaFin = document.getElementById("fechaFin");
-  const reservarBtn = document.getElementById("reservarBtn");
-
-  function verificarFechas() {
-    if (fechaInicio.value && fechaFin.value) {
-      reservarBtn.disabled = false;
-      reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
-      reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
-    } else {
-      reservarBtn.disabled = true;
-      reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
-      reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
-    }
-  }
-
-  fechaInicio.addEventListener("input", verificarFechas);
-  fechaFin.addEventListener("input", verificarFechas);
+    // Comentado para testeos
+    // function verificarFechas() {
+    //
+    //     const fechaInicioDom = document.getElementById("fechaInicio");
+    //     const fechaFinDom = document.getElementById("fechaFin");
+    //     const reservarBtn = document.getElementById("reservarBtn");
+    //
+    //     if (fechaInicioDom.value && fechaFinDom.value) {
+    //         const fechaInicio = new Date(document.getElementById("fechaInicio").value);
+    //         const fechaFin = new Date(document.getElementById("fechaFin").value);
+    //         const hoy = new Date();
+    //         hoy.setHours(0, 0, 0, 0); // Ignorar la hora para comparar solo la fecha
+    //
+    //         if (fechaInicio > fechaFin || fechaInicio <= hoy || fechaFin <= hoy) {
+    //             reservarBtn.disabled = true;
+    //             reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+    //             reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+    //         } else {
+    //             reservarBtn.disabled = false;
+    //             reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
+    //             reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+    //         }
+    //     } else {
+    //         reservarBtn.disabled = true;
+    //         reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+    //         reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+    //     }
+    // }
 </script>
 </body>
 </html>

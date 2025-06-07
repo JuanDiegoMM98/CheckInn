@@ -9,8 +9,8 @@
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-10 h-10" src="../images/logo.png" alt="Logo">
-        <nav class="flex flex-wrap gap-4 text-lg font-bold">
+        <img class="w-24 h-18" src="/images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
             <a href="Index.html" class="hover:text-orange-500">Home</a>
             <a href="ListadoReservas.html" class="text-orange-500">Mis reservas</a>
             <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
@@ -26,8 +26,8 @@
     </div>
 </header>
 
-<main class="max-w-6xl mx-auto px-4 py-8">
-    <h1 class="text-3xl font-extrabold text-orange-500 mb-6 text-center">Mis Reservas</h1>
+<main class="max-w-6xl mx-auto px-4">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Mis Reservas</h1>
 
     <div id="carouselContainer"
          class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
@@ -35,7 +35,7 @@
                 class="absolute -left-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
             ❮
         </button>
-        <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4"
+        <div class="flex gap-6 py-6 mx-8 w-max overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4"
              id="cardsWrapper"></div>
         <button id="carouselRight"
                 class="absolute -right-[50px] top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
@@ -49,59 +49,62 @@
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    let usuario = null;
-    const usuarioGuardado = sessionStorage.getItem("nombre");
 
-    if (usuarioGuardado) {
-        usuario = JSON.parse(usuarioGuardado);
-        document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
-        document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
-        document.addEventListener("DOMContentLoaded", async function () {
-            await cargarReservas();
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const response = await axios.get(`${uri}/me`);
+
+        if (response.status === 200) {
+            const usuario = response.data;
+            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+            document.querySelector('small[name="rol"]').textContent = usuario.rol;
+
+            await cargarReservas(usuario);
             configurarCarrusel();
-        });
-    }
+        }
 
-    async function cargarReservas() {
-        const cardsWrapper = document.getElementById("cardsWrapper");
-        const carouselContainer = document.getElementById("carouselContainer");
-        const arrowLeft = document.getElementById("carouselLeft");
-        const arrowRight = document.getElementById("carouselRight");
-        const mensaje = document.getElementById("mensajeSinReservas");
+        async function cargarReservas(usuario) {
+            const cardsWrapper = document.getElementById("cardsWrapper");
+            const carouselContainer = document.getElementById("carouselContainer");
+            const arrowLeft = document.getElementById("carouselLeft");
+            const arrowRight = document.getElementById("carouselRight");
+            const mensaje = document.getElementById("mensajeSinReservas");
 
-        try {
-            const response = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
+            try {
+                const responseCargar = await axios.get(`${uri}/usuarios/${usuario.id}/reservas`);
 
-            if (response.status === 200) {
-                const reservas = response.data;
+                if (responseCargar.status === 200) {
+                    const reservas = responseCargar.data;
 
-                if (!reservas.length) {
-                    mensaje.classList.remove("hidden");
-                    carouselContainer.classList.add("hidden");
-                    return;
-                }
+                    console.log(reservas)
 
-                mensaje.classList.add("hidden");
-                carouselContainer.classList.remove("hidden");
+                    if (!reservas.length) {
+                        mensaje.classList.remove("hidden");
+                        carouselContainer.classList.add("hidden");
+                        return;
+                    }
 
-                if (reservas.length <= 3) {
-                    arrowLeft.classList.add("hidden");
-                    arrowRight.classList.add("hidden");
-                    cardsWrapper.classList.add("justify-center");
-                } else {
-                    arrowLeft.classList.remove("hidden");
-                    arrowRight.classList.remove("hidden");
-                    cardsWrapper.classList.remove("justify-center");
-                }
+                    mensaje.classList.add("hidden");
+                    carouselContainer.classList.remove("hidden");
 
-                cardsWrapper.innerHTML = ""; // Limpiar antes de volver a cargar
+                    if (reservas.length <= 3) {
+                        arrowLeft.classList.add("hidden");
+                        arrowRight.classList.add("hidden");
+                        cardsWrapper.classList.add("justify-center");
+                    } else {
+                        arrowLeft.classList.remove("hidden");
+                        arrowRight.classList.remove("hidden");
+                        cardsWrapper.classList.remove("justify-center");
+                    }
 
-                reservas.forEach(reserva => {
-                    const card = document.createElement("div");
-                    card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+                    cardsWrapper.innerHTML = ""; // Limpiar antes de volver a cargar
 
-                    let contenidoCard = `
+                    reservas.forEach(reserva => {
+                        const card = document.createElement("div");
+                        card.className = "w-[450px] h-[700px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+
+                        let contenidoCard = `
                         <div class="flex flex-col h-full">
                             <img
                                 src="${reserva.imagen || 'https://via.placeholder.com/300x100'}"
@@ -120,10 +123,10 @@
                                     <p><strong>Capacidad:</strong> ${reserva.capacidad}</p>
                                 </div>`;
 
-                    if (new Date(reserva.fechaFin) < new Date()) {
-                        if (!reserva.valorada) {
-                            // No valorada
-                            contenidoCard += `
+                        if (new Date(reserva.fechaFin) < new Date()) {
+                            if (!reserva.valorada) {
+                                // No valorada
+                                contenidoCard += `
                             <form id="form-valorar-${reserva.idReserva}" class="mt-4 space-y-3">
                                 <input
                                     type="number"
@@ -138,88 +141,91 @@
                                     Valorar
                                 </button>
                             </form>`;
-                        } else {
-                            // Valorada
-                            contenidoCard += `
+                            } else {
+                                // Valorada
+                                contenidoCard += `
                             <div class="mt-4 space-y-3">
                                 <div class="mt-6 bg-blue-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-blue-600 transition-colors text-center">
                                     Alojamiento valorado
                                 </div>
                             </div>`;
-                        }
-                    } else if (reserva.motivoCancelacion == null) {
-                        // Activa
-                        contenidoCard += `
+                            }
+                        } else if (reserva.motivoCancelacion == null) {
+                            // Activa
+                            contenidoCard += `
                             <button onclick="solicitarCancelacion('${reserva.idReserva}', '${reserva.idAlojamiento}')"
                                     class="mt-6 bg-red-500 text-white py-3 w-full rounded-xl text-lg font-semibold hover:bg-red-600 transition-colors">
                                 Solicitar cancelación
                             </button>`;
-                    } else if (reserva.cancelada === true){
-                        // Cancelada
-                        contenidoCard += `
+                        } else if (reserva.cancelada === true) {
+                            // Cancelada
+                            contenidoCard += `
                             <div class="mt-6 bg-gray-200 text-gray-600 py-3 w-full rounded-xl text-lg font-semibold">
                                 Cancelada
                             </div>`;
-                    } else if (reserva.motivoCancelacion !== null && reserva.cancelada === false) {
-                        contenidoCard += `
+                        } else if (reserva.motivoCancelacion !== null && reserva.cancelada === false) {
+                            contenidoCard += `
                             <div class="mt-6 bg-yellow-100 text-yellow-800 py-3 w-full rounded-xl text-lg font-semibold">
                                 Solicitud de cancelación enviada
                             </div>`;
-                    }
+                        }
 
-                    contenidoCard += `</div></div>`;
-                    card.innerHTML = contenidoCard;
-                    cardsWrapper.appendChild(card);
+                        contenidoCard += `</div></div>`;
+                        card.innerHTML = contenidoCard;
+                        cardsWrapper.appendChild(card);
 
-                    const formValorar = card.querySelector(`#form-valorar-${reserva.idReserva}`);
-                    if (formValorar) {
-                        formValorar.addEventListener("submit", function (e) {
-                            e.preventDefault();
-                            const valor = parseInt(document.getElementById(`input-valoracion-${reserva.idReserva}`).value);
-                            enviarValoracion(reserva.idReserva, valor, reserva.idAlojamiento);
-                        });
-                    }
-                });
+                        const formValorar = card.querySelector(`#form-valorar-${reserva.idReserva}`);
+                        if (formValorar) {
+                            formValorar.addEventListener("submit", function (e) {
+                                e.preventDefault();
+                                const valor = parseInt(document.getElementById(`input-valoracion-${reserva.idReserva}`).value);
+                                enviarValoracion(reserva.idReserva, valor, reserva.idAlojamiento);
+                            });
+                        }
+                    });
+                } else if (responseCargar === 404) {
+                    alert("No se ha podido encontrar el id de usuario");
+                }
+            } catch (error) {
+                console.error("Error al cargar reservas:", error);
+                mensaje.textContent = "Error al cargar tus reservas.";
+                mensaje.classList.remove("hidden");
             }
-        } catch (error) {
-            console.error("Error al cargar reservas:", error);
-            mensaje.textContent = "Error al cargar tus reservas.";
-            mensaje.classList.remove("hidden");
         }
-    }
 
-    async function enviarValoracion(reservaId, puntuacion, idAlojamiento) {
-        const datosValoracion = {
-            idAlojamiento: idAlojamiento,
-            idReserva: reservaId,
-            valoracion: puntuacion
-        };
-        try {
-            const response = await axios.patch(`${uri}/reservas/${reservaId}`, datosValoracion);
-            if (response.status === 200) {
-                window.location.href = "ListadoReservas.html";
-            } else if (response.status === 404) {
-                alert("No se ha encontrado el alojamiento a valorar.");
-            } else {
-                alert("Error del servidor al intentar enviar la valoración del alojamiento.");
+        async function enviarValoracion(reservaId, puntuacion, idAlojamiento) {
+            const datosValoracion = {
+                idAlojamiento: idAlojamiento,
+                idReserva: reservaId,
+                valoracion: puntuacion
+            };
+            try {
+                const response = await axios.patch(`${uri}/reservas/${reservaId}`, datosValoracion);
+                if (response.status === 200) {
+                    window.location.href = "ListadoReservas.html";
+                } else if (response.status === 404) {
+                    alert("No se ha encontrado el alojamiento a valorar.");
+                } else {
+                    alert("Error del servidor al intentar enviar la valoración del alojamiento.");
+                }
+            } catch (error) {
+                console.error("Error al enviar valoración:", error);
+                alert("Hubo un error al enviar tu valoración.");
             }
-        } catch (error) {
-            console.error("Error al enviar valoración:", error);
-            alert("Hubo un error al enviar tu valoración.");
         }
-    }
 
-    function configurarCarrusel() {
-        const wrapper = document.getElementById("cardsWrapper");
-        document.getElementById("carouselLeft").addEventListener("click", () => {
-            wrapper.scrollBy({ left: -350, behavior: "smooth" });
-        });
-        document.getElementById("carouselRight").addEventListener("click", () => {
-            wrapper.scrollBy({ left: 350, behavior: "smooth" });
-        });
-    }
+        function configurarCarrusel() {
+            const wrapper = document.getElementById("cardsWrapper");
+            document.getElementById("carouselLeft").addEventListener("click", () => {
+                wrapper.scrollBy({left: -350, behavior: "smooth"});
+            });
+            document.getElementById("carouselRight").addEventListener("click", () => {
+                wrapper.scrollBy({left: 350, behavior: "smooth"});
+            });
+        }
 
-    function solicitarCancelacion(idReserva, idAlojamiento) {
-        window.location.href = `CancelacionReserva.html?idReserva=${idReserva}&idAlojamiento=${idAlojamiento}`;
-    }
+        function solicitarCancelacion(idReserva, idAlojamiento) {
+            window.location.href = `CancelacionReserva.html?idReserva=${idReserva}&idAlojamiento=${idAlojamiento}`;
+        }
+    });
 </script>

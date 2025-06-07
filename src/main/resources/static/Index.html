@@ -9,16 +9,16 @@
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-10 h-10" src="../images/logo.png" alt="Logo"/>
-        <nav class="flex flex-wrap gap-4 text-lg font-bold">
-            <a href="Index.html" class="text-orange-500">Home</a>
-            <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
-            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
-            <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+        <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
+            <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="text-xl hover:text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="text-xl hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="text-xl text-orange-500">Área personal</a>
         </nav>
     </div>
     <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar"/>
+        <img class="w-10 h-10 rounded-full" src="images/defaultAvatar.jpg" alt="Avatar"/>
         <span class="font-semibold text-sm">
       <span name="nombre"></span><br/>
       <small name="rol"></small>
@@ -26,11 +26,13 @@
     </div>
 </header>
 
-<main class="max-w-6xl mx-auto px-4">
-    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Bienvenido a CheckInn!</h1>
+<main class="mx-auto px-4 min-h-screen flex flex-col items-center">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6 w-full max-w-6xl">
+        Bienvenido a CheckInn!
+    </h1>
 
     <div id="carouselContainer"
-         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
+         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden w-full max-w-[1600px]">
         <button id="carouselLeft"
                 class="absolute -left-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
             ❮
@@ -43,12 +45,11 @@
         </button>
     </div>
 
-    <p id="mensajeSinResultados" class="text-center text-gray-500 mt-6 hidden text-lg">
+    <p id="mensajeSinResultados" class="text-center text-gray-500 mt-6 hidden text-lg w-full max-w-6xl">
         🛈 No se han encontrado alojamientos que cumplan con la condición de búsqueda
     </p>
 
-    <form id="filtroForm" class="bg-white rounded-xl shadow p-8 mt-12 space-y-8 w-1/2 mx-auto">
-        <!-- Campos de filtro -->
+    <form id="filtroForm" class="bg-white rounded-xl shadow p-8 mt-12 space-y-8 w-full max-w-[600px] mx-auto">
         <div class="grid md:grid-cols-2 gap-6">
             <div class="flex flex-col">
                 <label for="provincia" class="font-semibold mb-1">Provincia</label>
@@ -171,68 +172,72 @@
     </form>
 </main>
 
+
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
-    document.addEventListener("DOMContentLoaded", function () {
-        // Mostrar usuario si existe
-        const usuarioGuardado = sessionStorage.getItem("nombre");
-        if (usuarioGuardado) {
-            const usuario = JSON.parse(usuarioGuardado);
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const response = await axios.get(`${uri}/me`);
+        if (response.status === 200) {
+            const usuario = response.data;
             document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
             document.querySelector('small[name="rol"]').textContent = usuario.rol;
+
+            cargarAlojamientos(); //Carga inicial de todos los alojamientos
+
+            // 2) Suscribimos el evento SUBMIT del formulario
+            document.getElementById("filtroForm").addEventListener("submit", async function (e) {
+                e.preventDefault();
+
+                const form = e.target;
+                const formData = new FormData(form);
+
+                // Convertir a objeto sin campos vacíos
+                const provisional = Object.fromEntries(formData.entries());
+                const datos = {};
+                for (const [key, value] of Object.entries(provisional)) {
+                    if (value !== "") datos[key] = value;
+                }
+
+                // Añadir servicios seleccionados como array
+                const serviciosSeleccionados = [
+                    ...form.querySelectorAll('input[name="servicios"]:checked')
+                ].map(cb => cb.value);
+
+                if (serviciosSeleccionados.length > 0) {
+                    datos.servicios = serviciosSeleccionados;
+                }
+
+                // Construir URL con solo los campos útiles
+                const searchParams = new URLSearchParams();
+                for (const [key, value] of Object.entries(datos)) {
+                    if (Array.isArray(value)) {
+                        value.forEach(v => searchParams.append(key, v));
+                    } else {
+                        searchParams.append(key, value);
+                    }
+                }
+
+                const finalURL = `${uri}/alojamientos?${searchParams.toString()}`;
+
+                try {
+                    const response = await axios.get(finalURL);
+                    if (response.status === 200) {
+                        renderizarAlojamientos(response.data);
+                    } else {
+                        alert("Error del servidor al buscar los alojamientos");
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud:", error);
+                    alert("Error de red o servidor");
+                }
+            });
+        } else {
+            alert(mensajeErrorDatosUsuario);
+            window.location.href = "Login.html"
         }
-
-        cargarAlojamientos(); //Carga inicial de todos los alojamientos
-
-        // 2) Suscribimos el evento SUBMIT del formulario
-        document.getElementById("filtroForm").addEventListener("submit", async function (e) {
-            e.preventDefault();
-
-            const form = e.target;
-            const formData = new FormData(form);
-
-            // Convertir a objeto sin campos vacíos
-            const provisional = Object.fromEntries(formData.entries());
-            const datos = {};
-            for (const [key, value] of Object.entries(provisional)) {
-                if (value !== "") datos[key] = value;
-            }
-
-            // Añadir servicios seleccionados como array
-            const serviciosSeleccionados = [
-                ...form.querySelectorAll('input[name="servicios"]:checked')
-            ].map(cb => cb.value);
-
-            if (serviciosSeleccionados.length > 0) {
-                datos.servicios = serviciosSeleccionados;
-            }
-
-            // Construir URL con solo los campos útiles
-            const searchParams = new URLSearchParams();
-            for (const [key, value] of Object.entries(datos)) {
-                if (Array.isArray(value)) {
-                    value.forEach(v => searchParams.append(key, v));
-                } else {
-                    searchParams.append(key, value);
-                }
-            }
-
-            const finalURL = `${uri}/alojamientos?${searchParams.toString()}`;
-
-            try {
-                const response = await axios.get(finalURL);
-                if (response.status === 200) {
-                    renderizarAlojamientos(response.data);
-                } else {
-                    alert("Error del servidor al buscar los alojamientos");
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-                alert("Error de red o servidor");
-            }
-        });
     });
 
     // -------------------------------------------------
