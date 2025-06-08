@@ -149,10 +149,10 @@
                     datos.idUsuario = String(usuario.id);
 
                     try {
-                        const response = await axios.post(`${uri}/reservas`, datos);
-                        if (response.status === 201) {
+                        const responsePost = await axios.post(`${uri}/reservas`, datos);
+                        if (responsePost.status === 201) {
                             window.location.href = "ListadoReservas.html";
-                        } else if (response.status === 409) {
+                        } else if (responsePost.status === 409) {
                             alert("Error durante la reserva.");
                         } else {
                             alert("Error del servidor al intentar crear la reserva");

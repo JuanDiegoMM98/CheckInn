@@ -176,6 +176,13 @@
 
                         contenidoCard += `</div></div>`;
                         card.innerHTML = contenidoCard;
+
+                        // Hacer la tarjeta clickeable (compatible con botones)
+                        card.addEventListener("click", (e) => {
+                            if (e.target.closest("form") || e.target.closest("button")) return;
+                            window.location.href = `InformacionReserva.html?idReserva=${reserva.idReserva}`;
+                        });
+
                         cardsWrapper.appendChild(card);
 
                         const formValorar = card.querySelector(`#form-valorar-${reserva.idReserva}`);
@@ -229,6 +236,6 @@
     }
 
     function solicitarCancelacion(idReserva, idAlojamiento) {
-        window.location.href = `CancelacionReserva.html?idReserva=${idReserva}&idAlojamiento=${idAlojamiento}`;
+        window.location.href = `SolicitudCancelacionReserva.html?idReserva=${idReserva}&idAlojamiento=${idAlojamiento}`;
     }
 </script>

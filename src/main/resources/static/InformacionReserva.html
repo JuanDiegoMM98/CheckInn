@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CheckInn - Cancelación reserva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+    <div class="flex items-center gap-6">
+        <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
+            <a href="Index.html" class="hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-2 mt-4 md:mt-0">
+        <img class="w-10 h-10 rounded-full" src="images/defaultAvatar.jpg" alt="Avatar"/>
+        <span class="font-semibold text-sm">
+        <span name="nombre"></span><br>
+        <small name="rol"></small>
+      </span>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Información de la reserva</h1>
+
+    <!-- Datos del alojamiento -->
+    <div id="datosAlojamiento" class="bg-white p-6 rounded-xl shadow mb-6 flex gap-6 items-center">
+        <img id="imagenAlojamiento" src="https://via.placeholder.com/150" alt="Alojamiento" class="w-40 h-40 object-cover rounded-xl" />
+    </div>
+
+    <form class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow rounded-2xl p-8">
+        <h2 class="text-2xl font-bold md:col-span-2 mt-4">Datos de la Reserva</h2>
+
+        <div class="flex flex-col md:col-span-2">
+            <h3 id="nombreAlojamiento" class="text-xl font-semibold text-gray-800"></h3>
+        </div>
+
+        <div class="flex flex-col">
+            <label class="font-semibold mb-1">Dirección</label>
+            <input readonly type="text" id="direccionAlojamiento" class="p-3 border border-gray-300 rounded w-full"/>
+        </div>
+
+        <div class="flex flex-col">
+            <label class="font-semibold mb-1">Precio</label>
+            <input readonly type="text"  id="precioNoche" name="precioNoche" class="p-3 border border-gray-300 rounded w-full"/>
+        </div>
+
+        <div class="flex flex-col">
+            <label class="font-semibold mb-1">Fecha de Entrada</label>
+            <input readonly type="date" id="fechaInicio" name="fechaInicio" class="p-3 border border-gray-300 rounded w-full"/>
+        </div>
+
+        <div class="flex flex-col">
+            <label class="font-semibold mb-1">Fecha de Salida</label>
+            <input readonly type="date" id="fechaFin" name="fechaFin" class="p-3 border border-gray-300 rounded w-full"/>
+        </div>
+
+        <div class="flex justify-center gap-4 md:col-span-2 mt-4">
+            <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Volver</button>
+        </div>
+    </form>
+</main>
+
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const response = await axios.get(`${uri}/me`);
+
+        if (response.status === 200) {
+            const usuario = response.data;
+            document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+            document.querySelector('small[name="rol"]').textContent = usuario.rol;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const idReserva = urlParams.get("idReserva");
+
+            // Obtener datos del alojamiento
+            try {
+                const res = await axios.get(`${uri}/reservas/${idReserva}`);
+                if (res.status === 200) {
+                    const reserva = res.data;
+
+                    document.getElementById("nombreAlojamiento").textContent = reserva.nombre;
+                    document.getElementById("direccionAlojamiento").textContent = reserva.direccion;
+                    document.getElementById("imagenAlojamiento").src = reserva.imagen;
+                    document.getElementById("direccionAlojamiento").value = reserva.direccion;
+                    document.getElementById("precioNoche").value = reserva.precio;
+                    document.getElementById("fechaInicio").value = reserva.fechaInicio;
+                    document.getElementById("fechaFin").value = reserva.fechaFin;
+                } else if (res.status === 404) {
+                    alert("No se ha encontrado el id de la reserva en la base de datos");
+                }
+            } catch (error) {
+                console.error("Error al cargar el alojamiento:", error);
+            }
+
+            document.getElementById("btn-cancelar").addEventListener("click", function (e) {
+                e.preventDefault();
+                window.location.href = "ListadoReservas.html";
+            });
+        } else {
+            alert(mensajeErrorDatosUsuario);
+            window.location.href = "Login.html"
+        }
+    });
+</script>
+</body>
+</html>
