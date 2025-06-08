@@ -11,7 +11,7 @@
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
   <div class="flex items-center gap-6">
     <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
-    <nav class="flex flex-wrap gap-4 text-lg font-bold">
+    <nav class="flex flex-wrap gap-4 text-xl font-bold">
       <a href="Index.html" class="hover:text-orange-500">Home</a>
       <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
       <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
@@ -19,16 +19,16 @@
     </nav>
   </div>
   <div class="flex items-center gap-2 mt-4 md:mt-0">
-    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+    <img class="w-10 h-10 rounded-full" src="images/defaultAvatar.jpg" alt="Avatar"/>
     <span class="font-semibold text-sm">
-        <span name="nombreUsuario"></span><br>
-        <small name="rolUsuario"></small>
+        <span name="nombre"></span><br>
+        <small name="rol"></small>
       </span>
   </div>
 </header>
 
-<main class="max-w-5xl mx-auto px-4 py-8">
-  <h2 class="text-2xl font-bold text-gray-800 mb-6">Solicitud de cancelación</h2>
+<main class="max-w-6xl mx-auto px-4">
+  <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Solicitud de cancelación de reserva</h1>
 
   <!-- Datos del alojamiento -->
   <div id="datosAlojamiento" class="bg-white p-6 rounded-xl shadow mb-6 flex gap-6 items-center">
@@ -77,16 +77,15 @@
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  const usuarioGuardado = sessionStorage.getItem("nombre");
-  if (usuarioGuardado) {
-    const usuario = JSON.parse(usuarioGuardado);
 
-    document.addEventListener("DOMContentLoaded", async function () {
-      const nombreElement = document.querySelector('span[name="nombreUsuario"]');
-      const rolElement = document.querySelector('small[name="rolUsuario"]');
-      if (nombreElement && rolElement) {
-        nombreElement.innerHTML = `${usuario.nombre}<br><small>${usuario.rol}</small>`;
-      }
+  document.addEventListener("DOMContentLoaded", async function () {
+
+    const response = await axios.get(`${uri}/me`);
+
+    if (response.status === 200) {
+      const usuario = response.data;
+      document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+      document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
       const urlParams = new URLSearchParams(window.location.search);
       const idReserva = urlParams.get("idReserva");
@@ -149,17 +148,20 @@
           idAlojamiento: urlParams.get("idAlojamiento")
         };
 
-        const response = await axios.patch(`${uri}/reservas/${idReserva}`, datos);
-        if (response.status === 200) {
+        const res = await axios.patch(`${uri}/reservas/${idReserva}`, datos);
+        if (res.status === 200) {
           window.location.href = "ListadoReservas.html";
-        } else if (response.status === 404) {
+        } else if (res.status === 404) {
           alert(`No se ha encontrado el id de la reserva: ${idReserva}`);
         } else {
           alert(`Error al intentar solicitar la cancelación de la reserva: ${idReserva}`);
         }
       });
-    });
-  }
+    } else {
+      alert(mensajeErrorDatosUsuario);
+      window.location.href = "Login.html"
+    }
+  });
 </script>
 </body>
 </html>
