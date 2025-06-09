@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Info Apartamento</title>
+    <title>Información Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
@@ -30,7 +30,7 @@
     <h1 class="text-4xl font-extrabold text-orange-500 text-center mb-10">Villa Chirinos</h1>
     <div class="flex flex-wrap gap-10">
         <div class="w-full md:w-[300px] flex flex-col items-center">
-            <img src="placeholder.jpg" alt="Imagen del apartamento"
+            <img id="imagenApto" src="" alt="Imagen del apartamento"
                  class="w-full h-48 object-cover rounded-xl bg-gray-200">
 
             <!-- Botón de Reservar debajo de la imagen -->
@@ -126,6 +126,7 @@
 
             if (responseGet.status === 200) {
                 const apto = responseGet.data;
+                document.getElementById("imagenApto").src=RanderizarBaseImagen64(apto.imagen);
                 document.querySelector('[name="provincia"]').value = apto.provincia || '';
                 document.querySelector('[name="direccion"]').value = apto.direccion || '';
                 document.querySelector('[name="capacidad"]').value = apto.capacidad || '';

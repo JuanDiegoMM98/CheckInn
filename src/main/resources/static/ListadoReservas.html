@@ -110,7 +110,7 @@
                         let contenidoCard = `
                             <div class="flex flex-col h-full">
                                 <img
-                                    src="${reserva.imagen || 'https://via.placeholder.com/300x100'}"
+                                    src="${RanderizarBaseImagen64(reserva.imagen)}"
                                     onerror="this.onerror=null; this.src='FondoLogin.jpg';"
                                     class="w-full h-48 object-cover rounded-t-2xl"
                                     alt="Imagen alojamiento"

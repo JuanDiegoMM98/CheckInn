@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CheckInn - Cancelación reserva</title>
+    <title>CheckInn - Información reserva</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -30,42 +30,45 @@
 <main class="max-w-6xl mx-auto px-4">
     <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Información de la reserva</h1>
 
-    <!-- Datos del alojamiento -->
-    <div id="datosAlojamiento" class="bg-white p-6 rounded-xl shadow mb-6 flex gap-6 items-center">
-        <img id="imagenAlojamiento" src="https://via.placeholder.com/150" alt="Alojamiento" class="w-40 h-40 object-cover rounded-xl" />
+    <h2 class="text-2xl font-bold md:col-span-2 mt-2">Datos de la Reserva</h2>
+    <div class="bg-white p-6 rounded-xl shadow mb-6 flex flex-col md:flex-row gap-6 items-start">
+
+        <img id="imagenAlojamiento"
+             src="https://via.placeholder.com/400x300"
+             alt="Alojamiento"
+             class="object-cover rounded-xl w-full md:w-96 h-auto max-h-[400px]" />
+
+        <form class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="md:col-span-2">
+                <h3 id="nombreAlojamiento" class="text-xl font-semibold text-gray-800"></h3>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Dirección</label>
+                <input readonly type="text" id="direccionAlojamiento" class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Precio</label>
+                <input readonly type="text" id="precioNoche" name="precioNoche" class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Fecha de Entrada</label>
+                <input readonly type="date" id="fechaInicio" name="fechaInicio" class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Fecha de Salida</label>
+                <input readonly type="date" id="fechaFin" name="fechaFin" class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex justify-center gap-4 md:col-span-2 mt-4">
+                <button id="btn-cancelar" type="button" class="px-12 py-4 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400">Volver</button>
+            </div>
+        </form>
     </div>
-
-    <form class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow rounded-2xl p-8">
-        <h2 class="text-2xl font-bold md:col-span-2 mt-4">Datos de la Reserva</h2>
-
-        <div class="flex flex-col md:col-span-2">
-            <h3 id="nombreAlojamiento" class="text-xl font-semibold text-gray-800"></h3>
-        </div>
-
-        <div class="flex flex-col">
-            <label class="font-semibold mb-1">Dirección</label>
-            <input readonly type="text" id="direccionAlojamiento" class="p-3 border border-gray-300 rounded w-full"/>
-        </div>
-
-        <div class="flex flex-col">
-            <label class="font-semibold mb-1">Precio</label>
-            <input readonly type="text"  id="precioNoche" name="precioNoche" class="p-3 border border-gray-300 rounded w-full"/>
-        </div>
-
-        <div class="flex flex-col">
-            <label class="font-semibold mb-1">Fecha de Entrada</label>
-            <input readonly type="date" id="fechaInicio" name="fechaInicio" class="p-3 border border-gray-300 rounded w-full"/>
-        </div>
-
-        <div class="flex flex-col">
-            <label class="font-semibold mb-1">Fecha de Salida</label>
-            <input readonly type="date" id="fechaFin" name="fechaFin" class="p-3 border border-gray-300 rounded w-full"/>
-        </div>
-
-        <div class="flex justify-center gap-4 md:col-span-2 mt-4">
-            <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Volver</button>
-        </div>
-    </form>
 </main>
 
 <script src="app.js"></script>
@@ -91,7 +94,7 @@
 
                     document.getElementById("nombreAlojamiento").textContent = reserva.nombre;
                     document.getElementById("direccionAlojamiento").textContent = reserva.direccion;
-                    document.getElementById("imagenAlojamiento").src = reserva.imagen;
+                    document.getElementById("imagenAlojamiento").src = RanderizarBaseImagen64(reserva.imagen);
                     document.getElementById("direccionAlojamiento").value = reserva.direccion;
                     document.getElementById("precioNoche").value = reserva.precio;
                     document.getElementById("fechaInicio").value = reserva.fechaInicio;

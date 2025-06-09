@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Info Apartamento</title>
+    <title>Alta de Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
@@ -31,7 +31,7 @@
     <div class="flex flex-wrap gap-10">
         <div class="w-full md:w-[300px] flex flex-col items-center">
             <img
-                    id="imagenApartamento"
+                    id="imagenAlojamiento"
                     alt="Imagen del apartamento"
                     class="w-full aspect-video object-cover rounded-lg border border-gray-300 block"
             />
@@ -177,7 +177,7 @@
                     <button
                             id="registrarBtn"
                             type="submit"
-                            class="bg-blue-500 text-white w-full py-3 rounded-lg hover:bg-blue-600">
+                            class="bg-blue-500 text-white w-1/3 py-3 rounded-lg hover:bg-blue-600 mx-auto">
                         Registrar alojamiento
                     </button>
                 </div>
@@ -194,7 +194,7 @@
 
     document.getElementById("inputImagen").addEventListener("change", function (e) {
         archivo = e.target.files[0];
-        const imgPreview = document.getElementById("imagenApartamento");
+        const imgPreview = document.getElementById("imagenAlojamiento");
         imgPreview.src = URL.createObjectURL(archivo);
     });
 

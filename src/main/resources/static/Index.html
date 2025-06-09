@@ -256,8 +256,6 @@
         }
     }
 
-    // -------------------------------------------------
-    // Función que renderiza las tarjetas de alojamiento
     function renderizarAlojamientos(lista) {
         const carouselContainer = document.getElementById("carouselContainer");
         const cardsWrapper = document.getElementById("cardsWrapper");
@@ -265,18 +263,16 @@
         const arrowRight = document.getElementById("carouselRight");
         const mensajeSinResultados = document.getElementById("mensajeSinResultados");
 
-        // Bloquear e, E, +, - en inputs numéricos (solo un ejemplo)
-        const inputsNumericos = document.querySelectorAll('input[type="number"]');
-        inputsNumericos.forEach(input => {
-            input.addEventListener("keydown", function (eve) {
-                if (["e", "E", "+", "-"].includes(eve.key)) {
-                    eve.preventDefault();
+        // Bloquear letras no válidas en inputs numéricos
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener("keydown", e => {
+                if (["e", "E", "+", "-"].includes(e.key)) {
+                    e.preventDefault();
                 }
             });
         });
 
-        // Limpiar contenido previo
-        cardsWrapper.innerHTML = "";
+        cardsWrapper.innerHTML = ""; // Limpiar tarjetas previas
 
         // Configurar flechas
         arrowLeft.addEventListener("click", () => {
@@ -311,25 +307,34 @@
             card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
 
             card.innerHTML = `
-        <div class="flex flex-col h-full">
-          <img src="${apto.imagen}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />
-          <div class="flex-1 px-4 py-3 flex flex-col justify-between">
-            <div>
-              <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
-              <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
-            </div>
-            <div class="mt-4 text-left">
-              <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
-              <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
-            </div>
+      <div class="flex flex-col h-full">
+        ${CrearImagenBase64(apto.imagen)}
+        <div class="flex-1 px-4 py-3 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
+            <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
           </div>
-          <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
-            Reservar
-          </button>
+          <div class="mt-4 text-left">
+            <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
+            <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+          </div>
         </div>
-      `;
+        <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
+          Reservar
+        </button>
+      </div>
+    `;
+
             cardsWrapper.appendChild(card);
         });
+    }
+
+    function crearImagenBase64(base64Data) {
+        if (!base64Data || typeof base64Data !== 'string') {
+            return `<div class="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500">Sin imagen</div>`;
+        }
+
+        return `<img src="data:image/jpeg;base64,${base64Data}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />`;
     }
 </script>
 </body>
