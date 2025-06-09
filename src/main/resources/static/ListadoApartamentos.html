@@ -48,6 +48,19 @@
     <p id="mensajeNoPro" class="text-center text-gray-500 mt-6 hidden text-lg">
         Hazte cliente PRO para poder rentar alojamientos.
     </p>
+    <p id="hacermePro" class="text-center text-blue-600 cursor-pointer hidden mt-2 underline">
+        Hacerme PRO
+    </p>
+
+    <div id="modalPro" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h2 class="text-xl font-semibold mb-4">¿Deseas hacerte PRO?</h2>
+            <div class="flex justify-end space-x-4">
+                <button id="cancelarBtn" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+                <button id="aceptarBtn" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Aceptar</button>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script src="sweetalert2.all.min.js"></script>
@@ -65,6 +78,37 @@
                 await cargarAlojamientos(usuario.id);
             } else {
                 document.getElementById("mensajeNoPro").classList.remove("hidden");
+                document.getElementById("hacermePro").classList.remove("hidden");
+
+                hacermePro.addEventListener('click', () => {
+                    modalPro.classList.remove('hidden');
+                });
+
+                cancelarBtn.addEventListener('click', () => {
+                    modalPro.classList.add('hidden');
+                });
+
+                aceptarBtn.addEventListener('click', async () => {
+                    modalPro.classList.add('hidden');
+
+                    const datos = {
+                        nombre: usuario.nombre,
+                        apellido1: usuario.apellido1,
+                        apellido2: usuario.apellido2,
+                        correo: usuario.correo,
+                        contraseña: usuario.contraseña,
+                        tarjetaBancaria: usuario.tarjetaBancaria,
+                        direccion: usuario.direccion,
+                        fechaNacimiento: usuario.fechaNacimiento,
+                        rol: "PRO",
+                        telefono: usuario.telefono,
+                        genero: usuario.genero
+                    }
+
+                    await axios.patch(`${uri}/usuarios/${usuario.id}`, datos)
+                    window.location.reload();
+
+                });
             }
         } else {
             alert(mensajeErrorDatosUsuario);
