@@ -17,3 +17,16 @@ function CrearImagenBase64(base64Data) {
 
     return `<img src="data:image/jpeg;base64,${base64Data}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />`;
 }
+
+function irAreaPersonal() {
+    window.location.href = "AreaPersonal.html"
+}
+
+async function cerrarSesion() {
+    const responseLogout = await axios.post("/logout");
+    if (responseLogout.status === 302 || responseLogout.status === 200) {
+        window.location.href = "Login.html"
+    } else {
+        alert("Error al cerrar sesión")
+    }
+}

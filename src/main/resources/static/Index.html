@@ -11,19 +11,39 @@
     <div class="flex items-center gap-6">
         <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
         <nav class="flex flex-wrap gap-4 text-xl font-bold">
-            <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
+            <a href="Index.html" class="text-xl text-orange-500">Home</a>
             <a href="ListadoReservas.html" class="text-xl hover:text-orange-500">Mis reservas</a>
             <a href="ListadoApartamentos.html" class="text-xl hover:text-orange-500">Mis Apartamentos</a>
-            <a href="AreaPersonal.html" class="text-xl text-orange-500">Área personal</a>
+            <a href="AreaPersonal.html" class="text-xl hover:text-orange-500">Área personal</a>
         </nav>
     </div>
-    <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
-        <span class="font-semibold text-sm">
-      <span name="nombre"></span><br/>
-      <small name="rol"></small>
+    <div class="relative inline-block text-left">
+        <!-- Botón que despliega el menú -->
+        <div class="flex items-center gap-2 mt-4 md:mt-0 cursor-pointer" onclick="toggleMenu()">
+            <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
+            <span class="font-semibold text-sm">
+      <span name="nombre">Usuario</span><br/>
+      <small name="rol">Rol</small>
     </span>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div id="userMenu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
+            <ul class="py-1 text-sm text-gray-700">
+                <li>
+                    <button onclick="irAreaPersonal()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Área personal
+                    </button>
+                </li>
+                <li>
+                    <button onclick="cerrarSesion()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Cerrar sesión
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
+
 </header>
 
 <main class="mx-auto px-4 min-h-screen flex flex-col items-center">
@@ -166,8 +186,11 @@
         </div>
 
         <div class="flex justify-center gap-6">
-            <button id="filtrar" type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar</button>
-            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva rápida</button>
+            <button id="filtrar" type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar
+            </button>
+            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva
+                rápida
+            </button>
         </div>
     </form>
 </main>
@@ -187,7 +210,14 @@
 
             cargarAlojamientos(); //Carga inicial de todos los alojamientos
 
-            // 2) Suscribimos el evento SUBMIT del formulario
+            document.addEventListener('click', function (event) {
+                const menu = document.getElementById('userMenu');
+                const button = event.target.closest('.inline-block');
+                if (!button) {
+                    menu.classList.add('hidden');
+                }
+            });
+
             document.getElementById("filtroForm").addEventListener("submit", async function (e) {
                 e.preventDefault();
 
@@ -276,10 +306,10 @@
 
         // Configurar flechas
         arrowLeft.addEventListener("click", () => {
-            cardsWrapper.scrollBy({ left: -340, behavior: "smooth" });
+            cardsWrapper.scrollBy({left: -340, behavior: "smooth"});
         });
         arrowRight.addEventListener("click", () => {
-            cardsWrapper.scrollBy({ left: 340, behavior: "smooth" });
+            cardsWrapper.scrollBy({left: 340, behavior: "smooth"});
         });
 
         if (!lista.length) {
@@ -329,12 +359,9 @@
         });
     }
 
-    function crearImagenBase64(base64Data) {
-        if (!base64Data || typeof base64Data !== 'string') {
-            return `<div class="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500">Sin imagen</div>`;
-        }
-
-        return `<img src="data:image/jpeg;base64,${base64Data}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />`;
+    function toggleMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.classList.toggle('hidden');
     }
 </script>
 </body>

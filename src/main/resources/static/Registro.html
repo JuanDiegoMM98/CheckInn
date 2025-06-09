@@ -145,18 +145,16 @@
             const response = await axios.post(`${uri}/usuarios`, datos);
 
             if (response.status === 201) {
-                guardar_session(response.data);
-                window.location.href = "Home.html";
-            } else if (response.status === 404) {
-                alert("Registro fallido");
+                alert("Alta correcta");
+                window.location.href = "Login.html";
+            } else if (response.status === 409) {
+                alert("Registro fallido campos incorrectos");
             } else {
-                alert("Ha habido un error durante el registro");
+                alert("Ha habido un error de servidor durante el registro");
             }
         } catch (error) {
-            /*
-              console.error("Error:", error);
-              alert("Error al conectar con el servidor.");
-              */
+            console.error("Error:", error);
+            alert("Error al conectar con el servidor.");
         }
     });
 </script>
