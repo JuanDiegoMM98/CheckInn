@@ -30,3 +30,27 @@ async function cerrarSesion() {
         alert("Error al cerrar sesión")
     }
 }
+
+function ficheroAImagenBase64(file) {
+    return new Promise((resolve, reject) => {
+        // 1) Validar tipo Imagen
+        if (!file.type.startsWith('image/')) {
+            return reject(new Error('El fichero no es una imagen.'));
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            // reader.result es algo como "data:image/png;base64,iVBORw0KGgoAAAANS..."
+            // Si solo quieres la parte base64, quitas el prefijo:
+            const base64String = reader.result
+                .toString()
+                .split(',')[1];
+            resolve(base64String);
+        };
+
+        reader.onerror = error => reject(error);
+
+        reader.readAsDataURL(file);
+    });
+}

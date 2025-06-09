@@ -316,12 +316,17 @@
                     // Actualizar imagen
                     const inputImagen = document.getElementById('inputImagen');
 
-                    inputImagen.addEventListener('change', () => {
-                        archivo = inputImagen.files[0]; // El primer archivo (si solo se selecciona uno)
+                    inputImagen.addEventListener('change', async () => {
+                        const fichero = e.target.files[0];
+                        if (!fichero) return;
 
-                        if (archivo) {
-                            const url = URL.createObjectURL(archivo);
-                            document.getElementById('imagenApartamento').src = url;
+                        try {
+                            archivo = await ficheroAImagenBase64(e.target.files[0]);
+                            const dataUri = `data:${archivo.type};base64,${archivo}`;
+                            document.getElementById("imagenAlojamiento").src = dataUri;
+                        } catch (error) {
+                            console.log(error);
+                            alert("Error al intentar convertir la imagen");
                         }
                     });
 
