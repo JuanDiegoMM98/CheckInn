@@ -9,21 +9,41 @@
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-24 h-18" src="/images/logo.png" alt="Logo">
+        <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
         <nav class="flex flex-wrap gap-4 text-xl font-bold">
-            <a href="Index.html" class="hover:text-orange-500">Home</a>
-            <a href="ListadoReservas.html" class="text-orange-500">Mis reservas</a>
-            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
-            <a href="AreaPersonal.html" class="hover:text-orange-500">Área personal</a>
+            <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="text-xl text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="text-xl hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="text-xl hover:text-orange-500">Área personal</a>
         </nav>
     </div>
-    <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="images/defaultAvatar.jpg" alt="Avatar"/>
-        <span class="font-semibold text-sm">
-        <span name="nombre"></span><br>
-        <small name="rol"></small>
-      </span>
+    <div class="relative inline-block text-left">
+        <!-- Botón que despliega el menú -->
+        <div class="flex items-center gap-2 mt-4 md:mt-0 cursor-pointer" onclick="toggleMenu()">
+            <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
+            <span class="font-semibold text-sm">
+      <span name="nombre">Usuario</span><br/>
+      <small name="rol">Rol</small>
+    </span>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div id="userMenu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
+            <ul class="py-1 text-sm text-gray-700">
+                <li>
+                    <button onclick="irAreaPersonal()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Área personal
+                    </button>
+                </li>
+                <li>
+                    <button onclick="cerrarSesion()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Cerrar sesión
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
+
 </header>
 
 <main class="max-w-6xl mx-auto px-4">
@@ -194,6 +214,22 @@
                             });
                         }
                     });
+
+                    document.addEventListener('click', function (event) {
+                        const menu = document.getElementById('userMenu');
+                        const button = event.target.closest('.inline-block');
+                        if (!button) {
+                            menu.classList.add('hidden');
+                        }
+                    });
+
+                    document.addEventListener('click', function (event) {
+                        const menu = document.getElementById('userMenu');
+                        const button = event.target.closest('.inline-block');
+                        if (!button) {
+                            menu.classList.add('hidden');
+                        }
+                    });
                 } else if (responseCargar === 404) {
                     alert("No se ha podido encontrar el id de usuario");
                 }
@@ -237,5 +273,15 @@
 
     function solicitarCancelacion(idReserva, idAlojamiento) {
         window.location.href = `SolicitudCancelacionReserva.html?idReserva=${idReserva}&idAlojamiento=${idAlojamiento}`;
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.classList.toggle('hidden');
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.classList.toggle('hidden');
     }
 </script>

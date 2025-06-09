@@ -17,12 +17,31 @@
             <a href="AreaPersonal.html" class="text-xl text-orange-500">Área personal</a>
         </nav>
     </div>
-    <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="images/defaultAvatar.jpg" alt="Avatar"/>
-        <span class="font-semibold text-sm">
-        <span name="nombreUsuario"></span><br>
-        <small name="rolUsuario"></small>
-      </span>
+    <div class="relative inline-block text-left">
+        <!-- Botón que despliega el menú -->
+        <div class="flex items-center gap-2 mt-4 md:mt-0 cursor-pointer" onclick="toggleMenu()">
+            <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
+            <span class="font-semibold text-sm">
+      <span name="nombre">Usuario</span><br/>
+      <small name="rol">Rol</small>
+    </span>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div id="userMenu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
+            <ul class="py-1 text-sm text-gray-700">
+                <li>
+                    <button onclick="irAreaPersonal()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Área personal
+                    </button>
+                </li>
+                <li>
+                    <button onclick="cerrarSesion()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Cerrar sesión
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 </header>
 
@@ -94,6 +113,14 @@
             if (usuario.rol === "PRO") {
                 document.getElementById("btn-cancelar-pro").classList.remove("hidden");
             }
+
+            document.addEventListener('click', function (event) {
+                const menu = document.getElementById('userMenu');
+                const button = event.target.closest('.inline-block');
+                if (!button) {
+                    menu.classList.add('hidden');
+                }
+            });
 
             document.querySelector('[name="nombreUsuario"]').innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
 
@@ -190,6 +217,11 @@
             e.preventDefault(); // Solo cancela si la validación falla
         }
     });
+
+    function toggleMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.classList.toggle('hidden');
+    }
 </script>
 </body>
 </html>
