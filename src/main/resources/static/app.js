@@ -1,31 +1,19 @@
 const uri = "http://localhost:5000/api/v1";
 
-function obtener_session() {
-    let nombre = sessionStorage.getItem("nombre");
-    console.log(nombre);
+const mensajeErrorDatosUsuario = "Error al cargar los datos del usuario";
+
+function RanderizarBaseImagen64(base64Data) {
+    if (!base64Data || typeof base64Data !== 'string') {
+        return null;
+    }
+
+    return `data:image/jpeg;base64,${base64Data}`;
 }
 
-function guardar_session(dataArray) {
-    let usuario = dataArray;
-
-    /*
-    Formato de dataArray:
-
-    {
-        "dni": "String",
-        "nombre": "String",
-        "apellido1": "String",
-        "apellido2": "String",
-        "correo": "String",
-        "contraseña": "String",
-        "tarjetaBancaria": "String",
-        "direccion": "String",
-        "fechaNacimiento": "String",
-        "telefono": "String",       // OPCIONAL
-        "genero": "String"          // OPCIONAL
-        "rol": "String"
+function CrearImagenBase64(base64Data) {
+    if (!base64Data || typeof base64Data !== 'string') {
+        return `<div class="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500">Sin imagen</div>`;
     }
-    */
 
-    sessionStorage.setItem("nombre", JSON.stringify(usuario));
+    return `<img src="data:image/jpeg;base64,${base64Data}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />`;
 }

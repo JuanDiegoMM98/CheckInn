@@ -19,7 +19,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {auth
-                        .requestMatchers("app.js", "/images", "Registro.html").permitAll()
+                        .requestMatchers("app.js", "/images/**", "Registro.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").permitAll()
                         .anyRequest().authenticated();
                 })

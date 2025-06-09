@@ -9,16 +9,16 @@
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-10 h-10" src="../images/logo.png" alt="Logo">
-        <nav class="flex flex-wrap gap-4 text-lg font-bold">
-            <a href="Index.html" class="hover:text-orange-500">Home</a>
-            <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
-            <a href="ListadoApartamentos.html" class="hover:text-orange-500">Mis Apartamentos</a>
-            <a href="AreaPersonal.html" class="text-orange-500">Área personal</a>
+        <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
+            <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="text-xl hover:text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="text-xl hover:text-orange-500">Mis Apartamentos</a>
+            <a href="AreaPersonal.html" class="text-xl text-orange-500">Área personal</a>
         </nav>
     </div>
     <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar">
+        <img class="w-10 h-10 rounded-full" src="images/defaultAvatar.jpg" alt="Avatar"/>
         <span class="font-semibold text-sm">
         <span name="nombreUsuario"></span><br>
         <small name="rolUsuario"></small>
@@ -26,34 +26,34 @@
     </div>
 </header>
 
-<main class="max-w-4xl mx-auto px-4 py-12">
+<main class="max-w-4xl mx-auto px-4">
 
     <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Área Personal</h1>
 
     <form class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow rounded-2xl p-8">
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Nombre *</label>
-            <input type="text" name="nombre" class="p-3 border border-gray-300 rounded"/>
+            <input type="text" name="nombre" class="p-3 border border-gray-300 rounded" required/>
         </div>
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Correo electrónico *</label>
-            <input type="email" name="correo" class="p-3 border border-gray-300 rounded"/>
+            <input type="email" name="correo" class="p-3 border border-gray-300 rounded" required/>
         </div>
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Apellido 1 *</label>
-            <input type="text" name="apellido1" class="p-3 border border-gray-300 rounded"/>
+            <input type="text" name="apellido1" class="p-3 border border-gray-300 rounded" required/>
         </div>
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Apellido 2 *</label>
-            <input type="text" name="apellido2" class="p-3 border border-gray-300 rounded"/>
+            <input type="text" name="apellido2" class="p-3 border border-gray-300 rounded" required/>
         </div>
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Fecha de nacimiento *</label>
-            <input type="date" name="fechaNacimiento" class="p-3 border border-gray-300 rounded"/>
+            <input type="date" name="fechaNacimiento" class="p-3 border border-gray-300 rounded" required/>
         </div>
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Dirección *</label>
-            <input type="text" name="direccion" class="p-3 border border-gray-300 rounded"/>
+            <input type="text" name="direccion" class="p-3 border border-gray-300 rounded" required/>
         </div>
         <div class="flex flex-col">
             <label class="font-semibold mb-1">Género</label>
@@ -68,15 +68,14 @@
             <input type="tel" name="telefono" maxlength="9" class="p-3 border border-gray-300 rounded"/>
         </div>
         <div class="flex flex-col md:col-span-2">
-            <label class="font-semibold mb-1">Tarjeta de crédito</label>
-            <input type="text" name="tarjetaBancaria" maxlength="12" class="p-3 border border-gray-300 rounded"/>
+            <label class="font-semibold mb-1">Tarjeta de crédito *</label>
+            <input type="text" name="tarjetaBancaria" maxlength="12" class="p-3 border border-gray-300 rounded" required/>
         </div>
-        <div class="text-sm text-red-500 md:col-span-2">Los campos marcados con (*) son obligatorios</div>
+        <div class="text-sm md:col-span-2">Los campos marcados con (*) son obligatorios</div>
         <div class="flex justify-center gap-4 md:col-span-2 mt-4">
             <button type="reset" class="px-6 py-2 rounded bg-red-500 text-white hover:bg-red-600">Borrar datos</button>
-            <button id="btn-cancelar" type="button"
-                    class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar
-            </button>
+            <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar</button>
+            <button id="btn-cancelar-pro" type="button" class="px-6 py-2 rounded bg-yellow-500 text-white hover:bg-yellow-600 hidden">Cancelar suscripción PRO</button>
             <button type="submit" class="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Guardar
             </button>
         </div>
@@ -86,10 +85,16 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="app.js"></script>
 <script>
-    const usuarioGuardado = sessionStorage.getItem("nombre");
     document.addEventListener("DOMContentLoaded", async function () {
-        if (usuarioGuardado) {
-            const usuario = JSON.parse(usuarioGuardado);
+
+        const response = await axios.get(`${uri}/me`);
+
+        if (response.status === 200) {
+            const usuario = response.data;
+            if (usuario.rol === "PRO") {
+                document.getElementById("btn-cancelar-pro").classList.remove("hidden");
+            }
+
             document.querySelector('[name="nombreUsuario"]').innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
 
             const responseGet = await axios.get(`${uri}/usuarios/${usuario.id}`);
@@ -116,12 +121,15 @@
                 datos.rol = usuario.rol;
                 datos.contraseña = usuario.contraseña;
                 try {
-                    const response = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
-                    if (response.status === 200) {
-                        guardar_session(response.data);
-                        window.location.href = "Home.html";
+                    const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
+                    if (responsePatch.status === 200) {
+                        window.location.href = "Index.html";
+                    } else if (responsePatch.status === 404) {
+                        alert("No se ha podido encontrar el usuario en la base de datos.")
+                    } else if (responsePatch.status === 409) {
+                        alert("Ha habido un conflicto al intentar actualizar los datos.")
                     } else {
-                        alert("Modificación fallida");
+                        alert("Error del servidor al intentar actualizar los datos.")
                     }
                 } catch {
                     alert("Error al conectar con el servidor");
@@ -131,18 +139,55 @@
             document.querySelector("form").addEventListener("reset", async function (e) {
                 e.preventDefault();
                 if (confirm("¿Eliminar cuenta? Esta acción es irreversible.")) {
-                    const response = await axios.delete(`${uri}/usuarios/${usuario.id}`);
-                    if (response.status === 200) {
-                        window.location.href = "Index.html";
+                    const responseDelete = await axios.delete(`${uri}/usuarios/${usuario.id}`);
+                    if (responseDelete.status === 200) {
+                        window.location.href = "Login.html";
                     } else {
                         alert("Error al eliminar usuario");
                     }
                 }
             });
 
-            document.getElementById("btn-cancelar").addEventListener("click", function () {
-                window.location.href = "Home.html";
+            document.getElementById("btn-cancelar-pro").addEventListener("click", async function() {
+                if (confirm("¿Estás seguro que quieres cancelar tu suscripción PRO?")) {
+                    const datos = {
+                        nombre: usuario.nombre,
+                        apellido1: usuario.apellido1,
+                        apellido2: usuario.apellido2,
+                        correo: usuario.correo,
+                        contraseña: usuario.contraseña,
+                        tarjetaBancaria: usuario.tarjetaBancaria,
+                        direccion: usuario.direccion,
+                        fechaNacimiento: usuario.fechaNacimiento,
+                        rol: "CLIENTE",
+                        telefono: usuario.telefono,
+                        genero: usuario.genero
+                    }
+                    const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
+                    if (response.status === 200) {
+                        window.location.href = "Index.html";
+                    } else if (responsePatch.status === 404) {
+                        alert("No se ha podido encontrar el usuario en la base de datos.")
+                    } else if (responsePatch.status === 409) {
+                        alert("Ha habido un conflicto al intentar actualizar los datos.")
+                    } else {
+                        alert("Error del servidor al intentar actualizar los datos.")
+                    }
+                }
             });
+
+            document.getElementById("btn-cancelar").addEventListener("click", function () {
+                window.location.href = "Index.html";
+            });
+        } else {
+            alert(mensajeErrorDatosUsuario);
+            window.location.href = "Login.html"
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+        if (!validarCamposObligatorios()) {
+            e.preventDefault(); // Solo cancela si la validación falla
         }
     });
 </script>

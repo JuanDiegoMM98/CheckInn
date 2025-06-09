@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CheckInn - Home</title>
+    <title>CheckInn - Mis Alojamientos</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-10 h-10" src="../images/logo.png" alt="Logo"/>
-        <nav class="flex flex-wrap gap-4 text-lg font-bold">
+        <img class="w-24 h-18" src="/images/logo.png" alt="Logo"/>
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
             <a href="Index.html" class="hover:text-orange-500">Home</a>
             <a href="ListadoReservas.html" class="hover:text-orange-500">Mis reservas</a>
             <a href="ListadoApartamentos.html" class="text-orange-500">Mis Apartamentos</a>
@@ -18,85 +18,112 @@
         </nav>
     </div>
     <div class="flex items-center gap-2 mt-4 md:mt-0">
-        <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/40" alt="Avatar"/>
+        <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
         <span class="font-semibold text-sm">
       <span name="nombre"></span><br/>
       <small name="rol"></small>
     </span>
     </div>
 </header>
-
-<main class="max-w-6xl mx-auto px-4">
-    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Bienvenido a CheckInn!</h1>
+<main class="w-full px-6 md:px-12">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Mis Alojamientos</h1>
 
     <div id="carouselContainer"
-         class="relative flex items-center justify-center gap-4 px-6 mt-6 overflow-visible hidden">
-        <button id="carouselLeft"
-                class="absolute -left-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
-            ❮
+         class="relative w-full flex items-center justify-center px-2 sm:px-4 md:px-8 lg:px-12 hidden">
+        <button id="carouselLeft" class="absolute left-4 z-10 bg-white shadow p-3 rounded-full text-2xl hidden">❮
         </button>
-        <div class="flex gap-5 overflow-x-auto scroll-smooth py-6 w-full justify-start pl-4 pr-4"
-             id="cardsWrapper"></div>
-        <button id="carouselRight"
-                class="absolute -right-10 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full text-xl hidden mx-4">
-            ❯
+
+        <div id="carouselScrollWrapper" class="overflow-x-auto w-full">
+            <div id="cardsWrapper" class="flex gap-6 py-6 mx-8 w-max">
+                <!-- tarjetas -->
+            </div>
+        </div>
+
+        <button id="carouselRight" class="absolute right-4 z-10 bg-white shadow p-3 rounded-full text-2xl hidden">❯
         </button>
     </div>
 
     <p id="mensajeSinResultados" class="text-center text-gray-500 mt-6 hidden text-lg">
-        🛈 No se han encontrado alojamientos que cumplan con la condición de búsqueda
+        Aun no tienes ningún alojamiento
     </p>
+    <p id="mensajeNoPro" class="text-center text-gray-500 mt-6 hidden text-lg">
+        Hazte cliente PRO para poder rentar alojamientos.
+    </p>
+    <p id="hacermePro" class="text-center text-blue-600 cursor-pointer hidden mt-2 underline">
+        Hacerme PRO
+    </p>
+
+    <div id="modalPro" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h2 class="text-xl font-semibold mb-4">¿Deseas hacerte PRO?</h2>
+            <div class="flex justify-end space-x-4">
+                <button id="cancelarBtn" class="px-4 py-2 rounded bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+                <button id="aceptarBtn" class="px-4 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script src="sweetalert2.all.min.js"></script>
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-
     document.addEventListener("DOMContentLoaded", async function () {
-        // Mostrar usuario si existe
-
         const responseUsuario = await axios.get(`${uri}/me`);
-
         if (responseUsuario.status === 200) {
             const usuario = responseUsuario.data;
-
             document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
             document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
             if (usuario.rol === "PRO") {
+                await cargarAlojamientos(usuario.id);
+            } else {
+                document.getElementById("mensajeNoPro").classList.remove("hidden");
+                document.getElementById("hacermePro").classList.remove("hidden");
 
-                await cargarAlojamientos(usuario.id); //Carga inicial de todos los alojamientos
+                hacermePro.addEventListener('click', () => {
+                    modalPro.classList.remove('hidden');
+                });
 
-                // 2) Suscribimos el evento SUBMIT del formulario
-                document.getElementById("filtroForm").addEventListener("submit", async function (e) {
-                    e.preventDefault();
+                cancelarBtn.addEventListener('click', () => {
+                    modalPro.classList.add('hidden');
+                });
 
-                    const finalURL = `${uri}/alojamientos?${searchParams.toString()}`;
+                aceptarBtn.addEventListener('click', async () => {
+                    modalPro.classList.add('hidden');
 
-                    try {
-                        const response = await axios.get(finalURL);
-                        if (response.status === 200) {
-                            renderizarAlojamientos(response.data);
-                        } else {
-                            alert("Error del servidor al buscar los alojamientos");
-                        }
-                    } catch (error) {
-                        console.error("Error en la solicitud:", error);
-                        alert("Error de red o servidor");
+                    const datos = {
+                        nombre: usuario.nombre,
+                        apellido1: usuario.apellido1,
+                        apellido2: usuario.apellido2,
+                        correo: usuario.correo,
+                        contraseña: usuario.contraseña,
+                        tarjetaBancaria: usuario.tarjetaBancaria,
+                        direccion: usuario.direccion,
+                        fechaNacimiento: usuario.fechaNacimiento,
+                        rol: "PRO",
+                        telefono: usuario.telefono,
+                        genero: usuario.genero
+                    }
+
+                    const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos)
+                    if (responsePatch.status === 200) {
+                        window.location.reload();
+                    } else if (responsePatch.status === 404) {
+                        alert("No se ha podido encontrar el usuario en la base de datos.")
+                    } else if (responsePatch.status === 409) {
+                        alert("Ha habido un conflicto al intentar actualizar los datos.")
+                    } else {
+                        alert("Error del servidor al intentar actualizar los datos.")
                     }
                 });
-            } else {
-                alert("No es pro")
             }
-
         } else {
-            alert("Error al cargar los datos del usuario");
+            alert(mensajeErrorDatosUsuario);
         }
     });
 
-    // -------------------------------------------------
-    // Función para cargar todos los alojamientos al inicio
     async function cargarAlojamientos(idUsuario) {
         try {
             const response = await axios.get(`${uri}/usuarios/${idUsuario}/alojamientos`);
@@ -111,8 +138,6 @@
         }
     }
 
-    // -------------------------------------------------
-    // Función que renderiza las tarjetas de alojamiento
     function renderizarAlojamientos(lista) {
         const carouselContainer = document.getElementById("carouselContainer");
         const cardsWrapper = document.getElementById("cardsWrapper");
@@ -120,28 +145,16 @@
         const arrowRight = document.getElementById("carouselRight");
         const mensajeSinResultados = document.getElementById("mensajeSinResultados");
 
-        // Bloquear e, E, +, - en inputs numéricos (solo un ejemplo)
-        const inputsNumericos = document.querySelectorAll('input[type="number"]');
-        inputsNumericos.forEach(input => {
-            input.addEventListener("keydown", function (eve) {
-                if (["e", "E", "+", "-"].includes(eve.key)) {
-                    eve.preventDefault();
-                }
-            });
-        });
-
-        // Limpiar contenido previo
         cardsWrapper.innerHTML = "";
 
-        // Configurar flechas
         arrowLeft.addEventListener("click", () => {
-            cardsWrapper.scrollBy({ left: -340, behavior: "smooth" });
+            cardsWrapper.scrollBy({left: -420, behavior: "smooth"});
         });
         arrowRight.addEventListener("click", () => {
-            cardsWrapper.scrollBy({ left: 340, behavior: "smooth" });
+            cardsWrapper.scrollBy({left: 420, behavior: "smooth"});
         });
 
-        if (!lista.length) {
+        if (!lista.alojamientos.length) {
             mensajeSinResultados.classList.remove("hidden");
             carouselContainer.classList.add("hidden");
             return;
@@ -150,7 +163,7 @@
         mensajeSinResultados.classList.add("hidden");
         carouselContainer.classList.remove("hidden");
 
-        if (lista.length <= 3) {
+        if (lista.alojamientos.length <= 3) {
             arrowLeft.classList.add("hidden");
             arrowRight.classList.add("hidden");
             cardsWrapper.classList.add("justify-center");
@@ -160,29 +173,27 @@
             cardsWrapper.classList.remove("justify-center");
         }
 
-        // Tarjeta para crear un nuevo alojamiento
         const cardNueva = document.createElement("a");
-        cardNueva.className = "w-[320px] h-[500px] shrink-0 bg-white border-4 border-dashed border-orange-400 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center";
-        cardNueva.href = "FormularioAltaApartamento.html"; // Página de alta de alojamiento
+        cardNueva.className = "w-[450px] h-[700px] shrink-0 bg-white border-4 border-dashed border-orange-400 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center";
+        cardNueva.href = "AltaEstancia.html";
 
         cardNueva.innerHTML = `
-          <div class="flex flex-col items-center justify-center h-full px-6">
-            <div class="text-6xl text-orange-500 mb-4">＋</div>
-            <h3 class="text-2xl font-bold text-orange-500 mb-2">Nuevo Alojamiento</h3>
-            <p class="text-gray-600">Haz clic aquí para registrar un nuevo alojamiento en CheckInn.</p>
-          </div>
-        `;
-
+      <div class="flex flex-col items-center justify-center h-full px-6">
+        <div class="text-6xl text-orange-500 mb-4">＋</div>
+        <h3 class="text-2xl font-bold text-orange-500 mb-2">Nuevo Alojamiento</h3>
+        <p class="text-gray-600">Haz clic aquí para registrar un nuevo alojamiento en CheckInn.</p>
+      </div>
+    `;
         cardsWrapper.appendChild(cardNueva);
 
-        lista.forEach(apto => {
+        lista.alojamientos.forEach(apto => {
             const card = document.createElement("a");
-            card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
-            card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
+            card.className = "w-[450px] h-[700] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+            card.href = `InfoApartamentoUsuario.html?idAlojamiento=${apto.id}`;
 
             card.innerHTML = `
         <div class="flex flex-col h-full">
-          <img src="${apto.imagen}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />
+          ${CrearImagenBase64(apto.imagen)}
           <div class="flex-1 px-4 py-3 flex flex-col justify-between">
             <div>
               <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
@@ -193,9 +204,6 @@
               <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
             </div>
           </div>
-          <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
-            Reservar
-          </button>
         </div>
       `;
             cardsWrapper.appendChild(card);
