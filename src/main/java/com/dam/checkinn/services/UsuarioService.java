@@ -177,6 +177,7 @@ public class UsuarioService {
             throw new RecursoNotFoundException();
         }
 
+
         // Comprobamos que no exista alojamiento con el mismo nombre
         if (alojamientoRepository.existsByNombre(alojamientoDTO.nombre())) {
             throw new DatosNoValidosException();
@@ -203,6 +204,9 @@ public class UsuarioService {
         if (usuarioModel.getRol() != UsuarioModel.Rol.PRO) {
             throw new DatosNoValidosException();
         }
+
+        // Para relacion bidireccional
+        alojamientoModel.setUsuarioAlojamiento(usuarioModel);
 
         // Le añadimos su alojamiento
         usuarioModel.getAlojamientos().add(alojamientoModel);
