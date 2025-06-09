@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Información Alojamiento</title>
+    <title>Checkinn - Información Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -54,13 +54,7 @@
                  class="w-full h-48 object-cover rounded-xl bg-gray-200">
 
             <!-- Botón de Reservar debajo de la imagen -->
-            <button
-                    id="reservarBtn"
-                    type="submit"
-                    form="reservaForm"
-                    class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed"
-                    disabled
-            >
+            <button id="reservarBtn" type="submit" form="reservaForm" class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed" disabled>
                 Reservar
             </button>
 
@@ -156,7 +150,9 @@
                 document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
 
                 if (Array.isArray(apto.servicios)) {
+                    console.log(apto.servicios);
                     apto.servicios.forEach(servicio => {
+                        console.log(servicio.toLowerCase());
                         const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
