@@ -74,9 +74,8 @@
         <div class="text-sm md:col-span-2">Los campos marcados con (*) son obligatorios</div>
         <div class="flex justify-center gap-4 md:col-span-2 mt-4">
             <button type="reset" class="px-6 py-2 rounded bg-red-500 text-white hover:bg-red-600">Borrar datos</button>
-            <button id="btn-cancelar" type="button"
-                    class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar
-            </button>
+            <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar</button>
+            <button id="btn-cancelar-pro" type="button" class="px-6 py-2 rounded bg-yellow-500 text-white hover:bg-yellow-600 hidden">Cancelar suscripción PRO</button>
             <button type="submit" class="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Guardar
             </button>
         </div>
@@ -92,6 +91,9 @@
 
         if (response.status === 200) {
             const usuario = response.data;
+            if (usuario.rol === "PRO") {
+                document.getElementById("btn-cancelar-pro").classList.remove("hidden");
+            }
 
             document.querySelector('[name="nombreUsuario"]').innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
 
@@ -119,12 +121,15 @@
                 datos.rol = usuario.rol;
                 datos.contraseña = usuario.contraseña;
                 try {
-                    const response = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
-                    if (response.status === 200) {
-                        guardar_session(response.data);
+                    const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
+                    if (responsePatch.status === 200) {
                         window.location.href = "Index.html";
+                    } else if (responsePatch.status === 404) {
+                        alert("No se ha podido encontrar el usuario en la base de datos.")
+                    } else if (responsePatch.status === 409) {
+                        alert("Ha habido un conflicto al intentar actualizar los datos.")
                     } else {
-                        alert("Modificación fallida");
+                        alert("Error del servidor al intentar actualizar los datos.")
                     }
                 } catch {
                     alert("Error al conectar con el servidor");
@@ -134,11 +139,39 @@
             document.querySelector("form").addEventListener("reset", async function (e) {
                 e.preventDefault();
                 if (confirm("¿Eliminar cuenta? Esta acción es irreversible.")) {
-                    const response = await axios.delete(`${uri}/usuarios/${usuario.id}`);
-                    if (response.status === 200) {
+                    const responseDelete = await axios.delete(`${uri}/usuarios/${usuario.id}`);
+                    if (responseDelete.status === 200) {
                         window.location.href = "Login.html";
                     } else {
                         alert("Error al eliminar usuario");
+                    }
+                }
+            });
+
+            document.getElementById("btn-cancelar-pro").addEventListener("click", async function() {
+                if (confirm("¿Estás seguro que quieres cancelar tu suscripción PRO?")) {
+                    const datos = {
+                        nombre: usuario.nombre,
+                        apellido1: usuario.apellido1,
+                        apellido2: usuario.apellido2,
+                        correo: usuario.correo,
+                        contraseña: usuario.contraseña,
+                        tarjetaBancaria: usuario.tarjetaBancaria,
+                        direccion: usuario.direccion,
+                        fechaNacimiento: usuario.fechaNacimiento,
+                        rol: "CLIENTE",
+                        telefono: usuario.telefono,
+                        genero: usuario.genero
+                    }
+                    const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
+                    if (response.status === 200) {
+                        window.location.href = "Index.html";
+                    } else if (responsePatch.status === 404) {
+                        alert("No se ha podido encontrar el usuario en la base de datos.")
+                    } else if (responsePatch.status === 409) {
+                        alert("Ha habido un conflicto al intentar actualizar los datos.")
+                    } else {
+                        alert("Error del servidor al intentar actualizar los datos.")
                     }
                 }
             });
