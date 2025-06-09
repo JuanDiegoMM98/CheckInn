@@ -10,7 +10,7 @@
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
     <div class="flex items-center gap-6">
-        <img class="w-24 h-18" src="../images/logo.png" alt="Logo">
+        <img class="w-24 h-18" src="/images/logo.png" alt="Logo">
         <nav class="flex flex-wrap gap-4 text-xl font-bold">
             <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
             <a href="ListadoReservas.html" class="text-xl hover:text-orange-500">Mis reservas</a>
@@ -54,8 +54,8 @@
         <button id="carouselLeft" class="absolute left-4 z-10 bg-white shadow p-3 rounded-full text-2xl hidden">❮
         </button>
 
-        <div id="carouselScrollWrapper" class="overflow-x-auto w-full">
-            <div id="cardsWrapper" class="flex gap-6 py-6 mx-8 w-max">
+        <div id="carouselScrollWrapper" class="overflow-x-auto w-full scrollbar-hide">
+            <div id="cardsWrapper" class="flex gap-6 py-6 mx-8 w-full">
                 <!-- tarjetas -->
             </div>
         </div>
@@ -86,7 +86,6 @@
     </div>
 </main>
 
-<script src="sweetalert2.all.min.js"></script>
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
@@ -168,44 +167,21 @@
     }
 
     function renderizarAlojamientos(lista) {
-        const carouselContainer = document.getElementById("carouselContainer");
-        const cardsWrapper = document.getElementById("cardsWrapper");
-        const arrowLeft = document.getElementById("carouselLeft");
-        const arrowRight = document.getElementById("carouselRight");
-        const mensajeSinResultados = document.getElementById("mensajeSinResultados");
+        const carouselContainer   = document.getElementById("carouselContainer");
+        const cardsWrapper        = document.getElementById("cardsWrapper");
+        const scrollWrapper       = document.getElementById("carouselScrollWrapper");
+        const arrowLeft           = document.getElementById("carouselLeft");
+        const arrowRight          = document.getElementById("carouselRight");
+        const mensajeSinResultados= document.getElementById("mensajeSinResultados");
 
+        // Prepara todo
         cardsWrapper.innerHTML = "";
-
-        arrowLeft.addEventListener("click", () => {
-            cardsWrapper.scrollBy({left: -420, behavior: "smooth"});
-        });
-        arrowRight.addEventListener("click", () => {
-            cardsWrapper.scrollBy({left: 420, behavior: "smooth"});
-        });
-
-        if (!lista.alojamientos.length) {
-            mensajeSinResultados.classList.remove("hidden");
-            carouselContainer.classList.add("hidden");
-            return;
-        }
-
-        mensajeSinResultados.classList.add("hidden");
         carouselContainer.classList.remove("hidden");
 
-        if (lista.alojamientos.length <= 3) {
-            arrowLeft.classList.add("hidden");
-            arrowRight.classList.add("hidden");
-            cardsWrapper.classList.add("justify-center");
-        } else {
-            arrowLeft.classList.remove("hidden");
-            arrowRight.classList.remove("hidden");
-            cardsWrapper.classList.remove("justify-center");
-        }
-
+        // Construye la tarjeta de “Nuevo Alojamiento”
         const cardNueva = document.createElement("a");
         cardNueva.className = "w-[450px] h-[700px] shrink-0 bg-white border-4 border-dashed border-orange-400 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center";
         cardNueva.href = "AltaEstancia.html";
-
         cardNueva.innerHTML = `
       <div class="flex flex-col items-center justify-center h-full px-6">
         <div class="text-6xl text-orange-500 mb-4">＋</div>
@@ -213,28 +189,64 @@
         <p class="text-gray-600">Haz clic aquí para registrar un nuevo alojamiento en CheckInn.</p>
       </div>
     `;
+
+        const sinAlojamientos = !lista.alojamientos || lista.alojamientos.length === 0;
+        if (sinAlojamientos) {
+            // Sin datos: solo nueva tarjeta centrada, sin scroll
+            mensajeSinResultados.classList.remove("hidden");
+            arrowLeft.classList.add("hidden");
+            arrowRight.classList.add("hidden");
+            cardsWrapper.classList.add("justify-center");
+
+            scrollWrapper.classList.remove("overflow-x-auto");
+            scrollWrapper.classList.add("overflow-x-hidden");
+
+            cardsWrapper.appendChild(cardNueva);
+            return;
+        }
+
+        // Con datos
+        mensajeSinResultados.classList.add("hidden");
+        cardsWrapper.classList.remove("justify-center");
+
+        // Toggle de scroll según número de tarjetas
+        if (lista.alojamientos.length <= 3) {
+            arrowLeft.classList.add("hidden");
+            arrowRight.classList.add("hidden");
+
+            scrollWrapper.classList.remove("overflow-x-auto");
+            scrollWrapper.classList.add("overflow-x-hidden");
+        } else {
+            arrowLeft.classList.remove("hidden");
+            arrowRight.classList.remove("hidden");
+
+            scrollWrapper.classList.remove("overflow-x-hidden");
+            scrollWrapper.classList.add("overflow-x-auto");
+        }
+
+        // Siempre ponemos la tarjeta “Nuevo” a la izquierda
         cardsWrapper.appendChild(cardNueva);
 
+        // Añadimos el resto de alojamientos
         lista.alojamientos.forEach(apto => {
             const card = document.createElement("a");
-            card.className = "w-[450px] h-[700] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+            card.className = "w-[450px] h-[700px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
             card.href = `InfoApartamentoUsuario.html?idAlojamiento=${apto.id}`;
-
             card.innerHTML = `
-        <div class="flex flex-col h-full">
-          ${CrearImagenBase64(apto.imagen)}
-          <div class="flex-1 px-4 py-3 flex flex-col justify-between">
-            <div>
-              <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
-              <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
-            </div>
-            <div class="mt-4 text-left">
-              <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
-              <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+          <div class="flex flex-col h-full">
+            <img src="data:image/jpeg;base64,${apto.imagen}" class="h-56 w-full object-cover" alt="Imagen alojamiento">
+            <div class="flex-1 px-4 py-3 flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-lg text-gray-800 mb-1">${apto.nombre}</h3>
+                <p class="text-sm text-gray-600">${apto.descripcion || 'Sin descripción.'}</p>
+              </div>
+              <div class="mt-4 text-left">
+                <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
+                <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+              </div>
             </div>
           </div>
-        </div>
-      `;
+        `;
             cardsWrapper.appendChild(card);
         });
     }
