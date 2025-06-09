@@ -151,7 +151,7 @@
                 try {
                     const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
                     if (responsePatch.status === 200) {
-                        window.location.href = "Index.html";
+                        window.location.reload();
                     } else if (responsePatch.status === 404) {
                         alert("No se ha podido encontrar el usuario en la base de datos.")
                     } else if (responsePatch.status === 409) {
@@ -193,7 +193,7 @@
                     }
                     const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
                     if (response.status === 200) {
-                        window.location.href = "Index.html";
+                        window.location.reload();
                     } else if (responsePatch.status === 404) {
                         alert("No se ha podido encontrar el usuario en la base de datos.")
                     } else if (responsePatch.status === 409) {
@@ -222,6 +222,41 @@
     function toggleMenu() {
         const menu = document.getElementById('userMenu');
         menu.classList.toggle('hidden');
+    }
+
+    function validarCamposObligatorios() {
+        // Lista de los name de los campos obligatorios
+        const required = [
+            "nombre",
+            "correo",
+            "apellido1",
+            "apellido2",
+            "fechaNacimiento",
+            "direccion",
+            "tarjetaBancaria"
+        ];
+
+        let todoBien = true;
+
+        required.forEach(name => {
+            const input = document.querySelector(`[name="${name}"]`);
+            if (!input) return; // si por alguna razón no existe, lo saltamos
+
+            // Si está vacío (tras quitar espacios), marcamos error
+            if (!input.value.trim()) {
+                todoBien = false;
+                input.classList.add("border-red-500", "focus:ring-red-500");
+            } else {
+                // Quitamos marca de error si anteriormente la tuviera
+                input.classList.remove("border-red-500", "focus:ring-red-500");
+            }
+        });
+
+        if (!todoBien) {
+            alert("Por favor, completa todos los campos obligatorios marcados con *.");
+        }
+
+        return todoBien;
     }
 </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Información Alojamiento</title>
+    <title>Checkinn - Información Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -54,6 +54,7 @@
                     id="imagenApartamento"
                     alt="Imagen del apartamento"
                     class="w-full aspect-video object-cover rounded-lg border border-gray-300 block"
+                    onerror="this.onerror=null;this.src='/images/imgAlojamientoDefault.png';"
             />
             <label for="inputImagen" class="cursor-pointer text-blue-600 hover:underline">Cambiar imagen</label>
             <input
@@ -168,9 +169,9 @@
                 </div>
 
                 <div class="flex gap-6 flex-wrap" id="servicios">
-                    <label name="WIFI" class="flex items-center gap-2"><input type="checkbox" value="WIFI"> WiFi</label>
-                    <label name="PISCINA" class="flex items-center gap-2"><input type="checkbox" value="PISCINA">Piscina</label>
-                    <label name="BARBACOA" class="flex items-center gap-2"><input type="checkbox" value="BARBACOA">Barbacoa</label>
+                    <label class="flex items-center gap-2"><input name="wifi" type="checkbox" value="WIFI"> WiFi</label>
+                    <label name="piscina" class="flex items-center gap-2"><input name="piscina" type="checkbox" value="PISCINA">Piscina</label>
+                    <label name="barbacoa" class="flex items-center gap-2"><input name="barbacoa" type="checkbox" value="BARBACOA">Barbacoa</label>
                 </div>
 
                 <div class="pt-6">
@@ -248,7 +249,7 @@
                     document.getElementById("nombre").value = apto.nombre;
                     if (Array.isArray(apto.servicios)) {
                         apto.servicios.forEach(servicio => {
-                            const checkbox = document.querySelector(`input[name="${servicio}"]`);
+                            const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
                             if (checkbox) checkbox.checked = true;
                         });
                     }

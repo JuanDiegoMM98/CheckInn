@@ -12,7 +12,7 @@ function RanderizarBaseImagen64(base64Data) {
 
 function CrearImagenBase64(base64Data) {
     if (!base64Data || typeof base64Data !== 'string') {
-        return `<div class="w-full h-44 bg-gray-200 flex items-center justify-center text-gray-500">Sin imagen</div>`;
+        return `<img src="/images/imgAlojamientoDefault.png" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento por defecto" />`;
     }
 
     return `<img src="data:image/jpeg;base64,${base64Data}" class="w-full h-44 object-cover rounded-t-2xl" alt="Imagen alojamiento" />`;

@@ -50,11 +50,7 @@
     <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Alta de alojamiento</h1>
     <div class="flex flex-wrap gap-10">
         <div class="w-full md:w-[300px] flex flex-col items-center">
-            <img
-                    id="imagenAlojamiento"
-                    alt="Imagen del apartamento"
-                    class="w-full aspect-video object-cover rounded-lg border border-gray-300 block"
-            />
+            <img id="imagenAlojamiento" alt="Imagen del apartamento" src="/images/imgAlojamientoDefault.png" class="w-full aspect-video object-cover rounded-lg border border-gray-300 block"/>
             <label for="inputImagen" class="cursor-pointer text-blue-600 hover:underline">Subir imagen</label>
             <input
                     type="file"
@@ -146,7 +142,7 @@
                     </div>
                     <div>
                         <label class="font-semibold">Precio por noche</label>
-                        <input type="number" id="precio" name="precio"
+                        <input type="number" id="precioNoche" name="precioNoche"
                                class="w-full p-3 border border-gray-300 rounded"/>
                     </div>
                     <div>
@@ -203,22 +199,6 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 
-    let archivo = null;
-
-    document.getElementById("inputImagen").addEventListener("change", async function (e) {
-        const fichero = e.target.files[0];
-        if (!fichero) return;
-
-        try {
-            archivo = await ficheroAImagenBase64(e.target.files[0]);
-            const dataUri = `data:${archivo.type};base64,${archivo}`;
-            document.getElementById("imagenAlojamiento").src = dataUri;
-        } catch (error) {
-            console.log(error);
-            alert("Error al intentar convertir la imagen");
-        }
-    });
-
     document.addEventListener("DOMContentLoaded", async function () {
         const response = await axios.get(`${uri}/me`);
 
@@ -227,6 +207,8 @@
             document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
             document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
+            let archivo;
+            
             //Menú desplegable
             document.addEventListener('click', function (event) {
                 const menu = document.getElementById('userMenu');
@@ -279,6 +261,20 @@
                     }
                 }
             });
+
+            document.getElementById("inputImagen").addEventListener("change", async function (e) {
+                const fichero = e.target.files[0];
+                if (!fichero) return;
+
+                try {
+                    archivo = await ficheroAImagenBase64(e.target.files[0]);
+                    const dataUri = `data:${archivo.type};base64,${archivo}`;
+                    document.getElementById("imagenAlojamiento").src = dataUri;
+                } catch (error) {
+                    console.log(error);
+                    alert("Error al intentar convertir la imagen");
+                }
+            });
         } else {
             alert(mensajeErrorDatosUsuario);
             window.location.href = "Login.html"
@@ -297,7 +293,7 @@
             mensajeError.textContent = "";
 
             const capacidad = document.getElementById("capacidad");
-            const precio = document.getElementById("precio");
+            const precio = document.getElementById("precioNoche");
 
             // Validar campos vacíos
             inputs.forEach(input => {
@@ -351,10 +347,5 @@
             return true;
         }
     });
-
-    function toggleMenu() {
-        const menu = document.getElementById('userMenu');
-        menu.classList.toggle('hidden');
-    }
 </script>
 </body>
