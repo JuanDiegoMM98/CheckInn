@@ -24,23 +24,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated();
                 })
                 .formLogin( form -> form
-                        .loginPage("/Login.html")               // URL de la página de login personalizada
+                        .loginPage("/Login.html")
                         .loginProcessingUrl("/api/v1/login")
                         .usernameParameter("dni")
-                        .passwordParameter("contraseña")// URL a la que se envía el form para autenticación
-//                                .successHandler((request, response, authentication) -> {
-//                                    if (authentication.getPrincipal() instanceof UsuarioModel usuario) {
-//                                        int id = usuario.getId();
-//                                        // Enviar código 200 OK (o lo que desees)
-//                                        response.setStatus(HttpServletResponse.SC_ACCEPTED);
-//                                        response.getWriter().write(usuario.getId());
-//                                        response.getWriter().flush();
-//
-//                                    }
-//
-//
-//                                })
-                        .defaultSuccessUrl("/Index.html", true)  // URL a la que se redirige si login es exitoso // TODO ESTO VA
+                        .passwordParameter("contraseña")
+                        .defaultSuccessUrl("/Index.html", true)
                         .permitAll()
                 )
                 .logout(Customizer.withDefaults())
