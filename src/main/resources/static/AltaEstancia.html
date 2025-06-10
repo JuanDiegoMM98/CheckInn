@@ -138,16 +138,17 @@
                     <div>
                         <label class="font-semibold">Capacidad</label>
                         <input type="number" id="capacidad" name="capacidad"
-                               class="w-full p-3 border border-gray-300 rounded"/>
+                               class="w-full p-3 border border-gray-300 rounded" min = "1"/>
                     </div>
                     <div>
                         <label class="font-semibold">Precio por noche</label>
                         <input type="number" id="precioNoche" name="precioNoche"
-                               class="w-full p-3 border border-gray-300 rounded"/>
+                               step="0.01"
+                               class="w-full p-3 border border-gray-300 rounded" />
                     </div>
                     <div>
                         <p id="capacidadError" class="text-red-500 hidden">Capacidad no puede tener un valor
-                            negativo o igual a 0.</p>
+                            negativo o menor a 1.</p>
                     </div>
                     <div>
                         <p id="precioError" class="text-red-500 hidden">Precio no puede tener un valor negativo.</p>
@@ -171,12 +172,12 @@
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="font-semibold">Inicio</label>
-                            <input type="date" name="fechaInicio" id="fechaInicio"
+                            <input type="date" name="inicioBloqueo" id="inicioBloqueo"
                                    class="w-full p-3 border border-gray-300 rounded"/>
                         </div>
                         <div>
                             <label class="font-semibold">Fin</label>
-                            <input type="date" name="fechaFin" id="fechaFin"
+                            <input type="date" name="finBloqueo" id="finBloqueo"
                                    class="w-full p-3 border border-gray-300 rounded"/>
                         </div>
                     </div>
@@ -208,7 +209,7 @@
             document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
             let archivo;
-            
+
             //Menú desplegable
             document.addEventListener('click', function (event) {
                 const menu = document.getElementById('userMenu');
@@ -239,11 +240,11 @@
                         datos.imagen = "";
                     }
 
-                    if (datos.fechaInicio === "") {
-                        delete datos.fechaInicio;
+                    if (datos.inicioBloqueo === "") {
+                        delete datos.inicioBloqueo;
                     }
-                    if (datos.fechaFin === "") {
-                        delete datos.fechaFin;
+                    if (datos.finBloqueo === "") {
+                        delete datos.finBloqueo;
                     }
                     if (archivo instanceof File) {
                         formData.set("imagen", archivo);
@@ -252,7 +253,7 @@
                     }
                     const responsePost = await axios.post(`${uri}/usuarios/${usuario.id}/alojamientos`, datos);
                     if (responsePost.status === 201) {
-                        alert("alta correcta");
+                        alert("Alojamiento registrado con éxito");
                         window.location.href = "ListadoApartamentos.html";
                     } else if (responsePost.status === 404) {
                         alert("No se ha encontrado el alojamiento");
@@ -282,9 +283,9 @@
 
         function validarFormulario() {
             const form = document.querySelector("form");
-            const inputs = form.querySelectorAll("input:not([name='fechaInicio']):not([name='fechaFin']), textarea");
-            const fechaInicio = document.getElementById("fechaInicio").value;
-            const fechaFin = document.getElementById("fechaFin").value;
+            const inputs = form.querySelectorAll("input:not([name='inicioBloqueo']):not([name='finBloqueo']), textarea");
+            const inicioBloqueo = document.getElementById("inicioBloqueo").value;
+            const finBloqueo = document.getElementById("finBloqueo").value;
 
             let todosLlenos = true;
             let fechasValidas = true;
@@ -306,9 +307,9 @@
             });
 
             // Validar fechas
-            if (fechaInicio && fechaFin) {
-                const inicio = new Date(fechaInicio);
-                const fin = new Date(fechaFin);
+            if (inicioBloqueo && finBloqueo) {
+                const inicio = new Date(inicioBloqueo);
+                const fin = new Date(finBloqueo);
 
                 if (inicio >= fin) {
                     fechasValidas = false;
@@ -317,7 +318,7 @@
                     fechasValidas = false;
                     mensajeError.textContent = "La fecha de fin debe ser posterior a la fecha actual.";
                 }
-            } else if ((fechaFin && !fechaInicio) || (!fechaFin && fechaInicio)) {
+            } else if ((finBloqueo && !inicioBloqueo) || (!finBloqueo && inicioBloqueo)) {
                 fechasValidas = false;
                 mensajeError.textContent = "Si rellenas una fecha de bloqueo debes bloquear ambas.";
             }
