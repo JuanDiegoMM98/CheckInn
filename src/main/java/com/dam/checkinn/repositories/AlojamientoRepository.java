@@ -26,4 +26,6 @@ public interface AlojamientoRepository extends JpaRepository<AlojamientoModel, I
     );
 
     List<AlojamientoModel> findAllByUsuarioAlojamiento_Id(int usuarioAlojamientoId);
+
+    List<AlojamientoModel> findAllByUsuarioAlojamiento_IdOrderByIdDesc(int usuarioAlojamientoId);
 }
