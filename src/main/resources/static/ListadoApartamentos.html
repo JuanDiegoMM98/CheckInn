@@ -182,6 +182,20 @@
         }
     }
 
+    function cantidadSolicitudesCancelacion(apto) {
+        if (apto.reservas){
+            let solicitudesCancelacion = 0;
+            apto.reservas.forEach(reserva => {
+                if (reserva.motivoCancelacion !== null && !reserva.cancelada && new Date(reserva.fechaInicio) > new Date()) {
+                    solicitudesCancelacion++;
+                }
+            }) 
+            return solicitudesCancelacion;
+        } else {
+            return 0;
+        }
+    }
+
     function renderizarAlojamientos(lista) {
         const carouselContainer   = document.getElementById("carouselContainer");
         const cardsWrapper        = document.getElementById("cardsWrapper");
@@ -259,6 +273,7 @@
               <div class="mt-4 text-left">
                 <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
                 <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+                <p class="text-sm text-gray-700 font-medium">❌ ${cantidadSolicitudesCancelacion(apto) !== null ? cantidadSolicitudesCancelacion(apto) : '?'} Solicitudes de cancelación</p>
               </div>
             </div>
           </div>
