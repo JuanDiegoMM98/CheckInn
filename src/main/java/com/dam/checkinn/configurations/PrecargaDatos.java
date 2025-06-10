@@ -64,9 +64,16 @@ public class PrecargaDatos {
                         passwordEncoder.encode("pass1234"), "4444333322221111", "Avenida Siempre Viva 742", LocalDate.of(1990, 8, 15),
                         "699987654", UsuarioModel.Genero.FEMENINO);
                 u2.setRol(UsuarioModel.Rol.PRO);
+                UsuarioModel u3 = new UsuarioModel(
+                        "12345678C", "Carlos", "López", "Fernández", "carlos@mail.com",
+                        passwordEncoder.encode("pass1234"), "5555666677778888", "Plaza Mayor 5", LocalDate.of(1985, 3, 10),
+                        "612345678", UsuarioModel.Genero.MASCULINO
+                );
+                u3.setRol(UsuarioModel.Rol.CLIENTE);
 
                 usuarioRepository.save(u1);
                 usuarioRepository.save(u2);
+                usuarioRepository.save(u3);
 
                 // ALOJAMIENTOS
                 List<AlojamientoModel.Servicio> servicios = new ArrayList<>();
