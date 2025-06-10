@@ -7,6 +7,7 @@ import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
+import com.dam.checkinn.models.dto.alojamientos.FacturacionDTO;
 import com.dam.checkinn.services.AlojamientoService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,21 @@ public class AlojamientoController {
         try {
             AlojamientoDTO alojamiento = alojamientoService.getAlojamientoById(id);
             return ResponseEntity.ok(alojamiento);
+        } catch (RecursoNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping("/{id}/facturacion")
+    public ResponseEntity<FacturacionDTO> getFacturacionById(
+            @PathVariable int id,
+            @RequestParam(required = true) LocalDate fechaInicio,
+            @RequestParam (required = true) LocalDate fechaFin) {
+        try {
+            FacturacionDTO facturacion = alojamientoService.getFacturacion(id, fechaInicio, fechaFin);
+            return ResponseEntity.ok(facturacion);
         } catch (RecursoNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

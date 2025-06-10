@@ -124,6 +124,11 @@ public class UsuarioService {
             throw new RecursoNotFoundException();
         }
 
+        // Comprobar que el correo no este asociado a ningun otro usuario
+        if (usuarioRepository.existsByCorreo(dto.correo())) {
+            throw new DatosNoValidosException();
+        }
+
         UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
 
         usuarioModel.setNombre(dto.nombre());

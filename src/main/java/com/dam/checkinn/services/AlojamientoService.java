@@ -6,11 +6,14 @@ import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
 import com.dam.checkinn.models.UsuarioModel;
 import com.dam.checkinn.models.dto.alojamientos.AlojamientoDTO;
+import com.dam.checkinn.models.dto.alojamientos.FacturacionDTO;
 import com.dam.checkinn.repositories.AlojamientoRepository;
+import com.dam.checkinn.repositories.ReservaRepository;
 import com.dam.checkinn.repositories.UsuarioRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -30,11 +33,11 @@ public class AlojamientoService {
 
     private final AlojamientoRepository alojamientoRepository;
 
-    private final UsuarioRepository usuarioRepository;
+    private final ReservaRepository reservaRepository;
 
-    public AlojamientoService(AlojamientoRepository alojamientoRepository, UsuarioRepository usuarioRepository) {
+    public AlojamientoService(AlojamientoRepository alojamientoRepository, ReservaRepository reservaRepository) {
         this.alojamientoRepository = alojamientoRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.reservaRepository = reservaRepository;
     }
 
     /* MÉTODOS ********************************************************************************************************/
@@ -82,6 +85,30 @@ public class AlojamientoService {
                 alojamientoModel.getServicios(), alojamientoModel.getInicioBloqueo(),
                 alojamientoModel.getFinBloqueo()
         );
+    }
+
+    public FacturacionDTO getFacturacion(int id, LocalDate fechaInicio, LocalDate fechaFin) throws Exception {
+        filtroSeguridad(id);
+
+        if (!alojamientoRepository.existsById(id)) {
+            throw new RecursoNotFoundException();
+        }
+
+        // Recuperamos reservas
+        AlojamientoModel alojamiento = alojamientoRepository.findById(id).get();
+        List<ReservaModel> reservas = alojamiento.getReservas();
+
+        double totalFacturado = reservas.stream()
+                .filter(reserva -> {
+                    LocalDate inicioReserva = reserva.getFechaInicio();
+                    LocalDate finReserva = reserva.getFechaFin();
+
+                    // Comprobamos si hay solapamiento entre los rangos
+                    return !(finReserva.isBefore(fechaInicio) || inicioReserva.isAfter(fechaFin));
+                })
+                .mapToDouble(ReservaModel::getPrecio)
+                .sum();
+        return new FacturacionDTO(id, fechaInicio, fechaFin, totalFacturado);
     }
 
     @Transactional
