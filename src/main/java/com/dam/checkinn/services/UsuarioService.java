@@ -234,7 +234,8 @@ public class UsuarioService {
         if (!usuarioRepository.existsById(id)) {
             throw new RecursoNotFoundException();
         }
-        List<AlojamientoModel> alojamientosUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_Id(id);
+        List<AlojamientoModel> alojamientosUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_IdOrderByIdDesc(id);
+
         return new MisAlojamientosDTO(alojamientosUsuario);
     }
 
