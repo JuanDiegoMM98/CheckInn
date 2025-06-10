@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>CheckInn - Cancelación reserva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
+</head>
+<body class="bg-gray-100 font-sans min-h-screen">
+<header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
+    <div class="flex items-center gap-6">
+        <img class="w-24 h-18" src="/images/logo.png" alt="Logo">
+        <nav class="flex flex-wrap gap-4 text-xl font-bold">
+            <a href="Index.html" class="text-xl hover:text-orange-500">Home</a>
+            <a href="ListadoReservas.html" class="text-xl text-orange-500">Mis reservas</a>
+            <a href="ListadoApartamentos.html" class="text-xl hover:text-orange-500">Mis Alojamientos</a>
+            <a href="AreaPersonal.html" class="text-xl hover:text-orange-500">Área personal</a>
+        </nav>
+    </div>
+    <div class="relative inline-block text-left">
+        <!-- Botón que despliega el menú -->
+        <div class="flex items-center gap-2 mt-4 md:mt-0 cursor-pointer" onclick="toggleMenu()">
+            <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
+            <span class="font-semibold text-sm">
+      <span name="nombre">Usuario</span><br/>
+      <small name="rol">Rol</small>
+    </span>
+        </div>
+
+        <!-- Menú desplegable -->
+        <div id="userMenu" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-50">
+            <ul class="py-1 text-sm text-gray-700">
+                <li>
+                    <button onclick="irAreaPersonal()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Área personal
+                    </button>
+                </li>
+                <li>
+                    <button onclick="cerrarSesion()" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                        Cerrar sesión
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</header>
+
+<main class="max-w-6xl mx-auto px-4">
+    <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6">Solicitud de cancelación de reserva</h1>
+
+    <div class="bg-white p-6 rounded-xl shadow mb-6 flex flex-col gap-6 items-center">
+
+        <!-- Imagen encima del formulario -->
+        <div class="w-full">
+            <img id="imagenAlojamiento"
+                 alt="Alojamiento"
+                 class="w-full h-64 md:h-80 lg:h-96 object-cover rounded-xl"/>
+        </div>
+
+        <!-- Formulario de datos de la reserva -->
+        <form class="w-full grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow rounded-2xl p-8">
+            <h2 class="text-2xl font-bold md:col-span-2 mt-4">Datos de la Reserva</h2>
+
+            <div class="flex flex-col md:col-span-2">
+                <h3 id="nombreAlojamiento" class="text-xl font-semibold text-gray-800"></h3>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Dirección</label>
+                <input readonly type="text" id="direccionAlojamiento"
+                       class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Precio</label>
+                <input readonly type="text" id="precioNoche" name="precioNoche"
+                       class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Fecha de Entrada</label>
+                <input readonly type="date" id="fechaInicio" name="fechaInicio"
+                       class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col">
+                <label class="font-semibold mb-1">Fecha de Salida</label>
+                <input readonly type="date" id="fechaFin" name="fechaFin"
+                       class="p-3 border border-gray-300 rounded w-full"/>
+            </div>
+
+            <div class="flex flex-col md:col-span-2">
+                <label class="font-semibold mb-1">Motivo de Cancelación</label>
+                <textarea id="motivoCancelacion" name="motivoCancelacion"
+                          class="p-3 border border-gray-300 rounded w-full h-32 resize-y" readonly></textarea>
+            </div>
+
+            <div class="flex justify-center gap-4 md:col-span-2 mt-4">
+                <button id="btn-cancelar" type="button"
+                        class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Rechazar
+                </button>
+                <button type="submit" class="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Aceptar
+                    Cancelación
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", async function () {
+
+            const response = await axios.get(`${uri}/me`);
+
+            if (response.status === 200) {
+                const usuario = response.data;
+                document.querySelector('span[name="nombre"]').textContent = usuario.nombre;
+                document.querySelector('small[name="rol"]').textContent = usuario.rol;
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const idReserva = urlParams.get("idReserva");
+                const idApartamento = urlParams.get("idApartamento");
+
+                // Obtener datos del alojamiento
+                try {
+                    const res = await axios.get(`${uri}/reservas/${idReserva}`);
+                    if (res.status === 200) {
+                        const reserva = res.data;
+
+                        document.getElementById("imagenAlojamiento").src = RanderizarBaseImagen64(reserva.imagen);
+                        document.getElementById("nombreAlojamiento").textContent = reserva.nombre;
+                        document.getElementById("direccionAlojamiento").value = reserva.direccion;
+                        document.getElementById("precioNoche").value = reserva.precio;
+                        document.getElementById("fechaInicio").value = reserva.fechaInicio;
+                        document.getElementById("fechaFin").value = reserva.fechaFin;
+                        document.getElementById("motivoCancelacion").textContent = reserva.motivoCancelacion;
+                    } else if (res.status === 404) {
+                        alert("No se ha encontrado el id de la reserva en la base de datos");
+                    }
+                } catch (error) {
+                    console.error("Error al cargar el alojamiento:", error);
+                }
+
+                document.getElementById("btn-cancelar").addEventListener("click", function (e) {
+                    e.preventDefault();
+                    window.close();
+                });
+
+                document.querySelector("form").addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const datos = {
+                        cancelada: true,
+                        idReserva: urlParams.get("idReserva"),
+                        idAlojamiento: urlParams.get("idAlojamiento")
+                    };
+
+                    try {
+                        const res = await axios.patch(`${uri}/reservas/${idReserva}`, datos);
+                        if (res.status === 200) {
+                            alert("Se ha cancelado la reserva: " + idReserva);
+                            window.close();
+                        } else {
+                            alert("Error desconocido al intentar aceptar la cancelación de reserva");
+                        }
+                    } catch (error) {
+                        if (error.response.status === 404) {
+                            alert(`No se ha encontrado el id de la reserva: ${idReserva}`);
+                        } else {
+                            alert(`Error de servidor al aceptar la cancelación de la reserva: ${idReserva}`);
+                        }
+                    }
+
+                    document.addEventListener('click', function (event) {
+                        const menu = document.getElementById('userMenu');
+                        const button = event.target.closest('.inline-block');
+                        if (!button) {
+                            menu.classList.add('hidden');
+                        }
+                    });
+                });
+
+            } else {
+                alert(mensajeErrorDatosUsuario);
+                window.location.href = "Login.html"
+            }
+        }
+    );
+
+    function toggleMenu() {
+        const menu = document.getElementById('userMenu');
+        menu.classList.toggle('hidden');
+    }
+</script>
+</body>
+</html>
