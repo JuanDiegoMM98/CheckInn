@@ -125,21 +125,33 @@
 
             document.querySelector('[name="nombreUsuario"]').innerHTML = `${usuario.nombre}<br><small name="rol">${usuario.rol}</small>`;
 
-            const responseGet = await axios.get(`${uri}/usuarios/${usuario.id}`);
+            try {
+                const responseGet = await axios.get(`${uri}/usuarios/${usuario.id}`);
 
-            if (responseGet.status === 200) {
-                const campos = [
-                    "nombre", "correo", "apellido1", "apellido2",
-                    "fechaNacimiento", "direccion", "genero", "telefono", "tarjetaBancaria"
-                ];
+                if (responseGet.status === 200) {
+                    const campos = [
+                        "nombre", "correo", "apellido1", "apellido2",
+                        "fechaNacimiento", "direccion", "genero", "telefono", "tarjetaBancaria"
+                    ];
 
-                campos.forEach(campo => {
-                    if (usuario[campo]) document.querySelector(`[name="${campo}"]`).value = usuario[campo];
-                });
-            } else if (responseGet.status === 404) {
-                alert("No se ha encontrado el usuario en base de datos");
-            } else {
-                alert("Error al intentar acceder a la información del usuario");
+                    campos.forEach(campo => {
+                        if (usuario[campo]) document.querySelector(`[name="${campo}"]`).value = usuario[campo];
+                    });
+                // } else if (responseGet.status === 404) {
+                //     alert("No se ha encontrado el usuario en base de datos");
+                } else {
+                    alert("Error al intentar acceder a la información del usuario");
+                }
+            } catch (error) {
+                if (error.response) {
+                    // Cuando el código de la respuesta es un 4xx axios lo procesa como un error
+                    if (error.response.status === 409) {
+                        alert("Ha habido un conflicto al intentar actualizar los datos.");
+                    } else if (error.response.status === 404) {
+                        alert("No se ha podido encontrar el usuario en la base de datos.");
+                    } else {
+                        alert("Error del servidor al intentar actualizar los datos.");
+                    }
             }
 
             document.querySelector("form").addEventListener("submit", async function (e) {
@@ -151,16 +163,31 @@
                 try {
                     const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
                     if (responsePatch.status === 200) {
-                        window.location.href = "Index.html";
-                    } else if (responsePatch.status === 404) {
-                        alert("No se ha podido encontrar el usuario en la base de datos.")
-                    } else if (responsePatch.status === 409) {
-                        alert("Ha habido un conflicto al intentar actualizar los datos.")
+                        window.location.reload();
+                    // } else if (responsePatch.status === 404) {
+                    //     alert("No se ha podido encontrar el usuario en la base de datos.")
+                    // } else if (responsePatch.status === 409) {
+                    //     alert("Ha habido un conflicto al intentar actualizar los datos.")
                     } else {
                         alert("Error del servidor al intentar actualizar los datos.")
                     }
-                } catch {
-                    alert("Error al conectar con el servidor");
+                } catch (error) {
+                    if (error.response) {
+                        // Cuando el código de la respuesta es un 4xx axios lo procesa como un error
+                        if (error.response.status === 409) {
+                            alert("Ha habido un conflicto al intentar actualizar los datos.");
+                        } else if (error.response.status === 404) {
+                            alert("No se ha podido encontrar el usuario en la base de datos.");
+                        } else {
+                            alert("Error del servidor al intentar actualizar los datos.");
+                        }
+                    } else if (error.request) {
+                        // La solicitud fue hecha pero no hubo respuesta
+                        alert("Error al conectar con el servidor.");
+                    } else {
+                        alert("Error inesperado: " + error.message);
+                    }
+                    console.error(error);
                 }
             });
 
@@ -191,15 +218,22 @@
                         telefono: usuario.telefono,
                         genero: usuario.genero
                     }
-                    const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
-                    if (response.status === 200) {
-                        window.location.href = "Index.html";
-                    } else if (responsePatch.status === 404) {
-                        alert("No se ha podido encontrar el usuario en la base de datos.")
-                    } else if (responsePatch.status === 409) {
-                        alert("Ha habido un conflicto al intentar actualizar los datos.")
-                    } else {
-                        alert("Error del servidor al intentar actualizar los datos.")
+
+                    try {
+                        const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
+
+                        if (responsePatch.status === 200) {
+                            window.location.reload();
+                        } else if (responsePatch.status === 404) {
+                            alert("No se ha podido encontrar el usuario en la base de datos.");
+                        } else if (responsePatch.status === 409) {
+                            alert("Ha habido un conflicto al intentar actualizar los datos.");
+                        } else {
+                            alert("Error del servidor al intentar actualizar los datos.");
+                        }
+                    } catch (error) {
+                        alert("Error al conectar con el servidor 2.");
+                        console.error(error);
                     }
                 }
             });
@@ -222,6 +256,41 @@
     function toggleMenu() {
         const menu = document.getElementById('userMenu');
         menu.classList.toggle('hidden');
+    }
+
+    function validarCamposObligatorios() {
+        // Lista de los name de los campos obligatorios
+        const required = [
+            "nombre",
+            "correo",
+            "apellido1",
+            "apellido2",
+            "fechaNacimiento",
+            "direccion",
+            "tarjetaBancaria"
+        ];
+
+        let todoBien = true;
+
+        required.forEach(name => {
+            const input = document.querySelector(`[name="${name}"]`);
+            if (!input) return; // si por alguna razón no existe, lo saltamos
+
+            // Si está vacío (tras quitar espacios), marcamos error
+            if (!input.value.trim()) {
+                todoBien = false;
+                input.classList.add("border-red-500", "focus:ring-red-500");
+            } else {
+                // Quitamos marca de error si anteriormente la tuviera
+                input.classList.remove("border-red-500", "focus:ring-red-500");
+            }
+        });
+
+        if (!todoBien) {
+            alert("Por favor, completa todos los campos obligatorios marcados con *.");
+        }
+
+        return todoBien;
     }
 </script>
 </body>

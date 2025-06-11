@@ -337,6 +337,7 @@
             const card = document.createElement("a");
             card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
             card.href = `InfoApartamento.html?idAlojamiento=${apto.id}`;
+            card.target = "_blank";
 
             card.innerHTML = `
       <div class="flex flex-col h-full">
@@ -349,6 +350,7 @@
           <div class="mt-4 text-left">
             <p class="text-sm text-gray-700 font-medium">📍 ${apto.provincia || 'Desconocida'}</p>
             <p class="text-sm text-gray-700 font-medium">💶 ${apto.precioNoche || '?'} €/Noche</p>
+            <p class="text-sm text-gray-700 font-medium">⭐ ${apto.valoracionMedia !== null ? apto.valoracionMedia : '?'}</p>
           </div>
         </div>
         <button class="bg-orange-500 text-white p-6 text-center font-semibold text-2xl transition-colors cursor-pointer hover:bg-orange-600 rounded-b-2xl">
