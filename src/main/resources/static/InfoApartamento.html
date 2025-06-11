@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Información Alojamiento</title>
+    <title>Checkinn - Información Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -21,7 +21,7 @@
     <div class="relative inline-block text-left">
         <!-- Botón que despliega el menú -->
         <div class="flex items-center gap-2 mt-4 md:mt-0 cursor-pointer" onclick="toggleMenu()">
-            <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar"/>
+            <img class="w-10 h-10 rounded-full" src="/images/defaultAvatar.jpg" alt="Avatar" onerror="this.onerror=null;this.src='/images/imgAlojamientoDefault.png';"/>
             <span class="font-semibold text-sm">
       <span name="nombre">Usuario</span><br/>
       <small name="rol">Rol</small>
@@ -53,21 +53,16 @@
             <img id="imagenApto" src="" alt="Imagen del apartamento"
                  class="w-full h-48 object-cover rounded-xl bg-gray-200">
 
-            <!-- Botón de Reservar debajo de la imagen -->
-            <button
-                    id="reservarBtn"
-                    type="submit"
-                    form="reservaForm"
-                    class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed"
-                    disabled
-            >
+            <div class="flex items-center gap-3 rounded-md px-4 py-2 w-full justify-center shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.462a1 1 0 00-.364 1.118l1.287 3.974c.3.922-.755 1.688-1.538 1.118l-3.39-2.462a1 1 0 00-1.175 0l-3.39 2.462c-.783.57-1.838-.196-1.538-1.118l1.287-3.974a1 1 0 00-.364-1.118L2.045 9.4c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.974z"/>
+                </svg>
+                <span class="text-lg font-semibold text-gray-700" id="valoracion"></span>
+            </div>
+
+            <button id="reservarBtn" type="submit" form="reservaForm" class="bg-gray-400 text-white w-full mt-4 py-3 rounded-lg cursor-not-allowed" disabled>
                 Reservar
             </button>
-
-            <div class="flex justify-center items-center text-orange-500 text-xl mt-3 gap-1">
-                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9734;</span><span>&#9734;</span>
-                <span class="text-sm text-gray-700 ml-2">(3,7)</span>
-            </div>
         </div>
 
         <div class="flex-1 space-y-6">
@@ -154,9 +149,12 @@
                 document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
                 document.querySelector('[name="precio"]').value = apto.precioNoche || '';
                 document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
+                document.getElementById("valoracion").textContent = apto.valoracionMedia;
 
                 if (Array.isArray(apto.servicios)) {
+                    console.log(apto.servicios);
                     apto.servicios.forEach(servicio => {
+                        console.log(servicio.toLowerCase());
                         const checkbox = document.querySelector(`input[name="${servicio.toLowerCase()}"]`);
                         if (checkbox) checkbox.checked = true;
                     });
@@ -183,13 +181,15 @@
                         const responsePost = await axios.post(`${uri}/reservas`, datos);
                         if (responsePost.status === 201) {
                             window.location.href = "ListadoReservas.html";
-                        } else if (responsePost.status === 409) {
-                            alert("Error durante la reserva.");
+                        } else {
+                            alert("Error durante la reserva")
+                        }
+                    } catch (error) {
+                        if (error.response.status === 409) {
+                            alert("Las fechas indicadas no estan disponibles, consulta alojamientos disponibles en el filtro");
                         } else {
                             alert("Error del servidor al intentar crear la reserva");
                         }
-                    } catch (error) {
-                        alert("Error al conectar con el servidor.");
                     }
                 });
             } else {

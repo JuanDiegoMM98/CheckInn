@@ -38,7 +38,7 @@
         </div>
         <div>
             <label for="nombre" class="block font-semibold text-lg mb-2">Nombre *</label>
-            <input name="nombre" id="nombre" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+"
+            <input name="nombre" id="nombre" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
                    title="Introduce solo letras"
                    class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
                    oninvalid="this.classList.add('border-red-500')"
@@ -46,7 +46,7 @@
         </div>
         <div>
             <label for="apellido1" class="block font-semibold text-lg mb-2">Apellido 1 *</label>
-            <input name="apellido1" id="apellido1" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+"
+            <input name="apellido1" id="apellido1" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
                    title="Introduce solo letras"
                    class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
                    oninvalid="this.classList.add('border-red-500')"
@@ -54,7 +54,7 @@
         </div>
         <div>
             <label for="apellido2" class="block font-semibold text-lg mb-2">Apellido 2 *</label>
-            <input name="apellido2" id="apellido2" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+"
+            <input name="apellido2" id="apellido2" type="text" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+"
                    title="Introduce solo letras"
                    class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
                    oninvalid="this.classList.add('border-red-500')"
@@ -145,7 +145,7 @@
             const response = await axios.post(`${uri}/usuarios`, datos);
 
             if (response.status === 201) {
-                alert("Alta correcta");
+                alert("Alta correcta. Inicie sesión para iniciar la aplicación");
                 window.location.href = "Login.html";
             } else if (response.status === 409) {
                 alert("Registro fallido campos incorrectos");
