@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Área Personal</title>
+    <title>CheckInn - Área Personal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -89,13 +89,19 @@
         </div>
         <div class="flex flex-col md:col-span-2">
             <label class="font-semibold mb-1">Tarjeta de crédito *</label>
-            <input type="text" name="tarjetaBancaria" maxlength="12" class="p-3 border border-gray-300 rounded" required/>
+            <input type="text" name="tarjetaBancaria" maxlength="12" class="p-3 border border-gray-300 rounded"
+                   required/>
         </div>
         <div class="text-sm md:col-span-2">Los campos marcados con (*) son obligatorios</div>
         <div class="flex justify-center gap-4 md:col-span-2 mt-4">
             <button type="reset" class="px-6 py-2 rounded bg-red-500 text-white hover:bg-red-600">Borrar datos</button>
-            <button id="btn-cancelar" type="button" class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar</button>
-            <button id="btn-cancelar-pro" type="button" class="px-6 py-2 rounded bg-yellow-500 text-white hover:bg-yellow-600 hidden">Cancelar suscripción PRO</button>
+            <button id="btn-cancelar" type="button"
+                    class="px-6 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400">Cancelar
+            </button>
+            <button id="btn-cancelar-pro" type="button"
+                    class="px-6 py-2 rounded bg-yellow-500 text-white hover:bg-yellow-600 hidden">Cancelar suscripción
+                PRO
+            </button>
             <button type="submit" class="px-6 py-2 rounded bg-orange-500 text-white hover:bg-orange-600">Guardar
             </button>
         </div>
@@ -137,8 +143,8 @@
                     campos.forEach(campo => {
                         if (usuario[campo]) document.querySelector(`[name="${campo}"]`).value = usuario[campo];
                     });
-                // } else if (responseGet.status === 404) {
-                //     alert("No se ha encontrado el usuario en base de datos");
+                    // } else if (responseGet.status === 404) {
+                    //     alert("No se ha encontrado el usuario en base de datos");
                 } else {
                     alert("Error al intentar acceder a la información del usuario");
                 }
@@ -152,6 +158,7 @@
                     } else {
                         alert("Error del servidor al intentar actualizar los datos.");
                     }
+                }
             }
 
             document.querySelector("form").addEventListener("submit", async function (e) {
@@ -164,10 +171,10 @@
                     const responsePatch = await axios.patch(`${uri}/usuarios/${usuario.id}`, datos);
                     if (responsePatch.status === 200) {
                         window.location.reload();
-                    // } else if (responsePatch.status === 404) {
-                    //     alert("No se ha podido encontrar el usuario en la base de datos.")
-                    // } else if (responsePatch.status === 409) {
-                    //     alert("Ha habido un conflicto al intentar actualizar los datos.")
+                        // } else if (responsePatch.status === 404) {
+                        //     alert("No se ha podido encontrar el usuario en la base de datos.")
+                        // } else if (responsePatch.status === 409) {
+                        //     alert("Ha habido un conflicto al intentar actualizar los datos.")
                     } else {
                         alert("Error del servidor al intentar actualizar los datos.")
                     }
@@ -203,7 +210,7 @@
                 }
             });
 
-            document.getElementById("btn-cancelar-pro").addEventListener("click", async function() {
+            document.getElementById("btn-cancelar-pro").addEventListener("click", async function () {
                 if (confirm("¿Estás seguro que quieres cancelar tu suscripción PRO?")) {
                     const datos = {
                         nombre: usuario.nombre,
@@ -241,6 +248,7 @@
             document.getElementById("btn-cancelar").addEventListener("click", function () {
                 window.location.href = "Index.html";
             });
+
         } else {
             alert(mensajeErrorDatosUsuario);
             window.location.href = "Login.html"

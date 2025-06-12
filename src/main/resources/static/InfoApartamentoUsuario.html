@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Checkinn - Información Alojamiento</title>
+    <title>CheckInn - Información Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -157,11 +157,12 @@
                         <label class="font-semibold">Capacidad</label>
                         <input type="number" id="capacidad" name="capacidad"
                                class="w-full p-3 border border-gray-300 rounded"
-                                min = "1"/>
+                               min = "1"/>
                     </div>
                     <div>
                         <label class="font-semibold">Precio por noche</label>
-                        <input type="number" id="precio" name="precio" class="w-full p-3 border border-gray-300 rounded"/>
+                        <input type="number" id="precioNoche" name="precioNoche" class="w-full p-3 border border-gray-300 rounded"
+                               step="0.01" min="0"/>
                     </div>
                     <div>
                         <p id="capacidadError" class="text-red-500 hidden">Capacidad no puede tener valor negativo ni 0.</p>
@@ -201,12 +202,6 @@
                 <p id="mensajeError" class="text-red-500"></p>
                 <div class="pt-6 flex gap-4">
                     <button
-                            id="updateBtn"
-                            type="submit"
-                            class="bg-blue-500 text-white w-full py-3 rounded-lg hover:bg-blue-600">
-                        Actualizar alojamiento
-                    </button>
-                    <button
                             id="deleteBtn"
                             type="button"
                             class="bg-red-500 text-white w-full py-3 rounded-lg hover:bg-red-600">
@@ -217,6 +212,12 @@
                             type="button"
                             class="bg-gray-300 text-gray-800 hover:bg-gray-400 w-full py-3 rounded-lg">
                         Cancelar
+                    </button>
+                    <button
+                            id="updateBtn"
+                            type="submit"
+                            class="bg-orange-500 text-white hover:bg-orange-600 w-full py-3 rounded-lg">
+                        Actualizar alojamiento
                     </button>
                 </div>
             </div>
@@ -251,7 +252,7 @@
                     document.querySelector('[name="provincia"]').value = apto.provincia || '';
                     document.querySelector('[name="direccion"]').value = apto.direccion || '';
                     document.querySelector('[name="capacidad"]').value = apto.capacidad || '';
-                    document.querySelector('[name="precio"]').value = apto.precioNoche || '';
+                    document.querySelector('[name="precioNoche"]').value = apto.precioNoche || '';
                     document.querySelector('[name="descripcion"]').value = apto.descripcion || '';
                     document.querySelector('[name="inicioBloqueo"]').value = apto.inicioBloqueo || '';
                     document.querySelector('[name="finBloqueo"]').value = apto.finBloqueo || '';
@@ -429,7 +430,7 @@
         let fechasValidas = true;
         let mensajeError = document.getElementById("mensajeError");
         const capacidad = document.getElementById("capacidad");
-        const precio = document.getElementById("precio");
+        const precio = document.getElementById("precioNoche");
 
         if (inicioBloqueo && finBloqueo) {
             const inicio = new Date(document.getElementById('inicioBloqueo').value);
@@ -457,7 +458,7 @@
         }
         // Mostrar errores si hay
         if (!todosLlenos || !fechasValidas) {
-            if (mensajeError) alert(mensajeError);
+            if (mensajeError) alert(mensajeError.textContent);
             else mensajeError.textContent = "Por favor, completa todos los campos obligatorios.";
             return false;
         }

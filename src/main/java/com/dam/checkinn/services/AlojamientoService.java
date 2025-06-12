@@ -54,7 +54,8 @@ public class AlojamientoService {
 
 
     public List<AlojamientoModel> buscarDisponiblesConFiltro(String provincia, Double valoracionMinima, Double precioMaximo,
-                                                             List<AlojamientoModel.Servicio> servicios, LocalDate fechaInicio, LocalDate fechaFin, Integer personasMaximas
+                                                             List<AlojamientoModel.Servicio> servicios, LocalDate fechaInicio,
+                                                             LocalDate fechaFin, Integer personasMaximas
     ) {
         List<AlojamientoModel> candidatos = alojamientoRepository.findByFiltrosBasicos(provincia, valoracionMinima, precioMaximo,
                 personasMaximas
@@ -103,11 +104,13 @@ public class AlojamientoService {
                     LocalDate inicioReserva = reserva.getFechaInicio();
                     LocalDate finReserva = reserva.getFechaFin();
 
-                    // Comprobamos si hay solapamiento entre los rangos
-                    return !(finReserva.isBefore(fechaInicio) || inicioReserva.isAfter(fechaFin));
+                    // Comprobamos si hay solapamiento entre los rangos y que no esté cancelada
+                    return !reserva.isCancelada() &&
+                            !(finReserva.isBefore(fechaInicio) || inicioReserva.isAfter(fechaFin));
                 })
                 .mapToDouble(ReservaModel::getPrecio)
                 .sum();
+
         return new FacturacionDTO(id, fechaInicio, fechaFin, totalFacturado);
     }
 
