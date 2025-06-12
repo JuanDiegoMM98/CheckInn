@@ -6,7 +6,6 @@
     <title>CheckInn - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
-
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
@@ -47,7 +46,6 @@
     </div>
 
 </header>
-
 <main class="mx-auto px-4 min-h-screen flex flex-col items-center">
     <h1 class="text-4xl font-extrabold text-orange-500 text-center mt-10 mb-6 w-full max-w-6xl">
         Bienvenido a CheckInn!
@@ -135,7 +133,7 @@
             <div class="flex flex-col">
                 <label for="valoracionMinima" class="font-semibold mb-1">Valoración mínima</label>
                 <select name="valoracionMinima" id="valoracionMinima"
-                        class="w-full p-3 border border-gray-300 rounded">
+                        class="w-full p-3 border border-gray-300 rounded" min="1">
                     <option value="">Selecciona</option>
                     <option value="1">1 Estrella</option>
                     <option value="2">2 Estrellas</option>
@@ -147,16 +145,24 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Precio máximo -->
             <div class="flex flex-col">
                 <label for="precioMaximo" class="font-semibold mb-1">Precio máximo (€)</label>
                 <input type="number" id="precioMaximo" name="precioMaximo" placeholder="Precio máximo"
-                       class="w-full p-3 border border-gray-300 rounded"/>
+                       class="w-full p-3 border border-gray-300 rounded" min="1" step="0.01" />
+                <p id="precioMaximoError" class="text-red-500 text-sm mt-1 hidden">
+                    Precio máximo no puede tener un valor negativo o menor a 1.
+                </p>
             </div>
 
+            <!-- Número de personas -->
             <div class="flex flex-col">
                 <label for="personasMaximas" class="font-semibold mb-1">Número de personas</label>
                 <input type="number" id="personasMaximas" name="personasMaximas" placeholder="Personas"
-                       class="w-full p-3 border border-gray-300 rounded"/>
+                       class="w-full p-3 border border-gray-300 rounded" min="1" />
+                <p id="personasMaximasError" class="text-red-500 text-sm mt-1 hidden">
+                    Número de personas no puede tener un valor negativo o menor a 1.
+                </p>
             </div>
         </div>
 
@@ -190,8 +196,8 @@
         <div class="flex justify-center gap-6">
             <button id="filtrar" type="submit" class="bg-gray-200 px-6 py-2 rounded-md hover:bg-gray-300">Buscar
             </button>
-            <button type="button" class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva
-                rápida
+            <button name="btn-reservaRapida" type="button"
+                    class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600">Reserva rápida
             </button>
         </div>
     </form>
@@ -201,6 +207,20 @@
 <script src="app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+
+    function fechasValidas(fechaInicio, fechaFin) {
+        const fechaI = new Date(fechaInicio);
+        const fechaF = new Date(fechaFin);
+        if (fechaI >= fechaF) {
+            alert("La fecha de inicio no puede ser igual o posterior a la fecha de fin.")
+            return false;
+        } else if (fechaI < Date.now()) {
+            alert("Las fechas de reserva deben ser posteriores a la fecha actual");
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     document.addEventListener("DOMContentLoaded", async function () {
 
@@ -223,7 +243,9 @@
             document.getElementById("filtroForm").addEventListener("submit", async function (e) {
                 e.preventDefault();
 
-                const form = e.target;
+                validarNumeros();
+
+                const form = e.target.closest("form");
                 const formData = new FormData(form);
 
                 // Convertir a objeto sin campos vacíos
@@ -266,11 +288,50 @@
                     alert("Error de red o servidor");
                 }
             });
+
+            document.getElementById("filtroForm").addEventListener("click", async function (e) {
+                if (e.target.name === "btn-reservaRapida") {
+                    e.preventDefault();
+
+                    validarNumeros();
+                    const form = document.getElementById("filtroForm");
+                    const formData = new FormData(form);
+
+                    const datos = Object.fromEntries(formData.entries());
+                    if (!datos.fechaInicio || !datos.fechaFin || !datos.provincia) {
+                        alert("Los campos fecha inicio, fecha fin y provincia son obligatorios.")
+                        return;
+                    }
+                    if (!fechasValidas(datos.fechaInicio, datos.fechaFin)) {
+                        return;
+                    }
+                    datos.dni = usuario.dni;
+                    try {
+                        const responsePost = await axios.post(`${uri}/reservas/reservaRapida`, datos);
+
+                        if (responsePost.status === 200) {
+                            alert("Se ha realizado la reserva rápida correctamente.");
+                            window.location.href = "ListadoReservas.html";
+                        }
+                    } catch (error) {
+                        if (error.response.status === 404) {
+                            alert("No se ha encontrado ningún alojamiento disponible.");
+                        } else if (error.response.status === 409) {
+                            alert("Error en los datos recibidos.");
+                        } else if (error.response.status === 500) {
+                            alert("Error del servidor al intentar realizar la reserva.")
+                        } else {
+                            alert("Error inesperado al intentar realizar la reserva.");
+                        }
+                    }
+                }
+            });
         } else {
             alert(mensajeErrorDatosUsuario);
             window.location.href = "Login.html"
         }
-    });
+    })
+    ;
 
     // -------------------------------------------------
     // Función para cargar todos los alojamientos al inicio
@@ -366,6 +427,32 @@
     function toggleMenu() {
         const menu = document.getElementById('userMenu');
         menu.classList.toggle('hidden');
+    }
+
+    function validarNumeros() {
+        const precioMaximoInput = document.getElementById("precioMaximo");
+        const personasMaximasInput = document.getElementById("personasMaximas");
+
+        const precioMaximo = parseFloat(precioMaximoInput.value);
+        const personasMaximas = parseInt(personasMaximasInput.value);
+
+        // Validación precio
+        if (precioMaximoInput.value.trim() === "") {
+            document.getElementById("precioMaximoError").classList.add("hidden");
+        } else if (isNaN(precioMaximo) || precioMaximo < 1) {
+            document.getElementById("precioMaximoError").classList.remove("hidden");
+        } else {
+            document.getElementById("precioMaximoError").classList.add("hidden");
+        }
+
+        // Validación personas
+        if (personasMaximasInput.value.trim() === "") {
+            document.getElementById("personasMaximasError").classList.add("hidden");
+        } else if (isNaN(personasMaximas) || personasMaximas < 1) {
+            document.getElementById("personasMaximasError").classList.remove("hidden");
+        } else {
+            document.getElementById("personasMaximasError").classList.add("hidden");
+        }
     }
 </script>
 </body>

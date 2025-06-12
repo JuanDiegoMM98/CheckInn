@@ -45,16 +45,16 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Aquí defines qué orígenes permites
+        // Orígenes permitidos
         configuration.setAllowedOrigins(List.of("https://checkinn-f8mq.onrender.com"));
 
-        // Métodos permitidos (GET, POST, PUT, DELETE, etc.)
+        // Métodos permitidos
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         // Headers permitidos
         configuration.setAllowedHeaders(List.of("*"));
 
-        // Si quieres permitir cookies o credenciales
+        // Permitir cookies
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

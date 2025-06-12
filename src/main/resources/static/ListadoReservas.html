@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Reservas - CheckInn</title>
+    <title>CheckInn - Mis Reservas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -127,7 +127,7 @@
 
                         reservas.forEach(reserva => {
                             const card = document.createElement("div");
-                            card.className = "w-[450px] h-[700px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+                            card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
 
                             let contenidoCard = `
                                 <div class="flex flex-col h-full">
@@ -234,11 +234,11 @@
                         });
                     }
                 } catch (error) {
-                   if (error.response.status === 404) {
-                       alert("No se ha podido encontrar el id de usuario");
-                   } else if (error.response.status === 409) {
-                       alert("Ha habido un conflicto al intentar realizar la reserva");
-                   }
+                    if (error.response.status === 404) {
+                        alert("No se ha podido encontrar el id de usuario");
+                    } else if (error.response.status === 409) {
+                        alert("Ha habido un conflicto al intentar realizar la reserva");
+                    }
                 }
             } catch (error) {
                 mensaje.textContent = "Error al cargar tus reservas.";

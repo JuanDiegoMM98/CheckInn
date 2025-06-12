@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Alta de Alojamiento</title>
+    <title>CheckInn - Alta de Alojamiento</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
@@ -143,7 +143,7 @@
                     <div>
                         <label class="font-semibold">Precio por noche</label>
                         <input type="number" id="precioNoche" name="precioNoche"
-                               step="0.01"
+                               step="0.01" min="0"
                                class="w-full p-3 border border-gray-300 rounded" />
                     </div>
                     <div>
@@ -187,7 +187,7 @@
                     <button
                             id="registrarBtn"
                             type="submit"
-                            class="bg-blue-500 text-white w-1/3 py-3 rounded-lg hover:bg-blue-600 mx-auto">
+                            class="bg-orange-500 text-white hover:bg-orange-600 w-1/3 py-3 rounded-lg mx-auto">
                         Registrar alojamiento
                     </button>
                 </div>

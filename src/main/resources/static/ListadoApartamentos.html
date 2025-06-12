@@ -189,7 +189,7 @@
                 if (reserva.motivoCancelacion !== null && !reserva.cancelada && new Date(reserva.fechaInicio) > new Date()) {
                     solicitudesCancelacion++;
                 }
-            }) 
+            })
             return solicitudesCancelacion;
         } else {
             return 0;
@@ -210,7 +210,7 @@
 
         // Construye la tarjeta de “Nuevo Alojamiento”
         const cardNueva = document.createElement("a");
-        cardNueva.className = "w-[450px] h-[700px] shrink-0 bg-white border-4 border-dashed border-orange-400 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center";
+        cardNueva.className = "w-[320px] h-[500px] shrink-0 bg-white border-4 border-dashed border-orange-400 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex flex-col items-center justify-center text-center";
         cardNueva.href = "AltaEstancia.html";
         cardNueva.innerHTML = `
       <div class="flex flex-col items-center justify-center h-full px-6">
@@ -260,7 +260,7 @@
         // Añadimos el resto de alojamientos
         lista.alojamientos.forEach(apto => {
             const card = document.createElement("a");
-            card.className = "w-[450px] h-[700px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
+            card.className = "w-[320px] h-[500px] shrink-0 bg-white border border-gray-200 rounded-2xl shadow-xl hover:shadow-3xl hover:scale-105 transition-all duration-300 text-center flex flex-col overflow-hidden";
             card.href = `InfoApartamentoUsuario.html?idAlojamiento=${apto.id}`;
             card.innerHTML = `
           <div class="flex flex-col h-full">
