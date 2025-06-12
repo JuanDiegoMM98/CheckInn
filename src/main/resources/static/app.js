@@ -1,4 +1,4 @@
-const uri = "http://localhost:5000/api/v1";
+const uri = "/api/v1";
 
 const mensajeErrorDatosUsuario = "Error al cargar los datos del usuario";
 
