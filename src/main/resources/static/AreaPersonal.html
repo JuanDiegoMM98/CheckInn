@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>CheckInn - Área Personal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="favicon" type="image/png" href="/images/icon.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/icon.png" sizes="32x32">
 </head>
 <body class="bg-gray-100 font-sans min-h-screen">
 <header class="bg-white shadow-sm flex flex-col md:flex-row items-center justify-between px-8 py-4 border-b">
@@ -231,16 +231,19 @@
 
                         if (responsePatch.status === 200) {
                             window.location.reload();
-                        } else if (responsePatch.status === 404) {
-                            alert("No se ha podido encontrar el usuario en la base de datos.");
-                        } else if (responsePatch.status === 409) {
-                            alert("Ha habido un conflicto al intentar actualizar los datos.");
                         } else {
-                            alert("Error del servidor al intentar actualizar los datos.");
+                            alert("Respuesta inesperada al intentar actualizar los datos.");
                         }
                     } catch (error) {
-                        alert("Error al conectar con el servidor 2.");
-                        console.error(error);
+                        if (error.request.status === 404) {
+                            alert("No se ha podido encontrar el usuario en la base de datos.");
+                        } else if (error.request.status === 409) {
+                            alert("Ha habido un conflicto al intentar actualizar los datos.");
+                        } else if (error.request.status === 500) {
+                            alert("Error del servidor al intentar actualizar los datos.");
+                        } else {
+                            alert("Error al conectar con el servidor.");
+                        }
                     }
                 }
             });
