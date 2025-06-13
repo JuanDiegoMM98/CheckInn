@@ -33,7 +33,7 @@ public class ReservaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id;   // PK
 
     @Column(nullable = false)
     private double precio;
