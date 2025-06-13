@@ -157,7 +157,7 @@
                         <label class="font-semibold">Capacidad</label>
                         <input type="number" id="capacidad" name="capacidad"
                                class="w-full p-3 border border-gray-300 rounded"
-                                min = "1"/>
+                               min = "1"/>
                     </div>
                     <div>
                         <label class="font-semibold">Precio por noche</label>
@@ -267,6 +267,18 @@
             document.querySelector('small[name="rol"]').textContent = usuario.rol;
 
             if (!idAlojamiento) return alert("No se proporcionó el ID del apartamento en la URL.");
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const numberInputs = document.querySelectorAll('input[type="number"]');
+
+                numberInputs.forEach(input => {
+                    input.addEventListener('keydown', function (event) {
+                        if (['e', 'E', '-', '+'].includes(event.key)) {
+                            event.preventDefault();
+                        }
+                    });
+                });
+            });
 
             // Cargar datos del alojamiento
             let archivo;
@@ -385,7 +397,6 @@
                         const datos = Object.fromEntries(formData.entries());
 
                         if (!comprobarFechasValidas()) {
-                            alert("Se deben rellenar las fechas de la facturación");
                             return;
                         }
                         try {
