@@ -34,11 +34,8 @@ public class AlojamientoService {
 
     private final AlojamientoRepository alojamientoRepository;
 
-    private final ReservaRepository reservaRepository;
-
-    public AlojamientoService(AlojamientoRepository alojamientoRepository, ReservaRepository reservaRepository) {
+    public AlojamientoService(AlojamientoRepository alojamientoRepository) {
         this.alojamientoRepository = alojamientoRepository;
-        this.reservaRepository = reservaRepository;
     }
 
     /* MÉTODOS ********************************************************************************************************/
@@ -128,7 +125,7 @@ public class AlojamientoService {
             // Comprobar que no existe un alojamiento con dicho nombre
             boolean nombreExiste = alojamientoRepository.existsByNombre(dto.nombre());
 
-            boolean perteneceAlUsuario = usuario.getAlojamientos().stream()
+            boolean perteneceAlUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_Id(usuario.getId()).stream()
                     .anyMatch(a -> a.getNombre().equals(dto.nombre()));
 
             if (nombreExiste && !perteneceAlUsuario) {
@@ -242,6 +239,5 @@ public class AlojamientoService {
         // Limpiar contexto de seguridad
         SecurityContextHolder.clearContext();
         throw new AccesoDenegadoException();
-//        response.sendRedirect("/login?logout");
     }
 }

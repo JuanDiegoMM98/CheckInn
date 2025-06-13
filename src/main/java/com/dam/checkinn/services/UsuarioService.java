@@ -268,7 +268,6 @@ public class UsuarioService {
         // Limpiar contexto de seguridad
         SecurityContextHolder.clearContext();
         throw new AccesoDenegadoException();
-//        response.sendRedirect("/login?logout");
     }
 
     public UsuarioModel me() {

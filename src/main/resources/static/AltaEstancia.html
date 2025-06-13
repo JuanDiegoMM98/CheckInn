@@ -251,14 +251,21 @@
                     } else {
                         formData.delete("imagen");
                     }
-                    const responsePost = await axios.post(`${uri}/usuarios/${usuario.id}/alojamientos`, datos);
-                    if (responsePost.status === 201) {
-                        alert("Alojamiento registrado con éxito");
-                        window.location.href = "ListadoApartamentos.html";
-                    } else if (responsePost.status === 404) {
-                        alert("No se ha encontrado el alojamiento");
+                    try {
+                        const responsePost = await axios.post(`${uri}/usuarios/${usuario.id}/alojamientos`, datos);
+                        if (responsePost.status === 201) {
+                            alert("Alojamiento registrado con éxito.");
+                            window.location.href = "ListadoApartamentos.html";
+                        } else {
+                            alert("Respuesta inesperada al intentar realizar el alta del alojamiento.")
+                        }
+                    } catch (error) {
+                    }  if (error.response.status === 404) {
+                        alert("Error al intentar realizar el alta del alojamiento: El nombre del alojamiento ya existe.");
+                    } else if (error.response.status === 409) {
+                        alert("Ha habido un conflicto con los datos al intentar realizar el alta del alojamiento.");
                     } else {
-                        alert("Error del servidor al intentar actualizar los datos del alojamiento");
+                        alert("Error del servidor al intentar realizar el alta del alojaminto.");
                     }
                 }
             });
