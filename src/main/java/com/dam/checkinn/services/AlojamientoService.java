@@ -1,6 +1,7 @@
 package com.dam.checkinn.services;
 
 import com.dam.checkinn.exceptions.AccesoDenegadoException;
+import com.dam.checkinn.exceptions.DatosNoValidosException;
 import com.dam.checkinn.exceptions.RecursoNotFoundException;
 import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
@@ -120,6 +121,19 @@ public class AlojamientoService {
         // comprobamos existencia
         if (!alojamientoRepository.existsById(id)) {
             throw new RecursoNotFoundException();
+        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getPrincipal() instanceof UsuarioModel usuario) {
+            // Comprobar que no existe un alojamiento con dicho nombre
+            boolean nombreExiste = alojamientoRepository.existsByNombre(dto.nombre());
+
+            boolean perteneceAlUsuario = usuario.getAlojamientos().stream()
+                    .anyMatch(a -> a.getNombre().equals(dto.nombre()));
+
+            if (nombreExiste && !perteneceAlUsuario) {
+                throw new DatosNoValidosException();
+            }
         }
 
         // Buscamos el alojamiento y modificamos sus datos con los que vienen

@@ -148,8 +148,8 @@
                                             <p><strong>Capacidad:</strong> ${reserva.capacidad}</p>
                                         </div>`;
 
-                            if (new Date(reserva.fechaFin) < new Date()) {
-                                if (!reserva.valorada) {
+                            if (new Date(reserva.fechaInicio) < new Date()) {
+                                if (!reserva.valorada && !reserva.cancelada) {
                                     // No valorada
                                     contenidoCard += `
                                         <form id="form-valorar-${reserva.idReserva}" class="mt-4 space-y-3">
