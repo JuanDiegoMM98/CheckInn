@@ -157,6 +157,17 @@
                 alert("Registro fallido, conflicto en los campos")
             }
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            const numberInputs = document.querySelectorAll('input[type="number"]');
+
+            numberInputs.forEach(input => {
+                input.addEventListener('keydown', function (event) {
+                    if (['e', 'E', '-', '+'].includes(event.key)) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
     });
 </script>
 </body>

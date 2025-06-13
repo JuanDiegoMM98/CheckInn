@@ -260,14 +260,27 @@
                             alert("Respuesta inesperada al intentar realizar el alta del alojamiento.")
                         }
                     } catch (error) {
-                    }  if (error.response.status === 404) {
-                        alert("Error al intentar realizar el alta del alojamiento: El nombre del alojamiento ya existe.");
-                    } else if (error.response.status === 409) {
-                        alert("Ha habido un conflicto con los datos al intentar realizar el alta del alojamiento.");
-                    } else {
-                        alert("Error del servidor al intentar realizar el alta del alojaminto.");
+                        if (error.response.status === 404) {
+                            alert("Error al intentar realizar el alta del alojamiento: El nombre del alojamiento ya existe.");
+                        } else if (error.response.status === 409) {
+                            alert("Ha habido un conflicto con los datos al intentar realizar el alta del alojamiento.");
+                        } else {
+                            alert("Error del servidor al intentar realizar el alta del alojaminto.");
+                        }
                     }
                 }
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const numberInputs = document.querySelectorAll('input[type="number"]');
+
+                numberInputs.forEach(input => {
+                    input.addEventListener('keydown', function (event) {
+                        if (['e', 'E', '-', '+'].includes(event.key)) {
+                            event.preventDefault();
+                        }
+                    });
+                });
             });
 
             document.getElementById("inputImagen").addEventListener("change", async function (e) {

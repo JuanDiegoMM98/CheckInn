@@ -181,6 +181,7 @@
                         const responsePost = await axios.post(`${uri}/reservas`, datos);
                         if (responsePost.status === 201) {
                             alert("Reserva realizada con éxito");
+                            window.close();
                         } else {
                             alert("Error durante la reserva")
                         }
@@ -202,51 +203,50 @@
     });
 
     // Este esta solo para testeos, hay que modificarlo por el de abajo
-    function verificarFechas() {
-
-        const fechaInicio = document.getElementById("fechaInicio");
-        const fechaFin = document.getElementById("fechaFin");
-        const reservarBtn = document.getElementById("reservarBtn");
-
-        if (fechaInicio.value && fechaFin.value) {
-            reservarBtn.disabled = false;
-            reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
-            reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
-        } else {
-            reservarBtn.disabled = true;
-            reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
-            reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
-        }
-    }
-
-    // Comentado para testeos
     // function verificarFechas() {
     //
-    //     const fechaInicioDom = document.getElementById("fechaInicio");
-    //     const fechaFinDom = document.getElementById("fechaFin");
+    //     const fechaInicio = document.getElementById("fechaInicio");
+    //     const fechaFin = document.getElementById("fechaFin");
     //     const reservarBtn = document.getElementById("reservarBtn");
     //
-    //     if (fechaInicioDom.value && fechaFinDom.value) {
-    //         const fechaInicio = new Date(document.getElementById("fechaInicio").value);
-    //         const fechaFin = new Date(document.getElementById("fechaFin").value);
-    //         const hoy = new Date();
-    //         hoy.setHours(0, 0, 0, 0); // Ignorar la hora para comparar solo la fecha
-    //
-    //         if (fechaInicio > fechaFin || fechaInicio <= hoy || fechaFin <= hoy) {
-    //             reservarBtn.disabled = true;
-    //             reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
-    //             reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
-    //         } else {
-    //             reservarBtn.disabled = false;
-    //             reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
-    //             reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
-    //         }
+    //     if (fechaInicio.value && fechaFin.value) {
+    //         reservarBtn.disabled = false;
+    //         reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
+    //         reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
     //     } else {
     //         reservarBtn.disabled = true;
     //         reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
     //         reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
     //     }
     // }
+
+    function verificarFechas() {
+
+        const fechaInicioDom = document.getElementById("fechaInicio");
+        const fechaFinDom = document.getElementById("fechaFin");
+        const reservarBtn = document.getElementById("reservarBtn");
+
+        if (fechaInicioDom.value && fechaFinDom.value) {
+            const fechaInicio = new Date(document.getElementById("fechaInicio").value);
+            const fechaFin = new Date(document.getElementById("fechaFin").value);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0); // Ignorar la hora para comparar solo la fecha
+
+            if (fechaInicio > fechaFin || fechaInicio <= hoy || fechaFin <= hoy) {
+                reservarBtn.disabled = true;
+                reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+                reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+            } else {
+                reservarBtn.disabled = false;
+                reservarBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
+                reservarBtn.classList.add("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+            }
+        } else {
+            reservarBtn.disabled = true;
+            reservarBtn.classList.remove("bg-orange-500", "hover:bg-orange-600", "cursor-pointer");
+            reservarBtn.classList.add("bg-gray-400", "cursor-not-allowed");
+        }
+    }
     function toggleMenu() {
         const menu = document.getElementById('userMenu');
         menu.classList.toggle('hidden');
