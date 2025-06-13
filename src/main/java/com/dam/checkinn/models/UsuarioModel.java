@@ -68,10 +68,10 @@ public class UsuarioModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id;     // PK
 
     @Column(nullable = false, unique = true)
-    private String dni;     // PK
+    private String dni;
 
     @Column(nullable = false, length = 20)
     private String nombre;

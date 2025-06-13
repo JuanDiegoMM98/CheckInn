@@ -384,6 +384,10 @@
                         const formData = new FormData(event.target);
                         const datos = Object.fromEntries(formData.entries());
 
+                        if (!comprobarFechasValidas()) {
+                            alert("Se deben rellenar las fechas de la facturación");
+                            return;
+                        }
                         try {
                             const responseFacturacion = await axios.get(`${uri}/alojamientos/${idAlojamiento}/facturacion?fechaInicio=${datos.facturacionInicio}&fechaFin=${datos.facturacionFin}`);
                             if (responseFacturacion.status === 200) {
@@ -397,7 +401,7 @@
                             } else if (error.response.status === 500) {
                                 alert("Error del servidor al intentar obtener la factuación");
                             } else {
-                                alert("Error desconocido al inetntar obtener la facturación");
+                                alert("Error desconocido al intentar obtener la facturación");
                             }
                         }
                     })
@@ -516,6 +520,23 @@
     function toggleMenu() {
         const menu = document.getElementById('userMenu');
         menu.classList.toggle('hidden');
+    }
+
+    function comprobarFechasValidas() {
+        const inicio = document.getElementById('facturacionInicio').value;
+        const fin = document.getElementById('facturacionFin').value;
+
+        if (!inicio || !fin) {
+            alert("Por favor, completa ambas fechas.");
+            return false;
+        }
+
+        if (new Date(inicio) >= new Date(fin)) {
+            alert("la fecha de inicio de facturación debe ser menor a la fecha de fin de facturación")
+            return false;
+        }
+
+        return true;
     }
 </script>
 </body>
