@@ -177,9 +177,7 @@
 
                 const urlParams = new URLSearchParams(window.location.search);
                 const datos = {
-                    motivoCancelacion: motivo,
-                    idReserva: urlParams.get("idReserva"),
-                    idAlojamiento: urlParams.get("idAlojamiento")
+                    motivoCancelacion: motivo
                 };
 
                 const res = await axios.patch(`${uri}/reservas/${idReserva}`, datos);

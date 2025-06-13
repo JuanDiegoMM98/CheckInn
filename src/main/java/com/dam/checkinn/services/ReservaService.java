@@ -121,16 +121,6 @@ public class ReservaService {
     public ReservaModel actualizarReserva(int idReserva, CrearActualizarReservaDTOFront dto) throws Exception {
         filtroSeguridad(idReserva);
 
-        // Comprobar que existe reserva
-        if (!reservaRepository.existsById(idReserva)) {
-            throw new RecursoNotFoundException();
-        }
-
-        // Comprobar que existe alojamiento
-        if (!alojamientoRepository.existsById(dto.idAlojamiento())) {
-            throw new RecursoNotFoundException();
-        }
-
         ReservaModel reservaModel = reservaRepository.findById(idReserva).get();
 
         // Si tiene motivo de cancelacion, modificamos dicha reserva
@@ -245,7 +235,7 @@ public class ReservaService {
             List<AlojamientoModel> alojamientosUsuario = alojamientoRepository.findAllByUsuarioAlojamiento_Id(idUsuario);
             boolean enAlojamientosDelUsuario = alojamientosUsuario != null &&
                     alojamientosUsuario.stream()
-                            .flatMap(a -> a.getReservas().stream()) // a.getReservas() debe devolver lista no-nula
+                            .flatMap(a -> a.getReservas().stream())
                             .anyMatch(r -> r.getId() == idReserva);
 
             if (!enAlojamientosDelUsuario) {
@@ -268,7 +258,6 @@ public class ReservaService {
         // Limpiar contexto de seguridad
         SecurityContextHolder.clearContext();
         throw new AccesoDenegadoException();
-//        response.sendRedirect("/login?logout");
     }
 
     /* AUXILIARES *****************************************************************************************************/

@@ -234,11 +234,11 @@
                         });
                     }
                 } catch (error) {
-                   if (error.response.status === 404) {
-                       alert("No se ha podido encontrar el id de usuario");
-                   } else if (error.response.status === 409) {
-                       alert("Ha habido un conflicto al intentar realizar la reserva");
-                   }
+                    if (error.response.status === 404) {
+                        alert("No se ha podido encontrar el id de usuario");
+                    } else if (error.response.status === 409) {
+                        alert("Ha habido un conflicto al intentar realizar la reserva");
+                    }
                 }
             } catch (error) {
                 mensaje.textContent = "Error al cargar tus reservas.";
@@ -249,8 +249,6 @@
 
     async function enviarValoracion(reservaId, puntuacion, idAlojamiento) {
         const datosValoracion = {
-            idAlojamiento: idAlojamiento,
-            idReserva: reservaId,
             valoracion: puntuacion
         };
         try {
