@@ -22,7 +22,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-//                .cors(Customizer.withDefaults())
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {auth
                         .requestMatchers("app.js", "/images/**", "Registro.html").permitAll()
@@ -41,29 +41,29 @@ public class SecurityConfig {
                 .build();
     }
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        // Orígenes permitidos
-//        configuration.setAllowedOrigins(List.of("https://checkinn-f8mq.onrender.com"));
-//
-//        // Métodos permitidos
-//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//
-//        // Headers permitidos
-//        configuration.setAllowedHeaders(List.of("*"));
-//
-//        // Permitir cookies
-//        configuration.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        // Aplica esta configuración para todas las rutas
-//        source.registerCorsConfiguration("/**", configuration);
-//        configuration.setAllowCredentials(true);
-//        return source;
-//    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // Orígenes permitidos
+        configuration.setAllowedOrigins(List.of("https://checkinn-f8mq.onrender.com"));
+
+        // Métodos permitidos
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Headers permitidos
+        configuration.setAllowedHeaders(List.of("*"));
+
+        // Permitir cookies
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        // Aplica esta configuración para todas las rutas
+        source.registerCorsConfiguration("/**", configuration);
+        configuration.setAllowCredentials(true);
+        return source;
+    }
 
 }
 
