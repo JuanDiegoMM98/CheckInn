@@ -12,7 +12,7 @@
 <main class="bg-white/90 p-12 shadow-xl w-full max-w-4xl">
     <div class="flex items-center justify-end gap-4 mb-8">
         <h1 class="text-5xl font-bold text-orange-500">CheckInn</h1>
-        <img src="/images/logo.png" alt="Logo" class="w-24 h-18" />
+        <img src="/images/logo.png" alt="Logo" class="w-24 h-18"/>
     </div>
     <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
@@ -63,7 +63,8 @@
         </div>
         <div>
             <label for="fechaNacimiento" class="block font-semibold text-lg mb-2">Fecha de nacimiento *</label>
-            <input name="fechaNacimiento" id="fechaNacimiento" type="date" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400" />
+            <input name="fechaNacimiento" id="fechaNacimiento" type="date"
+                   class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"/>
         </div>
         <div>
             <label for="direccion" class="block font-semibold text-lg mb-2">Dirección *</label>
@@ -148,14 +149,13 @@
             if (response.status === 201) {
                 alert("Alta correcta. Inicie sesión para iniciar la aplicación");
                 window.location.href = "Login.html";
-            } else if (response.status === 409) {
-                alert("Registro fallido campos incorrectos");
             } else {
-                alert("Ha habido un error de servidor durante el registro");
+                alert("Respuesta inesperada durante el registro");
             }
         } catch (error) {
-            console.error("Error:", error);
-            alert("Error al conectar con el servidor.");
+            if (error.response.status === 409) {
+                alert("Registro fallido, conflicto en los campos")
+            }
         }
     });
 </script>
