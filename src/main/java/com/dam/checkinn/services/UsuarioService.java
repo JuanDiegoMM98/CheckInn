@@ -130,7 +130,6 @@ public class UsuarioService {
         usuarioModel.setApellido1(dto.apellido1());
         usuarioModel.setApellido2(dto.apellido2());
         usuarioModel.setCorreo(dto.correo());
-        usuarioModel.setContraseña(passwordEncoder.encode(dto.contraseña()));
         usuarioModel.setTarjetaBancaria(dto.tarjetaBancaria());
         usuarioModel.setDireccion(dto.direccion());
         if (dto.fechaNacimiento() != null) {
