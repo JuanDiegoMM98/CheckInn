@@ -1,5 +1,6 @@
 package com.dam.checkinn.repositories;
 
+import com.dam.checkinn.models.AlojamientoModel;
 import com.dam.checkinn.models.ReservaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,7 @@ public interface ReservaRepository extends JpaRepository<ReservaModel, Integer> 
     List<ReservaModel> findAllByUsuarioReserva_Id(int usuarioReservaId);
 
     List<ReservaModel> getById(int id);
+
+    @Query("SELECT r.alojamiento.id FROM ReservaModel r WHERE r.id = :idReserva")
+    int findAlojamientoByIdReserva(@Param("idReserva") int idReserva);
 }
