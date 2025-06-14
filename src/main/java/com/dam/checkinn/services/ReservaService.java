@@ -22,7 +22,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -135,7 +134,9 @@ public class ReservaService {
 
         // Si tiene valoracion, modificamos las valoraciones del alojamiento y la ponemos como valorada
         if (dto.valoracion() != 0) {
-            AlojamientoModel alojamiento = alojamientoRepository.findById(dto.idAlojamiento()).get();
+
+            int idAlojamiento = reservaRepository.findAlojamientoByIdReserva(idReserva);
+            AlojamientoModel alojamiento = alojamientoRepository.findById(idAlojamiento).get();
             int contadorValoraciones = alojamiento.getContadorValoraciones();
             double valoracionMedia = alojamiento.getValoracionMedia();
 
