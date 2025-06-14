@@ -124,15 +124,6 @@ public class UsuarioService {
             throw new RecursoNotFoundException();
         }
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth.getPrincipal() instanceof UsuarioModel usuario) {
-            // Comprobar que el correo no este asociado a ningun otro usuario
-            if (usuarioRepository.existsByCorreo(dto.correo()) && !dto.correo().equals(usuario.getCorreo())) {
-                throw new DatosNoValidosException();
-            }
-        }
-
-
         UsuarioModel usuarioModel = usuarioRepository.findById(id).get();
 
         usuarioModel.setNombre(dto.nombre());
